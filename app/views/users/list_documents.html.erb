@@ -1,0 +1,13 @@
+<table border="1" style="border-collapse: collapse;">
+	<tr>
+		<th>Name</th>
+		<th>Path</th>
+		<th>Status</th>
+	</tr>
+	<% @upload_documents.each do |a| %>
+		<tr>
+			<td><%= a.document_name %></td>
+			<td><%= Rails.public_path.to_s + a.document_url %></td>
+		</tr>
+	<% end %>
+</table>
