@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  devise_for :users
 	root to: 'users#upload_document'
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
   get 'upload_document', to: 'users#upload_document'

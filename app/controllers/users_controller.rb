@@ -1,4 +1,6 @@
 class UsersController < ApplicationController
+	before_action :authenticate_user!
+	protect_from_forgery prepend: true
 	def upload_document
 		@upload_document = UploadDocument.new
 	end

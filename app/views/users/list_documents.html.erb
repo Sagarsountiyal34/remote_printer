@@ -8,6 +8,8 @@
 		<tr>
 			<td><%= a.document_name %></td>
 			<td><%= Rails.public_path.to_s + a.document_url %></td>
+			<td><%= a.status.capitalize %></td>
+
 		</tr>
 	<% end %>
 </table>
