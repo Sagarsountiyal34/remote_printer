@@ -1,15 +1,135 @@
-<table border="1" style="border-collapse: collapse;">
-	<tr>
-		<th>Name</th>
-		<th>Path</th>
-		<th>Status</th>
-	</tr>
-	<% @upload_documents.each do |a| %>
-		<tr>
-			<td><%= a.document_name %></td>
-			<td><%= Rails.public_path.to_s + a.document_url %></td>
-			<td><%= a.status.capitalize %></td>
+<!-- Breadcrumbs-->
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">
+    <a href="#">Dashboard</a>
+  </li>
+  <li class="breadcrumb-item active">List Documents</li>
+</ol>
 
-		</tr>
-	<% end %>
-</table>
+<!-- Icon Cards-->
+<!-- <div class="row">
+  <div class="col-xl-3 col-sm-6 mb-3">
+    <div class="card text-white bg-primary o-hidden h-100">
+      <div class="card-body">
+        <div class="card-body-icon">
+          <i class="fas fa-fw fa-comments"></i>
+        </div>
+        <div class="mr-5">26 New Messages!</div>
+      </div>
+      <a class="card-footer text-white clearfix small z-1" href="#">
+        <span class="float-left">View Details</span>
+        <span class="float-right">
+          <i class="fas fa-angle-right"></i>
+        </span>
+      </a>
+    </div>
+  </div>
+  <div class="col-xl-3 col-sm-6 mb-3">
+    <div class="card text-white bg-warning o-hidden h-100">
+      <div class="card-body">
+        <div class="card-body-icon">
+          <i class="fas fa-fw fa-list"></i>
+        </div>
+        <div class="mr-5">11 New Tasks!</div>
+      </div>
+      <a class="card-footer text-white clearfix small z-1" href="#">
+        <span class="float-left">View Details</span>
+        <span class="float-right">
+          <i class="fas fa-angle-right"></i>
+        </span>
+      </a>
+    </div>
+  </div>
+  <div class="col-xl-3 col-sm-6 mb-3">
+    <div class="card text-white bg-success o-hidden h-100">
+      <div class="card-body">
+        <div class="card-body-icon">
+          <i class="fas fa-fw fa-shopping-cart"></i>
+        </div>
+        <div class="mr-5">123 New Orders!</div>
+      </div>
+      <a class="card-footer text-white clearfix small z-1" href="#">
+        <span class="float-left">View Details</span>
+        <span class="float-right">
+          <i class="fas fa-angle-right"></i>
+        </span>
+      </a>
+    </div>
+  </div>
+  <div class="col-xl-3 col-sm-6 mb-3">
+    <div class="card text-white bg-danger o-hidden h-100">
+      <div class="card-body">
+        <div class="card-body-icon">
+          <i class="fas fa-fw fa-life-ring"></i>
+        </div>
+        <div class="mr-5">13 New Tickets!</div>
+      </div>
+      <a class="card-footer text-white clearfix small z-1" href="#">
+        <span class="float-left">View Details</span>
+        <span class="float-right">
+          <i class="fas fa-angle-right"></i>
+        </span>
+      </a>
+    </div>
+  </div>
+</div> -->
+<div class="card mb-3">
+  <div class="card-header">
+    <i class="fas fa-table"></i>
+    Data Table Example</div>
+  <div class="card-body">
+    <div class="table-responsive">
+      <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+        <thead>
+          <tr>
+            <!-- <th width="10%">Select</th> -->
+            <th width="18%">Name</th>
+            <th width="40%">Path</th>
+            <th width="15%">Status</th>
+            <!-- <th width="17%">Action</th> -->
+          </tr>
+        </thead>
+        <tfoot>
+          <tr>
+            <!-- <th>Select</th> -->
+            <th>Name</th>
+            <th>Path</th>
+            <th>Status</th>
+            <!-- <th>Action</th> -->
+          </tr>
+        </tfoot>
+        <tbody>
+	      <% @upload_documents.each do |a| %>
+				<tr data-id="<%= a.id%>">
+					<!-- <td width="10%"><%#= check_box_tag a.id, '', false, class: 'document_check_box' %></td> -->
+					<td width="18%"><%= a.document_name %></td>
+					<td style="word-wrap: break-word;word-break: break-all;" width="40%"><%= Rails.public_path.to_s + a.document_url %></td>
+					<td width="15%"><%= a.status.capitalize %></td>
+					<!-- <td width="17%"><%#= button_tag "Add to group", data: { confirm: "Are you sure?" }, class: 'add_to_group btn btn-primary' %></td> -->
+				</tr>
+			<% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
+</div>
+<script>
+$(".add_to_group").click(function(){
+	var document_id = jQuery(this).parent().data('id');
+	$.ajax({
+               type: "post",
+               url: "/add_document_to_group",
+               data: {
+                 document_id: document_id
+               },
+               success: function(data) {
+                   debugger
+               },
+               error: function(data) {
+               		debugger
+               }
+         });  
+	});
+
+</script>

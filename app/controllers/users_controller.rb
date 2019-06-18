@@ -6,7 +6,7 @@ class UsersController < ApplicationController
 	end
 
 	def save_document
-		@upload_document = UploadDocument.new(document_params)
+		@upload_document = current_user.upload_documents.new(document_params)
 		if @upload_document.save
 			redirect_to list_documents_path
 		else
@@ -15,7 +15,7 @@ class UsersController < ApplicationController
 	end
 
 	def list_documents
-		@upload_documents = UploadDocument.all
+		@upload_documents = current_user.upload_documents.order_by(created_at: :desc)
 	end
 
 	private
