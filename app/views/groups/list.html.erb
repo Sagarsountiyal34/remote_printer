@@ -1,0 +1,100 @@
+<!-- Breadcrumbs-->
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">
+    <a href="#">Dashboard</a>
+  </li>
+  <li class="breadcrumb-item active">List Documents</li>
+</ol>
+
+<div class="card mb-3">
+  <div class="card-header">
+    <i class="fas fa-table"></i>
+    Data Table Example</div>
+  <div class="card-body">
+    <div class="table-responsive">
+      <table class="table table-bordered document_table" id="dataTable" width="100%" cellspacing="0">
+        <thead>
+          <tr>
+            <th width="10%">Select</th>
+            <th width="18%">Name</th>
+            <th width="40%">Path</th>
+            <th width="15%">Status</th>
+            <th width="17%">Action</th>
+          </tr>
+        </thead>
+        <tfoot>
+          <tr>
+            <th>Select</th>
+            <th>Name</th>
+            <th>Path</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+        </tfoot>
+        <tbody>
+        <% if @group_doc.present? %>
+  	      <% @group_doc.each do |a| %>
+    				<tr data-id="<%= a.id%>" class="document_record">
+    					<td width="10%"><%= check_box_tag a.id, '', false, class: 'document_check_box', disabled: a.is_document_added_to_group? %></td>
+    					<td width="15%"><%= a.document_name %></td>
+    					<td style="word-wrap: break-word;word-break: break-all;" width="40%"><%= Rails.public_path.to_s + a.document_url %></td>
+    					<td width="15%"><%= a.status.capitalize %></td>
+              <td width="20%">
+                <i class="fas fa-trash remove_cart_item" ></i>
+              </td>
+    				</tr>
+  			  <% end %>
+        <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
+</div>
+<script>
+
+$('#dataTable').DataTable({
+    "ordering": false
+});
+
+// for one 
+$(".remove_cart_item").click(function(){
+    var self = this;
+    var document_id = [ $(this).closest('.document_record').data('id') ];
+    var main_tr = $('tr.document_record[data-id="' + document_id[0] + '"]')
+    
+    $(this).hide();
+
+    function onSuccess(response)
+    {
+        main_tr.remove();
+        jQuery('nav span.total_cart_item').text(response.total_cart_item);
+    }
+
+    function onError(reponse)
+    {
+        $(self).show();
+    }
+    
+    removeFromGroup(document_id, onSuccess, onError);
+});
+
+function removeFromGroup(document_ids, successcb, errorcb){
+    $.ajax({
+        type: "POST",
+        beforeSend: setCsrfToken, // implemented in
+        url: "/remove_document_from_group",
+        data: { document_ids: document_ids },
+        success: function(data) {
+            if(successcb) successcb(data);
+        },
+        error: function(exception) {
+            if(successcb) successcb(exception);  
+        }
+    });  
+}
+
+function setCsrfToken(xhr){
+    xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))
+}
+</script>
