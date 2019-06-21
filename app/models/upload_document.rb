@@ -4,7 +4,6 @@ class UploadDocument
   include DocumentUploader::Attachment.new(:document)
 
   belongs_to :user
-
   field :document_name,           type: String, default: ""
   field :document_data,   		  type: String, default: ""
   field :status, 				  type: String, default: "pending"
@@ -15,10 +14,11 @@ class UploadDocument
 
   validates :status, inclusion: { in: ['pending', 'ready_for_payment'] }
   def is_document_added_to_group?
-  	flag = false
-  	if user.group.present? and user.group.document_ids.include?(self.id.to_s)
+    flag = false
+  	if user.group.present? and  user.group.documents.map { |doc| doc.upload_document_id}.include?(self.id)
   		flag = true
   	end
   	return flag
   end
 end
+

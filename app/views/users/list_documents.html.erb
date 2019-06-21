@@ -135,7 +135,7 @@ $(".add_to_group").click(function(){
       $(self).text('Added to group');
       main_tr.find('.document_check_box').prop('disabled','true');
       main_tr.find('.remove_cart_item').show();
-      jQuery('nav span.total_cart_item').text(response.total_cart_item);
+      jQuery('nav span.total_cart_item').text(response.total_group_item);
     }
     function onError(reponse)
     {
