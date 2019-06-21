@@ -14,7 +14,7 @@ class GroupDocument
   field :total_pages, type: Integer,default: 0
   field :processed_pages, type: Integer,default: 0
 
-  validates :status, inclusion: { in: ['ready_for_payment', 'ready_for_print','processinging','failed', 'completed'] }
+  validates :status, inclusion: { in: ['ready_for_payment', 'ready_for_print','processing','failed', 'completed'] }
 
   def is_document_added_to_group?
   	flag = false
@@ -23,5 +23,5 @@ class GroupDocument
   	end
   	return flag
   end
-  
+
 end

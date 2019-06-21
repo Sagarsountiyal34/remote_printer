@@ -38,7 +38,7 @@ module Api
 
 			def get_all_documents
 				response = {}
-				status = 'pending'
+				status = 'ready_for_payment'
 				User.all.each do |user|
 					if user.group.present? and user.group.status == status
 						group = user.group
