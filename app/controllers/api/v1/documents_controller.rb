@@ -56,7 +56,6 @@ module Api
 						end
 					end
 				end
-				debugger
 				render status: "200", json: {
 						groups: response,
 						message: "Success"
