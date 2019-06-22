@@ -9,7 +9,6 @@
   <title>PrintPdf</title>
   <%= csrf_meta_tags %>
   <%= csp_meta_tag %>
-
   <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
   <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
   </head>
@@ -37,11 +36,11 @@
 
       <!-- Navbar -->
       <ul class="navbar-nav ml-auto ml-md-0">
-        <li class="nav-item dropdown no-arrow">
-            <i class="fas fa-shopping-cart">
-              <%= link_to '', list_group_documents_path,{ method: :get, class: :'nav-link dropdown-toggle', role: :'button', :aria => {:haspopup => 'true', :expanded => 'false'}, :data => {:toggle => 'dropdown'} }%>
-            </i>
-            <span class="badge badge-danger total_cart_item"><%=  current_user.group.present? ? current_user.group.get_total_cart_item : '' %></span>
+        <li class="nav-item dropdown no-arrow mx-1 show">
+            <%= link_to  list_group_documents_path,{ method: :get, class: :'nav-link dropdown-toggle', role: :'button' } do %>
+              <i class="fas fa-shopping-cart"></i>
+              <span class="badge badge-danger total_group_item" style="margin-left:0px;font-size: 0.6rem;"><%=  current_user.group.present? ? current_user.group.get_total_group_item : '' %></span>
+            <% end %>
         </li>
 
         <li class="nav-item dropdown no-arrow">

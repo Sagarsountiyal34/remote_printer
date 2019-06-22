@@ -135,7 +135,7 @@ $(".add_to_group").click(function(){
       $(self).text('Added to group');
       main_tr.find('.document_check_box').prop('disabled','true');
       main_tr.find('.remove_cart_item').show();
-      jQuery('nav span.total_cart_item').text(response.total_group_item);
+      jQuery('nav span.total_group_item').text(response.total_group_item);
     }
     function onError(reponse)
     {
@@ -152,7 +152,7 @@ $(".remove_document").click(function(){
     function onSuccess(response)
     {
       main_tr.remove();
-      jQuery('nav span.total_cart_item').text(response.total_cart_item);
+      jQuery('nav span.total_group_item').text(response.total_group_item);
     }
     function onError(reponse)
     {
@@ -175,7 +175,7 @@ $("#add_to_group").click(function(){
         $('tr.document_record[data-id="' + document_ids[i] + '"]').find('.add_to_group').text('Added to group');
         $('tr.document_record[data-id="' + document_ids[i] + '"]').find('.add_to_group').prop('disabled','true');
       }
-      jQuery('nav span.total_cart_item').text(response.total_cart_item);
+      jQuery('nav span.total_group_item').text(response.total_group_item);
     }
     addToGroup(document_ids, onSuccess);
 });

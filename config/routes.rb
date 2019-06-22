@@ -9,12 +9,13 @@ Rails.application.routes.draw do
   post 'add_document_to_group', to: 'groups#add_document_to_group'
   post 'remove_document_from_group', to: 'groups#remove_document_from_group'
   post 'remove_documents', to: 'documents#remove_documents'
+  post 'start_payment', to: 'groups#start_payment'
   get 'list_group_documents', to: 'groups#list'
 
   namespace 'api' do
 		namespace 'v1' do
 			get 'get_all_documents', to: 'documents#get_all_documents'
-			post 'update_document_status/:id', to: 'documents#update_document_status', as: 'update_document_status'
+			post 'update_document_and_group_status', to: 'documents#update_document_and_group_status', as: 'update_document_and_group_status'
 		end
 	end
 end

@@ -3,13 +3,18 @@
   <li class="breadcrumb-item">
     <a href="#">Dashboard</a>
   </li>
-  <li class="breadcrumb-item active">List Documents</li>
+  <li class="breadcrumb-item active">Group Document</li>
 </ol>
 
 <div class="card mb-3">
   <div class="card-header">
-    <i class="fas fa-table"></i>
-    Data Table Example</div>
+    <% if current_user.group.present? %>
+        <i class="fas fa-table"></i>
+        Group Status :
+        <%= current_user.group.status %>
+    <% end %>
+  </div>
+
   <div class="card-body">
     <div class="table-responsive">
       <table class="table table-bordered document_table" id="dataTable" width="100%" cellspacing="0">
@@ -34,7 +39,7 @@
         <tbody>
         <% if @group_doc.present? %>
   	      <% @group_doc.each do |a| %>
-    				<tr data-id="<%= a.id%>" class="document_record">
+    				<tr data-id="<%= a.upload_document_id.to_s %>" class="document_record">
     					<td width="10%"><%= check_box_tag a.id, '', false, class: 'document_check_box' %></td>
     					<td width="15%"><%= a.document_name %></td>
     					<td style="word-wrap: break-word;word-break: break-all;" width="40%"><%= Rails.public_path.to_s + a.document_url %></td>
@@ -69,7 +74,7 @@ $(".remove_cart_item").click(function(){
     function onSuccess(response)
     {
         main_tr.remove();
-        jQuery('nav span.total_cart_item').text(response.total_cart_item);
+        jQuery('nav span.total_group_item').text(response.total_group_item);
     }
 
     function onError(reponse)
@@ -125,6 +130,11 @@ function startPayment(document_ids, successcb, errorcb){
             if(successcb) successcb(exception);
         }
     });
+}
+
+function sendAjaxReqest()
+{
+
 }
 
 function setCsrfToken(xhr){

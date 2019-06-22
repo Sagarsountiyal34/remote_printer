@@ -20,5 +20,16 @@ class UploadDocument
   	end
   	return flag
   end
+
+  def get_document_by_ids(document_ids)
+    return self.where(:_id.in => document_ids)
+  end
+
+  def add_documents(group)
+      group_document = GroupDocument.new(document_name: self.document_name, upload_document_id: self.id, document_data: self.document_data, status: 'ready_for_payment')
+      group.documents << group_document
+      group.status = 'ready_for_payment'
+      group.save
+  end
 end
 
