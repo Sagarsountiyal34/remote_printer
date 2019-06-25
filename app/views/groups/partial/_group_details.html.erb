@@ -1,0 +1,112 @@
+<style>
+    .preview
+    {
+      border-radius: 15px;
+      background-position: center;
+      width: 275px;
+      height: 100px;
+    }
+</style>
+<div class="card mb-3">
+    <div class="card-header">
+        <i class="fas fa-table"></i>
+        Group Item: <span id="total_group_item">
+            <%= @group.documents.length %></span></div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered document_table" id="dataTable" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th width="30%">Preview</th>
+                        <th width="30%">Name</th>
+                        <th width="30%">Action</th>
+                    </tr>
+                </thead>
+                <tbody id="tbody_head" data-group-id="<%= @group.id.to_s %>">
+                    <% @documents.each do |a| %>
+                    <tr data-id="<%= a.id%>" class="document_record">
+                        <td width="30%">
+                            <% if a.get_file_type == 'jpg' %>
+                            <div class="preview" data-id="<%= a.id %>" style="background-image:url(<%= a.document_url%>)"></div>
+                            <% else %>
+                            <% url = a.get_path_with_server_url(request.base_url) %>
+                            <iframe src="https://docs.google.com/gview?url=<%= url %>&embedded=true"></iframe>
+                            <% end %>
+                        </td>
+                        <td width="30%">
+                            <%= a.document_name %>
+                        </td>
+                        <td width="30%">
+                            <a class="remove_group_document" alt="remove" href="javscript:;"><i class="fas fa-trash"></i></a>
+                        </td>
+                    </tr>
+                    <% end %>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <% if @group.status != 'completed' and @group.status != 'failed' and @group.status != 'processing' %>
+    <div class="card-footer small text-muted d-flex align-items-center">
+        <%= button_tag "Proceed TO Payment", id: 'proceed_to_payment', class: 'btn btn-primary' %>
+        <div class="dropdown" style="margin-left:10px;">
+            <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                Add More
+            </button>
+            <div class="dropdown-menu">
+                <a class="dropdown-item btn btn-primary" href="#" data-toggle="modal" data-target="#fromDesktop">From Desktop</a>
+                <a class="dropdown-item btn btn-primary" href="#" data-toggle="modal" data-target="#fromHistory">From History</a>
+            </div>
+        </div>
+    </div>
+    <% end %>
+    <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
+    <%= render "groups/partial/from_desktop" %>
+    <%= render "groups/partial/from_history" %>
+</div>
+<script>
+$('#dataTable').DataTable({
+    "ordering": false
+});
+$(".remove_group_document").click(function() {
+    var self = this;
+    var document_id = [$(this).closest('.document_record').data('id')];
+    var main_tr = $('tr.document_record[data-id="' + document_id[0] + '"]')
+    var group_id = main_tr.parent().data('group-id')
+    $(this).hide();
+
+    function onSuccess(response) {
+        $('#group_content').html(response);
+        $('#group_content').html(response).promise().done(function() {
+            $('#dataTable').DataTable().fnDestroy();
+            $('#dataTable').DataTable({
+                "ordering": false
+            });
+        });
+    }
+
+    function onError(reponse) {
+        $(self).show();
+    }
+
+    removeFromGroup(group_id, document_id, onSuccess, onError);
+});
+
+function removeFromGroup(group_id, document_ids, successcb, errorcb) {
+    $.ajax({
+        type: "POST",
+        beforeSend: setCsrfToken, // implemented in
+        url: "/remove_document_from_group",
+        data: { document_ids: document_ids, id: group_id },
+        success: function(data) {
+            if (successcb) successcb(data);
+        },
+        error: function(exception) {
+            if (successcb) successcb(exception);
+        }
+    });
+}
+
+function setCsrfToken(xhr) {
+    xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))
+}
+</script>

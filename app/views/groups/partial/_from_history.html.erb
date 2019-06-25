@@ -1,0 +1,88 @@
+<!-- From History Modal -->
+<div class="modal" id="fromHistory" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document" style="max-width:1000px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Upload Document into group</h5>
+                <button type="button" class="close" data-dismiss="modal" id="close_history_modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="card mb-3">
+                    <div class="card-header">
+                        <i class="fas fa-table"></i>
+                        All Documents</div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered document_table" id="dataTable" width="100%" cellspacing="0">
+                                <thead>
+                                    <tr>
+                                        <th width="10%">Select</th>
+                                        <th width="45%">Preview</th>
+                                        <th width="45%">Name</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% @all_documents.each do |a| %>
+                                    <tr data-id="<%= a.id%>" class="document_record_for_add">
+                                        <td width="10%">
+                                            <%= check_box_tag a.id, '', false, class: 'document_check_box'%>
+                                        </td>
+                                        <td width="45%">Preview</td>
+                                        <td width="45%">
+                                            <%= a.document_name %>
+                                        </td>
+                                    </tr>
+                                    <% end %>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="card-footer small text-muted">
+                        <%= button_tag "Add for printing", id: 'add_to_group', class: 'btn btn-primary', :data => {id: @group.id.to_s} %>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+// for multiple using checkboxes
+$("#add_to_group").on('click', function() {
+    var checked_checkboxes = $('.document_check_box:checked');
+    var document_ids = checked_checkboxes.map(function() {
+        return $(this).attr('id');
+    }).get();
+    var group_id = jQuery(this).data('id');
+
+    function onSuccess(response) {
+        $('#fromHistory').modal('hide');
+        $('#group_content').html(response);
+
+        $('#group_content').html(response).promise().done(function() {
+            $('#dataTable').DataTable().fnDestroy();
+            $('#dataTable').DataTable({
+                "ordering": false
+            });
+        });
+    }
+    addToGroup(group_id, document_ids, onSuccess);
+});
+
+
+function addToGroup(group_id, document_ids, successcb, errorcb) {
+    $.ajax({
+        type: "POST",
+        beforeSend: setCsrfToken, // implemented in
+        url: "/add_document_to_group",
+        data: { document_ids: document_ids, id: group_id },
+        success: function(data) {
+            if (successcb) successcb(data);
+        },
+        error: function(exception) {
+            if (successcb) successcb(exception);
+        }
+    });
+}
+</script>

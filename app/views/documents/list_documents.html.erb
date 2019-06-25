@@ -1,0 +1,149 @@
+<!-- Breadcrumbs-->
+<ol class="breadcrumb">
+    <li class="breadcrumb-item">
+        <a href="#">Dashboard</a>
+    </li>
+    <li class="breadcrumb-item active">List Documents</li>
+</ol>
+<!-- Icon Cards-->
+<!-- <div class="row">
+  <div class="col-xl-3 col-sm-6 mb-3">
+    <div class="card text-white bg-primary o-hidden h-100">
+      <div class="card-body">
+        <div class="card-body-icon">
+          <i class="fas fa-fw fa-comments"></i>
+        </div>
+        <div class="mr-5">26 New Messages!</div>
+      </div>
+      <a class="card-footer text-white clearfix small z-1" href="#">
+        <span class="float-left">View Details</span>
+        <span class="float-right">
+          <i class="fas fa-angle-right"></i>
+        </span>
+      </a>
+    </div>
+  </div>
+  <div class="col-xl-3 col-sm-6 mb-3">
+    <div class="card text-white bg-warning o-hidden h-100">
+      <div class="card-body">
+        <div class="card-body-icon">
+          <i class="fas fa-fw fa-list"></i>
+        </div>
+        <div class="mr-5">11 New Tasks!</div>
+      </div>
+      <a class="card-footer text-white clearfix small z-1" href="#">
+        <span class="float-left">View Details</span>
+        <span class="float-right">
+          <i class="fas fa-angle-right"></i>
+        </span>
+      </a>
+    </div>
+  </div>
+  <div class="col-xl-3 col-sm-6 mb-3">
+    <div class="card text-white bg-success o-hidden h-100">
+      <div class="card-body">
+        <div class="card-body-icon">
+          <i class="fas fa-fw fa-shopping-cart"></i>
+        </div>
+        <div class="mr-5">123 New Orders!</div>
+      </div>
+      <a class="card-footer text-white clearfix small z-1" href="#">
+        <span class="float-left">View Details</span>
+        <span class="float-right">
+          <i class="fas fa-angle-right"></i>
+        </span>
+      </a>
+    </div>
+  </div>
+  <div class="col-xl-3 col-sm-6 mb-3">
+    <div class="card text-white bg-danger o-hidden h-100">
+      <div class="card-body">
+        <div class="card-body-icon">
+          <i class="fas fa-fw fa-life-ring"></i>
+        </div>
+        <div class="mr-5">13 New Tickets!</div>
+      </div>
+      <a class="card-footer text-white clearfix small z-1" href="#">
+        <span class="float-left">View Details</span>
+        <span class="float-right">
+          <i class="fas fa-angle-right"></i>
+        </span>
+      </a>
+    </div>
+  </div>
+</div> -->
+<div class="card mb-3">
+    <div class="card-header">
+        <i class="fas fa-table"></i>
+        Data Table Example</div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered document_table" id="dataTable" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th width="20%">Preview</th>
+                        <th width="40%">Name</th>
+                        <th width="40%">Remove</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% @upload_documents.each do |a| %>
+                    <tr data-id="<%= a.id%>" class="document_record">
+                        <td width="20%">Preview</td>
+                        <td width="40%">
+                            <%= a.document_name %>
+                        </td>
+                        <td width="40%">
+                            <i class="fas fa-trash remove_document"></i>
+                        </td>
+                    </tr>
+                    <% end %>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
+</div>
+<script>
+$('#dataTable').DataTable({
+    "ordering": false
+});
+
+
+$(".remove_document").click(function() {
+    var self = this;
+    var document_id = [$(this).closest('.document_record').data('id')];
+    var main_tr = $('tr.document_record[data-id="' + document_id[0] + '"]')
+    $(this).prop('disabled', true);
+
+    function onSuccess(response) {
+        main_tr.remove();
+        jQuery('nav span.total_group_item').text(response.total_group_item);
+    }
+
+    function onError(reponse) {
+        $(self).removeAttr('disabled');
+    }
+    removeDocument(document_id, onSuccess, onError);
+});
+
+
+function removeDocument(document_ids, successcb, errorcb) {
+    $.ajax({
+        type: "POST",
+        beforeSend: setCsrfToken, // implemented in
+        url: "/remove_documents",
+        data: { document_ids: document_ids },
+        success: function(data) {
+            if (successcb) successcb(data);
+        },
+        error: function(exception) {
+            if (successcb) successcb(exception);
+        }
+    });
+}
+
+function setCsrfToken(xhr) {
+    xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))
+}
+</script>

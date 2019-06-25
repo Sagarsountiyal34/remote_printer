@@ -24,4 +24,12 @@ class GroupDocument
   	return flag
   end
 
+  def get_file_type
+    File.extname(self.document_url).split('.')[1]
+  end
+
+  def get_path_with_server_url(server_url)
+    return server_url + self.document_url
+  end
+
 end

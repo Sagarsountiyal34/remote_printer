@@ -1,6 +1,7 @@
 module Api
 	module V1
 		class DocumentsController < ApplicationController
+			include ActionController::ImplicitRender
 			protect_from_forgery with: :null_session
 
 			#also check..status sshould be correct
@@ -42,33 +43,37 @@ module Api
 				end
 			end
 
+			# def get_all_documents
+			# 	response = {}
+			# 	status = 'ready_for_payment'
+			# 	have_to_send_groups = true
+			# 	User.all.each do |user|
+			# 		if user.check_user_group_sent_for_print?
+			# 			render status: "200", json: {
+	  #             			groups: response,
+	  #             			message: "Some Groups already sent for print.can't send more."
+	  #           		}
+	  #           		have_to_send_groups = false
+	  #           		break
+	  #           	end
+			# 	end
+			# 	if have_to_send_groups
+			# 		User.all.each do |user|
+			# 			if user.group.present? and user.group.status == status and user.group.documents.present?
+			# 				group = user.group
+			# 				documents_hash = group.get_documents_for_api(request,status)
+			# 				response[group.id.to_s] = documents_hash
+			# 			end
+			# 		end
+			# 		render status: "200", json: {
+			# 			groups: response,
+			# 			message: "Success"
+			# 		}
+			# 	end
+			# end
+
 			def get_all_documents
-				response = {}
-				status = 'ready_for_payment'
-				have_to_send_groups = true
-				User.all.each do |user|
-					if user.check_user_group_sent_for_print?
-						render status: "200", json: {
-	              			groups: response,
-	              			message: "Some Groups already sent for print.can't send more."
-	            		}
-	            		have_to_send_groups = false
-	            		break
-	            	end
-				end
-				if have_to_send_groups
-					User.all.each do |user|
-						if user.group.present? and user.group.status == status and user.group.documents.present?
-							group = user.group
-							documents_hash = group.get_documents_for_api(request,status)
-							response[group.id.to_s] = documents_hash
-						end
-					end
-					render status: "200", json: {
-						groups: response,
-						message: "Success"
-					}
-				end
+				@group = Group.all
 			end
 
 		end

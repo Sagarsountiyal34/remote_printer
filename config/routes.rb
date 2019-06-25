@@ -1,16 +1,20 @@
 Rails.application.routes.draw do
   get 'group/view'
   devise_for :users
-	root to: 'users#list_documents'
+	root to: 'groups#new'
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
-  get 'upload_document', to: 'users#upload_document'
-  post 'save_document', to: 'users#save_document'
-  get 'list_documents', to: 'users#list_documents'
+  # get 'upload_document', to: 'documents#upload_document'
+  get 'upload_doc', to: 'groups#new'
+  post 'save_group', to: 'groups#create'
+  get 'edit_group/:id', to: 'groups#edit'
+  get 'list_documents', to: 'documents#list_documents'
+  get 'printed_groups', to: 'groups#list'
   post 'add_document_to_group', to: 'groups#add_document_to_group'
   post 'remove_document_from_group', to: 'groups#remove_document_from_group'
   post 'remove_documents', to: 'documents#remove_documents'
   post 'start_payment', to: 'groups#start_payment'
-  get 'list_group_documents', to: 'groups#list'
+  get 'list_group', to: 'groups#list'
+
 
   namespace 'api' do
 		namespace 'v1' do

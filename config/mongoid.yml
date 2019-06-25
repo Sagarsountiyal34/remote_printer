@@ -104,6 +104,7 @@ development:
 
   # Configure Mongoid specific options. (optional)
   options:
+    raise_not_found_error: false
     # Includes the root model name in json serialization. (default: false)
     # include_root_in_json: false
 
@@ -166,3 +167,5 @@ production:
         read:
           mode: :primary
         max_pool_size: 1
+    options:
+        raise_not_found_error: false

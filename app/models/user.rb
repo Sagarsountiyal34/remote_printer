@@ -18,7 +18,7 @@ class User
 
 
   has_many :upload_documents, dependent: :destroy
-  has_one :group, dependent: :destroy
+  has_many :groups, dependent: :destroy
 
   ## Trackable
   # field :sign_in_count,      type: Integer, default: 0
@@ -38,10 +38,21 @@ class User
   # field :unlock_token,    type: String # Only if unlock strategy is :email or :both
   # field :locked_at,       type: Time
 
-  def check_user_group_sent_for_print?
-    flag = false
-      if self.group.present? and (self.group.status == 'sent_for_printing' or self.group.status == 'processing')
-            have_to_send_groups = true
+  # def check_user_group_sent_for_print?
+  #   flag = false
+  #     if self.group.present? and (self.group.status == 'sent_for_printing' or self.group.status == 'processing')
+  #           have_to_send_groups = true
+  #     end
+  # end
+  def get_total_group
+    total_group = ''
+      if self.groups.present?
+            total_group = self.groups.length
       end
   end
+
+  def check_if_any_group_ready_to_print?
+    self.groups.find_by(:status => 'ready_for_payment').present?
+  end
+
 end

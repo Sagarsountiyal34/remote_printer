@@ -8,7 +8,6 @@ class Group
 
 
   field :status, type: String, default: "pending"
-  field :document_ids, type: Array, default: []
   validates :status, inclusion: { in: ['ready_for_payment', 'ready_for_print','sent_for_printing', 'processing', 'failed', 'completed'] }
   def get_total_group_item
     total_item = ''
@@ -20,7 +19,7 @@ class Group
 
   # removing from group documents
   def remove_document(document_ids)
-      self.documents.find_by(:upload_document_id.in => document_ids).destroy
+      self.documents.where(:id.in => document_ids).destroy
       if self.documents.length == 0
         self.destroy
       end
@@ -51,5 +50,14 @@ class Group
     self.save
     return documents_array
   end
+
+  def get_hash
+    json.group @artists do |group|
+      json.id group.id
+      json.name group.status
+    end
+  end
+
+
 
 end

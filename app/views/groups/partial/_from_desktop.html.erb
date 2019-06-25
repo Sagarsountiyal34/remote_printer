@@ -1,0 +1,37 @@
+<!-- From Desktop Modal -->
+<div class="modal fade" id="fromDesktop" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Upload Document into group</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <%= form_for @upload_document, url: save_group_path do |f| %>
+                <%= hidden_field_tag 'group_id', @group.id.to_s  %>
+                <div class="form-group">
+                    <div class="form-label-group">
+                        <%= f.text_field :document_name, autofocus: true, :class => 'form-control', :placeholder => 'Document Name', :required => 'required' %>
+                        <%= f.label :document_name %>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="form-label-group">
+                        <%= f.hidden_field :document, value: f.object.cached_document_data %>
+                        <%= f.file_field :document , class: 'uploadDocument' %>
+                        <%= f.label :document %>
+                        <% if @upload_document.errors[:document] %>
+                        <ul class="errors">
+                            <%= @upload_document.errors.full_messages_for(:document).map { |msg| content_tag(:li, msg) }.uniq.join.html_safe %>
+                        </ul>
+                        <% end %>
+                    </div>
+                    <%= f.submit "Upload", :class => 'btn btn-primary btn-block' %>
+                    <% end %>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -16,7 +16,7 @@
   <body>
     <nav class="navbar navbar-expand navbar-dark bg-dark static-top">
 
-      <a class="navbar-brand mr-1" href="index.html">Start Bootstrap</a>
+      <a class="navbar-brand mr-1" href="index.html">Remote Print</a>
 
       <button class="btn btn-link btn-sm text-white order-1 order-sm-0" id="sidebarToggle" href="#">
         <i class="fas fa-bars"></i>
@@ -37,9 +37,9 @@
       <!-- Navbar -->
       <ul class="navbar-nav ml-auto ml-md-0">
         <li class="nav-item dropdown no-arrow mx-1 show">
-            <%= link_to  list_group_documents_path,{ method: :get, class: :'nav-link dropdown-toggle', role: :'button' } do %>
+            <%= link_to  list_documents_path,{ method: :get, class: :'nav-link dropdown-toggle', role: :'button' } do %>
               <i class="fas fa-shopping-cart"></i>
-              <span class="badge badge-danger total_group_item" style="margin-left:0px;font-size: 0.6rem;"><%=  current_user.group.present? ? current_user.group.get_total_group_item : '' %></span>
+              <span class="badge badge-danger total_group" style="margin-left:0px;font-size: 0.6rem;"><%= current_user.get_total_group %></span>
             <% end %>
         </li>
 
@@ -67,30 +67,19 @@
           <span>List Documents</span>
         <% end %>
       </li>
-      <!-- dropdown example -->
-      <!--       <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          <i class="fas fa-fw fa-folder"></i>
-          <span>Pages</span>
-        </a>
-        <div class="dropdown-menu" aria-labelledby="pagesDropdown">
-          <h6 class="dropdown-header">Login Screens:</h6>
-          <a class="dropdown-item" href="login.html">Login</a>
-          <a class="dropdown-item" href="register.html">Register</a>
-          <a class="dropdown-item" href="forgot-password.html">Forgot Password</a>
-          <div class="dropdown-divider"></div>
-          <h6 class="dropdown-header">Other Pages:</h6>
-          <a class="dropdown-item" href="404.html">404 Page</a>
-          <a class="dropdown-item" href="blank.html">Blank Page</a>
-        </div>
-      </li> -->
-      <li class="nav-item">
+      <li class="nav-item active">
         <!-- <a class="nav-link" href="/"> -->
-        <%= link_to upload_document_path, class: "nav-link" do %>
+        <%= link_to upload_doc_path, class: "nav-link" do %>
           <i class="fas fa-fw fa-chart-area"></i>
           <span>Upload Documents</span>
         <% end %>
-          <!-- </a> -->
+      </li>
+
+      <li class="nav-item active">
+        <%= link_to printed_groups_path, class: "nav-link" do %>
+          <i class="fas fa-fw fa-tachometer-alt"></i>
+          <span>Previous Print</span>
+        <% end %>
       </li>
     </ul>
     <div id="content-wrapper">
