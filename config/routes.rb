@@ -3,7 +3,7 @@ Rails.application.routes.draw do
   devise_for :users
 	root to: 'groups#new'
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
-  # get 'upload_document', to: 'documents#upload_document'
+
   get 'upload_doc', to: 'groups#new'
   post 'save_group', to: 'groups#create'
   get 'edit_group/:id', to: 'groups#edit'

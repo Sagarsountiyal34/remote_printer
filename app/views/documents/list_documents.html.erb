@@ -83,7 +83,7 @@
                     <tr>
                         <th width="20%">Preview</th>
                         <th width="40%">Name</th>
-                        <th width="40%">Remove</th>
+                        <!-- <th width="40%">Remove</th> -->
                     </tr>
                 </thead>
                 <tbody>
@@ -93,9 +93,9 @@
                         <td width="40%">
                             <%= a.document_name %>
                         </td>
-                        <td width="40%">
+                        <!-- <td width="40%">
                             <i class="fas fa-trash remove_document"></i>
-                        </td>
+                        </td> -->
                     </tr>
                     <% end %>
                 </tbody>
@@ -110,40 +110,40 @@ $('#dataTable').DataTable({
 });
 
 
-$(".remove_document").click(function() {
-    var self = this;
-    var document_id = [$(this).closest('.document_record').data('id')];
-    var main_tr = $('tr.document_record[data-id="' + document_id[0] + '"]')
-    $(this).prop('disabled', true);
+// $(".remove_document").click(function() {
+//     var self = this;
+//     var document_id = [$(this).closest('.document_record').data('id')];
+//     var main_tr = $('tr.document_record[data-id="' + document_id[0] + '"]')
+//     $(this).prop('disabled', true);
 
-    function onSuccess(response) {
-        main_tr.remove();
-        jQuery('nav span.total_group_item').text(response.total_group_item);
-    }
+//     function onSuccess(response) {
+//         main_tr.remove();
+//         jQuery('nav span.total_group_item').text(response.total_group_item);
+//     }
 
-    function onError(reponse) {
-        $(self).removeAttr('disabled');
-    }
-    removeDocument(document_id, onSuccess, onError);
-});
+//     function onError(reponse) {
+//         $(self).removeAttr('disabled');
+//     }
+//     removeDocument(document_id, onSuccess, onError);
+// });
 
 
-function removeDocument(document_ids, successcb, errorcb) {
-    $.ajax({
-        type: "POST",
-        beforeSend: setCsrfToken, // implemented in
-        url: "/remove_documents",
-        data: { document_ids: document_ids },
-        success: function(data) {
-            if (successcb) successcb(data);
-        },
-        error: function(exception) {
-            if (successcb) successcb(exception);
-        }
-    });
-}
+// function removeDocument(document_ids, successcb, errorcb) {
+//     $.ajax({
+//         type: "POST",
+//         beforeSend: setCsrfToken, // implemented in
+//         url: "/remove_documents",
+//         data: { document_ids: document_ids },
+//         success: function(data) {
+//             if (successcb) successcb(data);
+//         },
+//         error: function(exception) {
+//             if (successcb) successcb(exception);
+//         }
+//     });
+// }
 
-function setCsrfToken(xhr) {
-    xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))
-}
+// function setCsrfToken(xhr) {
+//     xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))
+// }
 </script>

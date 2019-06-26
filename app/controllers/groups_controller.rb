@@ -1,4 +1,7 @@
 class GroupsController < ApplicationController
+	before_action :authenticate_user!
+	protect_from_forgery prepend: true
+
 	def new
 		if current_user.check_if_any_group_ready_to_print?
 			@group = current_user.groups.find_by(:status => 'ready_for_payment')
@@ -24,6 +27,7 @@ class GroupsController < ApplicationController
 			redirect_to 'new'
 		end
 	end
+
 	def edit
 		get_details_for_group_page
 	end
@@ -41,7 +45,7 @@ class GroupsController < ApplicationController
 		@all_documents = current_user.upload_documents.not_in(:_id => uploaded_doc_ids)
 	end
 
-	def remove_document_from_group
+	def remove_document_from_group #via ajax
 		document_ids = params[:document_ids]
 		group = Group.find(:id => params[:id])
 		group.remove_document(document_ids)
@@ -53,7 +57,7 @@ class GroupsController < ApplicationController
 		end
 	end
 
-	def add_document_to_group
+	def add_document_to_group #via ajax
 		group = Group.find(params[:id])
 		document_ids = params[:document_ids]
 		group.add_documents(document_ids)

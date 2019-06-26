@@ -13,14 +13,6 @@ class UploadDocument
   validates :document_data,       presence: true
 
   validates :status, inclusion: { in: ['pending', 'ready_for_payment'] }
-  def is_document_added_to_group?
-    return false
-    flag = false
-  	if user.group.present? and  user.group.documents.map { |doc| doc.upload_document_id}.include?(self.id)
-  		flag = true
-  	end
-  	return flag
-  end
 
   def get_document_by_ids(document_ids)
     return self.where(:_id.in => document_ids)
@@ -33,4 +25,3 @@ class UploadDocument
       group.save
   end
 end
-

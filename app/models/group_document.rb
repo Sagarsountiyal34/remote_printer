@@ -16,13 +16,6 @@ class GroupDocument
 
   validates :status, inclusion: { in: ['ready_for_payment','sent_for_printing', 'ready_for_print','processing','failed', 'completed'] }
 
-  def is_document_added_to_group?
-  	flag = false
-  	if user.group.present? and user.group.document_ids.include?(self.id.to_s)
-  		flag = true
-  	end
-  	return flag
-  end
 
   def get_file_type
     File.extname(self.document_url).split('.')[1]
