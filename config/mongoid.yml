@@ -167,15 +167,14 @@ production:
         read:
           mode: :primary
         max_pool_size: 1
+        #The name of the user for authentication.
+        user: 'remote_print'
+
+        #The password of the user for authentication.
+        password: 'remote_print@123'
+
+        #The user's database roles.
+        roles:
+          - 'dbOwner'
   options:
     raise_not_found_error: false
-
-    #The name of the user for authentication.
-    user: 'remote_print'
-
-    #The password of the user for authentication.
-    password: 'remote_print@123'
-
-    #The user's database roles.
-    roles:
-        - 'dbOwner'
