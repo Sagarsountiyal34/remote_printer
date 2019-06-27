@@ -46,8 +46,8 @@ class User
     end
   end
 
-  def check_if_any_group_ready_to_print?
-    self.groups.find_by(:status => 'ready_for_payment').present?
+  def check_if_any_group_ready_to_print
+    self.groups.find_by(:status => 'ready_for_payment')
   end
 
 end

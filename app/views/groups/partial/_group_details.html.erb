@@ -75,13 +75,17 @@ $(".remove_group_document").click(function() {
     $(this).hide();
 
     function onSuccess(response) {
-        $('#group_content').html(response);
-        $('#group_content').html(response).promise().done(function() {
-            $('#dataTable').DataTable().fnDestroy();
-            $('#dataTable').DataTable({
-                "ordering": false
+        if (response['group_present'] == false) {
+            window.location.href = response['url']
+        } else {
+            $('#group_content').html(response);
+            $('#group_content').html(response).promise().done(function() {
+                $('#dataTable').DataTable().fnDestroy();
+                $('#dataTable').DataTable({
+                    "ordering": false
+                });
             });
-        });
+        }
     }
 
     function onError(reponse) {

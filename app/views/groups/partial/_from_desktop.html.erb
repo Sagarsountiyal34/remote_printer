@@ -9,8 +9,8 @@
                 </button>
             </div>
             <div class="modal-body">
-                <%= form_for @upload_document, url: save_group_path do |f| %>
-                <%= hidden_field_tag 'group_id', @group.id.to_s  %>
+                <%= form_for @upload_document, url: update_group_path do |f| %>
+                <%= hidden_field_tag 'id', @group.id.to_s  %>
                 <div class="form-group">
                     <div class="form-label-group">
                         <%= f.text_field :document_name, autofocus: true, :class => 'form-control', :placeholder => 'Document Name', :required => 'required' %>

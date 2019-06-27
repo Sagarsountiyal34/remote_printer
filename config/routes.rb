@@ -6,6 +6,7 @@ Rails.application.routes.draw do
 
   get 'upload_doc', to: 'groups#new'
   post 'save_group', to: 'groups#create'
+  post 'update_group', to: 'groups#update'
   get 'edit_group/:id', to: 'groups#edit'
   get 'list_documents', to: 'documents#list_documents'
   get 'printed_groups', to: 'groups#list'
@@ -13,7 +14,7 @@ Rails.application.routes.draw do
   post 'remove_document_from_group', to: 'groups#remove_document_from_group'
   post 'remove_documents', to: 'documents#remove_documents'
   post 'start_payment', to: 'groups#start_payment'
-  get 'list_group', to: 'groups#list'
+
 
 
   namespace 'api' do

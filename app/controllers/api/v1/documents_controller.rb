@@ -4,7 +4,6 @@ module Api
 			include ActionController::ImplicitRender
 			protect_from_forgery with: :null_session
 
-			#also check..status sshould be correct
 			def update_document_and_group_status
 				begin
 					group_id = params["group_id"]

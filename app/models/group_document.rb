@@ -14,7 +14,7 @@ class GroupDocument
   field :total_pages, type: Integer,default: 0
   field :processed_pages, type: Integer,default: 0
 
-  validates :status, inclusion: { in: ['ready_for_payment','sent_for_printing', 'ready_for_print','processing','failed', 'completed'] }
+  validates :status, inclusion: { in: ['pending', 'completed'] }
 
 
   def get_file_type
@@ -24,5 +24,6 @@ class GroupDocument
   def get_path_with_server_url(server_url)
     return server_url + self.document_url
   end
+
 
 end

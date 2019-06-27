@@ -19,17 +19,12 @@ class DocumentsController < ApplicationController
 	# 	end
 	# end
 
-	def upload_document
-		@upload_document = UploadDocument.new
-	end
+	# def upload_document
+	# 	@upload_document = UploadDocument.new
+	# end
 
 	def list_documents
 		@upload_documents = current_user.upload_documents.order_by(created_at: :desc)
 	end
 
-	private
-
-		def document_params
-			params.require("upload_document").permit(:document_name, :document)
-		end
 end

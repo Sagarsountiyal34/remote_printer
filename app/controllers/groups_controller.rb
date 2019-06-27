@@ -3,9 +3,9 @@ class GroupsController < ApplicationController
 	protect_from_forgery prepend: true
 
 	def new
-		if current_user.check_if_any_group_ready_to_print?
-			@group = current_user.groups.find_by(:status => 'ready_for_payment')
-			redirect_to action: 'edit', :id =>  @group.id
+		ready_to_print_group = current_user.check_if_any_group_ready_to_print
+		if ready_to_print_group.present?
+			redirect_to action: 'edit', :id =>  ready_to_print_group.id
 		else
 			@upload_document = UploadDocument.new
 		end
@@ -13,19 +13,26 @@ class GroupsController < ApplicationController
 
 	def create
 		@upload_document = current_user.upload_documents.new(document_params)
-		if 	params[:group_id].present?
-			@group = Group.find(:id => params[:group_id])
+		if @upload_document.save
+			group = current_user.groups.new
+			@upload_document.add_documents(group) # addding into group
+			if group.save
+				redirect_to action: 'edit', :id =>  group.id
+			end
 		else
-			@group = Group.new
-			@group.user = current_user
+			# if the upload document not updated
+			render 'new'
 		end
-		@upload_document.save
-		@upload_document.add_documents(@group) # addding into group
-		if @group.save
-			redirect_to action: 'edit', :id =>  @group.id
-		else
-			redirect_to 'new'
+	end
+
+	def update
+		upload_document = current_user.upload_documents.new(document_params)
+		group = current_user.groups.find(params[:id])
+		if upload_document.save and group.present?
+			upload_document.add_documents(group) # addding into group
+			group.save
 		end
+		redirect_to action: 'edit', :id =>  group.id
 	end
 
 	def edit
@@ -36,29 +43,24 @@ class GroupsController < ApplicationController
 		@printed_groups = current_user.groups.where(:status => 'completed')
 	end
 
-	def get_details_for_group_page
-		@group = Group.find(params[:id])
-		@documents = @group.documents
-		@upload_document = UploadDocument.new
-
-		uploaded_doc_ids = @group.documents.map{|d| d.upload_document_id.to_s}
-		@all_documents = current_user.upload_documents.not_in(:_id => uploaded_doc_ids)
-	end
-
 	def remove_document_from_group #via ajax
 		document_ids = params[:document_ids]
-		group = Group.find(:id => params[:id])
-		group.remove_document(document_ids)
+		group = current_user.groups.find(params[:id])
+		group.documents.where(:id.in => document_ids).destroy
 		if group.save
 			get_details_for_group_page
-			render partial: 'groups/partial/group_details'
+			if @group.present?
+				render partial: 'groups/partial/group_details'
+			else
+				render json: {  group_present: false, url: request.base_url   }
+			end
 		else
 			render json: 'Please try again later'.to_json, status: 500
 		end
 	end
 
 	def add_document_to_group #via ajax
-		group = Group.find(params[:id])
+		group = current_user.groups.find(params[:id])
 		document_ids = params[:document_ids]
 		group.add_documents(document_ids)
 		if group.save
@@ -73,6 +75,17 @@ class GroupsController < ApplicationController
 
 	def document_params
 		params.require("upload_document").permit(:document_name, :document)
+	end
+
+	def get_details_for_group_page
+		@group = Group.find(params[:id])
+		if @group.present?
+			@documents = @group.documents
+			@upload_document = UploadDocument.new
+
+			uploaded_doc_ids = @group.documents.map{|d| d.upload_document_id.to_s}
+			@all_documents = current_user.upload_documents.not_in(:_id => uploaded_doc_ids)
+		end
 	end
 
 
