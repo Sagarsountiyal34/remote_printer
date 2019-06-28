@@ -15,11 +15,9 @@
 //= require jquery.min
 //= require bootstrap.bundle.min
 //= require jquery.easing.min
-//= require Chart.min
 //= require jquery.dataTables
 //= require dataTables.bootstrap4
 //= require sb-admin.min
 //= require datatables-demo
-//= require chart-area-demo
 //= require jquery.mousewheel.min
 //= require_tree .

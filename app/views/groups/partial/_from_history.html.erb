@@ -15,7 +15,7 @@
                         All Documents</div>
                     <div class="card-body">
                         <div class="table-responsive">
-                            <table class="table table-bordered document_table" id="dataTable" width="100%" cellspacing="0">
+                            <table class="table table-bordered document_table" id="dataTableFromHistory" width="100%" cellspacing="0">
                                 <thead>
                                     <tr>
                                         <th width="10%">Select</th>
@@ -59,13 +59,6 @@ $("#add_to_group").on('click', function() {
     function onSuccess(response) {
         $('#fromHistory').modal('hide');
         $('#group_content').html(response);
-
-        $('#group_content').html(response).promise().done(function() {
-            $('#dataTable').DataTable().fnDestroy();
-            $('#dataTable').DataTable({
-                "ordering": false
-            });
-        });
     }
     addToGroup(group_id, document_ids, onSuccess);
 });
@@ -85,4 +78,8 @@ function addToGroup(group_id, document_ids, successcb, errorcb) {
         }
     });
 }
+
+$('#dataTableFromHistory').DataTable({
+        "ordering": false
+});
 </script>
