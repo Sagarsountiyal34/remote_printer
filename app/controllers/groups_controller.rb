@@ -31,8 +31,10 @@ class GroupsController < ApplicationController
 		if upload_document.save and group.present?
 			upload_document.add_documents(group) # addding into group
 			group.save
+			redirect_to action: 'edit', :id =>  group.id
+		else
+			render json: {  document_error: upload_document.errors.full_messages_for(:document)   }, status: :unprocessable_entity
 		end
-		redirect_to action: 'edit', :id =>  group.id
 	end
 
 	def edit
@@ -52,7 +54,7 @@ class GroupsController < ApplicationController
 			if @group.present?
 				render partial: 'groups/partial/group_details'
 			else
-				render json: {  group_present: false, url: request.base_url   }
+				render json: {  group_present: false, url: request.base_url   }, status: 500
 			end
 		else
 			render json: 'Please try again later'.to_json, status: 500
@@ -80,11 +82,11 @@ class GroupsController < ApplicationController
 	def get_details_for_group_page
 		@group = Group.find(params[:id])
 		if @group.present?
-			@documents = @group.documents
+			@documents = @group.documents.order_by(created_at: :desc)
 			@upload_document = UploadDocument.new
 
 			uploaded_doc_ids = @group.documents.map{|d| d.upload_document_id.to_s}
-			@all_documents = current_user.upload_documents.not_in(:_id => uploaded_doc_ids)
+			@all_documents = current_user.upload_documents.not_in(:_id => uploaded_doc_ids).order_by(created_at: :desc)
 		end
 	end
 

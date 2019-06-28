@@ -35,3 +35,26 @@
         </div>
     </div>
 </div>
+<script>
+
+$('#new_upload_document').submit(function(e) {
+    e.preventDefault();
+    var valuesToSubmit = new FormData(this);
+    var url_action =  $(this).attr('action');
+    $.ajax({
+        type: "POST",
+        url: url_action, //sumbits it to the given url of the form
+        data: valuesToSubmit,
+        processData: false,
+        contentType: false,
+        success: function(response){
+
+        },
+        error: function(response)
+        {
+            alert(JSON.parse(response.responseText)['document_error'][1]);
+        }
+    });
+    return false; // prevents normal behaviour
+});
+</script>
