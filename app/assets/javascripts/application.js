@@ -21,4 +21,6 @@
 //= require sb-admin.min
 //= require datatables-demo
 //= require chart-area-demo
+//= require lightgallery-all.min
+//= require jquery.mousewheel.min
 //= require_tree .
