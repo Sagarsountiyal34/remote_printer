@@ -49,7 +49,7 @@ class GroupsController < ApplicationController
 		document_ids = params[:document_ids]
 		group = current_user.groups.find(params[:id])
 		group.documents.where(:id.in => document_ids).destroy
-		if group.save
+		if group.save!
 			get_details_for_group_page
 			if @group.present?
 				render partial: 'groups/partial/group_details'
