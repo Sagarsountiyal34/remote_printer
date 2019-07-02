@@ -35,15 +35,37 @@ module Api
 						end
 					end
 				rescue Exception => e
-					render status: "500", json: {
-            			message: "Internal Server Error. Please try after some time." + e.to_s
-          			}
+					forbidden_error(e)
 				end
 			end
 
 			def get_all_documents
-				@groups = Group.all
-				# @groups = Group.where(:status =>'ready_for_payment' )
+				begin
+					response = {}
+					status = 'ready_for_payment'
+					# have_to_send_groups = true
+					# if have_to_send_groups
+						Group.all.each do |group|
+								if group.documents.present?
+									documents_hash = group.get_documents_for_api(request)
+									if group.update_attributes(:status => 'sent_for_printing') and documents_hash.present?
+										response[group.id.to_s] = documents_hash
+									end
+								end
+						end
+						if response.present?
+							render status: "200", json: {
+								groups: response,
+								message: "Success"
+							}
+						else
+							forbidden_error
+						end
+
+					# end
+				rescue Exception => e
+					forbidden_error(e)
+				end
 			end
 
 			def update_group_status
@@ -74,9 +96,19 @@ module Api
 						end
 					end
 				rescue Exception => e
-					render status: "500", json: {
-            			message: "Internal Server Error. Please try after some time." + e.to_s
-          			}
+					forbidden_error(e)
+				end
+			end
+
+			def get_groups_with_status
+				begin
+					groups = Group.all
+					render status: "200", json: {
+						groups: groups,
+						message: "Success"
+					}
+				rescue Exception => e
+					forbidden_error(e)
 				end
 			end
 		end

@@ -35,4 +35,16 @@ class Group
     end
   end
 
+  def get_documents_for_api(request)
+    documents_array = []
+    self.documents.each do |document|
+        document_hash = {}
+        document_hash['id'] = document.id.to_s
+        document_hash['name'] = document.document_name
+        document_hash['path'] = request.base_url + document.document_url
+        documents_array << document_hash
+    end
+    return documents_array
+  end
+
 end

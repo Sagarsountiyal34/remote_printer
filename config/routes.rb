@@ -21,6 +21,7 @@ Rails.application.routes.draw do
 		namespace 'v1' do
 			get 'get_all_documents', to: 'documents#get_all_documents'
 			post 'update_document_and_group_status', to: 'documents#update_document_and_group_status', as: 'update_document_and_group_status'
+      get 'get_groups_with_status', to: 'documents#get_groups_with_status'
 		end
 	end
 end

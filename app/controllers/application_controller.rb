@@ -6,4 +6,11 @@ class ApplicationController < ActionController::Base
 			"devise_layout"
 		end
 	end
+
+	protected
+	def forbidden_error(e=nil)
+		render status: "500", json: {
+			message: "Internal Server Error. Please try after some time." + e.to_s
+        }
+	end
 end
