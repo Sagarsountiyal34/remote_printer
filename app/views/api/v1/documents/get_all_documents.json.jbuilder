@@ -19,7 +19,7 @@
 
 		end
 	end
-	if @group.present?
+	if @groups.present?
 		json.set! :message, 'Success'
 	else
 		json.set! :message, 'No group present'

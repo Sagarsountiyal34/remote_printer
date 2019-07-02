@@ -45,6 +45,39 @@ module Api
 				@groups = Group.where(:status =>'ready_for_payment' )
 			end
 
+			def update_group_status
+				begin
+					group_id = params["group_id"]
+					status = params["status"]
+					if !group_id.present? or !status.present?
+						render status: "422", json: {
+	           				 message: "Group id or status is empty."
+	          			}
+					else
+						group = Group.find(group_id)
+						if group.present?
+							group.status = status
+							if group.save
+								render status: "201", json: {
+									message: "Status updated successfully"
+								}
+							else
+								render status: "500", json: {
+			            			message: "Please Enter Valid Status"
+			          			}
+							end
+						else
+							render status: "422", json: {
+		            			message: "Group not found with given ID"
+		          			}
+						end
+					end
+				rescue Exception => e
+					render status: "500", json: {
+            			message: "Internal Server Error. Please try after some time." + e.to_s
+          			}
+				end
+			end
 		end
 	end
 end
