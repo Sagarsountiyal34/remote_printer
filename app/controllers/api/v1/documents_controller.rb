@@ -16,7 +16,7 @@ module Api
 					else
 						if status.present?
 							group = Group.find(group_id)
-							document = group.documents.find_by(:upload_document_id => document_id)
+							document = group.documents.find(document_id)
 							document.status = status
 							group.status = 'processing'
 							if document.save and group.save
