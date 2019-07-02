@@ -32,7 +32,7 @@
         <!-- Navbar -->
         <ul class="navbar-nav ml-auto ml-md-0">
             <li class="nav-item dropdown no-arrow mx-1 show">
-                <%= link_to  list_documents_path,{ method: :get, class: :'nav-link dropdown-toggle', role: :'button' } do %>
+                <%= link_to  printed_groups_path,{ method: :get, class: :'nav-link dropdown-toggle', role: :'button' } do %>
                 <i class="fas fa-shopping-cart"></i>
                 <span class="badge badge-danger total_group" style="margin-left:0px;font-size: 0.6rem;">
                     <%= current_user.get_total_group %></span>
@@ -88,6 +88,50 @@
             </footer>
         </div>
     </div>
+    <script>
+    <% if flash[:notice].present? %>
+    message = "<%= flash[:notice]%>"
+    type = 'success'
+    notification(message, type)
+    <%end%>
+
+    <% if flash[:alert].present? %>
+    message = "<%= flash[:alert]%>"
+    type = 'warn'
+    notification(message, type)
+    <%end%>
+
+    <% if flash[:message].present?%>
+    message = "<%= flash[:message]%>"
+    type = 'info'
+    notification(message, type)
+    <%end%>
+
+    <% if flash[:errors].present?%>
+    <% if flash[:errors].class == Array %>
+    <%flash[:errors].each do |err|%>
+    message = "<%= err.html_safe %>"
+    type = 'error'
+    notification(message, type)
+    <%end%>
+    <% else %>
+    message = "<%= flash[:errors] %>"
+    type = 'error'
+    notification(message, type)
+    <% end %>
+    <% end %>
+
+    function notification(message, type) {
+        $.notify(message, {
+            className: type,
+            clickToHide: true,
+            globalPosition: 'top center',
+            autoHideDelay: 10000000,
+            width: 500,
+            height: 300
+        });
+    }
+    </script>
 </body>
 
 </html>

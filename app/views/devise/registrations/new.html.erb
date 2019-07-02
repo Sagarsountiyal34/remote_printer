@@ -17,12 +17,16 @@
               <%= f.password_field :password, autocomplete: "new-password", :class => 'form-control', :placeholder => 'Password', :required => 'required' %>
               <%= f.label :password %>
             </div>
+            <ul>
+            <%= resource.errors.full_messages_for(:password).map { |msg| content_tag(:li, msg) }.uniq.join.html_safe %>
+          </ul>
           </div>
           <div class="col-md-6">
             <div class="form-label-group">
               <%= f.password_field :password_confirmation, autocomplete: "new-password", :class=> 'form-control', :placeholder => 'Confirm Password',:required => 'required'%>
               <%= f.label :password_confirmation %>
             </div>
+            <%= resource.errors.full_messages_for(:password_confirmation).map { |msg| content_tag(:li, msg) }.uniq.join.html_safe %>
           </div>
         </div>
       </div>

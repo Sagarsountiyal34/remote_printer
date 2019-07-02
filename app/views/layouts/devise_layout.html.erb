@@ -1,22 +1,64 @@
 <!DOCTYPE html>
 <html>
-  <head>
-  <script
-  src="https://code.jquery.com/jquery-3.4.1.min.js"
-  integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
-  crossorigin="anonymous"></script>
-  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
-  <title>PrintPdf</title>
-  <%= csrf_meta_tags %>
-  <%= csp_meta_tag %>
 
-  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
-  <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
-  </head>
+<head>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+    <title>PrintPdf</title>
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+</head>
 
-  <body class="bg-dark">
+<body class="bg-dark">
     <div class="container">
-      <%= yield %>
+        <%= yield %>
     </div>
-  </body>
+    <script>
+    <% if flash[:notice].present? %>
+    message = "<%= flash[:notice]%>"
+    type = 'success'
+    notification(message, type)
+    <%end%>
+
+    <% if flash[:alert].present? %>
+    message = "<%= flash[:alert]%>"
+    type = 'warn'
+    notification(message, type)
+    <%end%>
+
+    <% if flash[:message].present?%>
+    message = "<%= flash[:message]%>"
+    type = 'info'
+    notification(message, type)
+    <%end%>
+
+    <% if flash[:errors].present?%>
+    <% if flash[:errors].class == Array %>
+    <%flash[:errors].each do |err|%>
+    message = "<%= err.html_safe %>"
+    type = 'error'
+    notification(message, type)
+    <%end%>
+    <% else %>
+    message = "<%= flash[:errors] %>"
+    type = 'error'
+    notification(message, type)
+    <% end %>
+    <% end %>
+
+    function notification(message, type) {
+        $.notify(message, {
+            className: type,
+            clickToHide: false,
+            globalPosition: 'top center',
+            autoHideDelay: 10000000,
+            width: 500,
+            height: 300
+        });
+    }
+    </script>
+</body>
+
 </html>

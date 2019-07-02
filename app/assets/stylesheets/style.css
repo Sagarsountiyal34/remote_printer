@@ -5,3 +5,8 @@
   width: 275px;
   height: 100px;
 }
+
+.notifyjs-corner{
+	left: 50% !important;
+    transform: translate(-50%,0);
+}
