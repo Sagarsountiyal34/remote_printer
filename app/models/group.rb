@@ -9,7 +9,7 @@ class Group
   field :status, type: String, default: "pending"
   validates :status, inclusion: { in: ['ready_for_payment', 'ready_for_print','sent_for_printing', 'processing', 'failed', 'completed'] }
 
-  after_initialize :set_default_status
+  after_create :set_default_status
   after_save :remove_group_if_needed
 
   def set_default_status
