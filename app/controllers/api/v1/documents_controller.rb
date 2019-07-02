@@ -42,7 +42,8 @@ module Api
 			end
 
 			def get_all_documents
-				@groups = Group.where(:status =>'ready_for_payment' )
+				@groups = Group.all
+				# @groups = Group.where(:status =>'ready_for_payment' )
 			end
 
 			def update_group_status
