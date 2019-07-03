@@ -16,6 +16,7 @@ Rails.application.routes.draw do
   post 'remove_documents', to: 'documents#remove_documents'
   post 'start_payment', to: 'groups#start_payment'
 
+  post 'test_whatsapp_twillio_api', to: 'groups#test_whatsapp_twillio_api'
 
 
   namespace 'api' do
@@ -24,6 +25,7 @@ Rails.application.routes.draw do
 			post 'update_document_status', to: 'documents#update_document_status', as: 'update_document_status'
       post 'update_group_status', to: 'documents#update_group_status', as: 'update_group_status'
       post 'get_groups_with_status', to: 'documents#get_groups_with_status'
+      post 'send_error_to_admin', to: 'documents#send_error_to_admin'
 		end
 	end
 end

@@ -1,3 +1,4 @@
+require 'twilio-ruby'
 class GroupsController < ApplicationController
 	before_action :authenticate_user!
 	protect_from_forgery prepend: true
@@ -75,6 +76,20 @@ class GroupsController < ApplicationController
 		else
 			render json: 'Please try again later'.to_json, status: 500
 		end
+	end
+
+	def test_whatsapp_twillio_api
+		account_sid = "AC8e9c769146578c92b27c86b4e884445f" # Your Account SID from www.twilio.com/console
+		auth_token = "c565824da97e24c1f64b8ff01e97c2d2"   # Your Auth Token from www.twilio.com/console
+		@client = Twilio::REST::Client.new account_sid, auth_token
+		message = @client.messages.create(
+							media_url: 'http://139.59.35.254:82/uploads/530cbd3e3ed7eb959b4949dfa0924457.jpg',
+                            body: 'Your Twilio code is 12345',
+                            from: 'whatsapp:+14155238886',
+                            to: 'whatsapp:+918394848527' )
+
+		puts message.sid #save into group ,also generate otp and save into group
+
 	end
 
 	private

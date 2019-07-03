@@ -3,7 +3,6 @@
 # 	# 	json.set! :groups, {}
 # 	# 	json.set! :message, "Some Groups already sent for print.can't send more."
 # 	# else
-# 	debugger
 # 		json.set! 'groups' do
 # 			@groups.each do |group|
 # 				if group.documents.present?

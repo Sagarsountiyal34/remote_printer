@@ -106,6 +106,31 @@ module Api
 					forbidden_error(e)
 				end
 			end
+
+			def send_error_to_admin
+				begin
+					if params[:error].present?
+						error = params["error"]
+						if ExampleMailer.sample_email(error).deliver_now
+							render status: "200", json: {
+	        					message: 'Mail Sent'
+				        	}
+				        else
+				        	render status: "500", json: {
+	        					message: 'Please Try Again Letter'
+				        	}
+				        end
+					else
+						render status: "500", json: {
+        					message: 'Please send the error'
+			        	}
+					end
+				rescue Exception => e
+					render status: "500", json: {
+        				message: e.message
+			        }
+				end
+			end
 		end
 	end
 end

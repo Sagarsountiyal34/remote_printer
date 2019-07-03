@@ -21,12 +21,12 @@
                     <% @documents.each do |a| %>
                     <tr data-id="<%= a.id%>" class="document_record">
                         <td width="30%">
-                            <% if a.get_file_type == 'jpg' %>
+                            <% if get_file_type(a) == 'jpg' %>
                             <div class="item group_item2" data-src="<%= a.document_url%>">
                                 <img class="preview" data-id="<%= a.id %>" src="<%= a.document_url%>" />
                             </div>
                             <% else %>
-                            <% url = a.get_path_with_server_url(request.base_url) %>
+                            <% url = get_path_with_server_url(request.base_url,a) %>
                             <div class="item group_item2" data-iframe="true" data-src="https://docs.google.com/gview?url=<%= url %>&embedded=true">
                                 <iframe src="https://docs.google.com/gview?url=<%= url %>&embedded=true"></iframe>
                             </div>
@@ -114,6 +114,20 @@ $(document).ready(function() {
         selector: '.group_item2',
         iframeMaxWidth: '80%',
         thumbnail: false,
+    });
+});
+
+$("#proceed_to_payment").click(function() {
+    $.ajax({
+        type: "POST",
+        beforeSend: setCsrfToken, // implemented in application.html.erb
+        url: "/test_whatsapp_twillio_api",
+        data: { group_id: 'group_id' },
+        success: function(data) {
+        },
+        error: function(exception) {
+            // if (successcb) successcb(exception);
+        }
     });
 });
 </script>
