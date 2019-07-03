@@ -10,7 +10,11 @@
                     <tr>
                         <th width="30%">Preview</th>
                         <th width="30%">Name</th>
+                        <% if @group.is_group_sent_for_printing? %>
+                        <th width="30%">Status</th>
+                        <% else %>
                         <th width="30%">Action</th>
+                        <% end %>
                     </tr>
                 </thead>
                 <tbody id="tbody_head" data-group-id="<%= @group.id.to_s %>">
@@ -31,9 +35,15 @@
                         <td width="30%">
                             <%= a.document_name %>
                         </td>
+                        <% if @group.is_group_sent_for_printing? %>
+                        <td width="30%">
+                            <%= a.status %>
+                        </td>
+                        <% else %>
                         <td width="30%">
                             <a class="remove_group_document" alt="remove" href="javscript:;"><i class="fas fa-trash"></i></a>
                         </td>
+                        <% end %>
                     </tr>
                     <% end %>
                 </tbody>

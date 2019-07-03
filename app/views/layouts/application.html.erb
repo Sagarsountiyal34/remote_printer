@@ -34,8 +34,10 @@
             <li class="nav-item dropdown no-arrow mx-1 show">
                 <%= link_to  printed_groups_path,{ method: :get, class: :'nav-link dropdown-toggle', role: :'button' } do %>
                 <i class="fas fa-shopping-cart"></i>
+                <% if current_user.get_total_group.present? %>
                 <span class="badge badge-danger total_group" style="margin-left:0px;font-size: 0.6rem;">
                     <%= current_user.get_total_group %></span>
+                <% end %>
                 <% end %>
             </li>
             <li class="nav-item dropdown no-arrow">
@@ -71,6 +73,12 @@
                 <%= link_to printed_groups_path, class: "nav-link" do %>
                 <i class="fas fa-fw fa-tachometer-alt"></i>
                 <span>Previous Print</span>
+                <% end %>
+            </li>
+            <li class="nav-item active">
+                <%= link_to progress_groups_path, class: "nav-link" do %>
+                <i class="fas fa-fw fa-tachometer-alt"></i>
+                <span>Progress Group</span>
                 <% end %>
             </li>
         </ul>

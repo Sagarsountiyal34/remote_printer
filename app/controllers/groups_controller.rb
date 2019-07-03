@@ -45,6 +45,10 @@ class GroupsController < ApplicationController
 		@printed_groups = current_user.groups.where(:status => 'completed')
 	end
 
+	def progress_groups
+		@progress_groups = current_user.groups.where(:status.in => ['sent_for_printing', 'processing'])
+	end
+
 	def remove_document_from_group #via ajax
 		document_ids = params[:document_ids]
 		group = current_user.groups.find(params[:id])

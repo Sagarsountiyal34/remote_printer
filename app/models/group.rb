@@ -47,4 +47,20 @@ class Group
     return documents_array
   end
 
+  def is_progress_group?
+    ['sent_for_printing', 'processing'].include?(self.status)
+  end
+
+  def is_completed_group?
+    self.status == 'completed'
+  end
+
+  def is_failed_group?
+    self.status == 'failed'
+  end
+
+  def is_group_sent_for_printing?
+    ['sent_for_printing', 'processing','failed', 'completed'].include?(self.status)
+  end
+
 end

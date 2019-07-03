@@ -4,11 +4,11 @@ module Api
 			include ActionController::ImplicitRender
 			protect_from_forgery with: :null_session
 
-			def update_document_and_group_status
+			def update_document_status
 				begin
 					group_id = params["group_id"]
 					document_id = params["document_id"]
-					status = params["document_status"]
+					status = params["status"]
 					if !group_id.present? or !document_id.present? or !status.present?
 						render status: "422", json: {
 	           				 message: "Group id and/or Document id and/or Status is empty."
@@ -42,27 +42,22 @@ module Api
 			def get_all_documents
 				begin
 					response = {}
-					status = 'ready_for_payment'
-					# have_to_send_groups = true
-					# if have_to_send_groups
-						Group.all.each do |group|
-								if group.documents.present?
-									documents_hash = group.get_documents_for_api(request)
-									if group.update_attributes(:status => 'sent_for_printing') and documents_hash.present?
-										response[group.id.to_s] = documents_hash
-									end
+					Group.not_in(status: 'completed').each do |group|
+							if group.documents.present?
+								documents_hash = group.get_documents_for_api(request)
+								if group.update_attributes(:status => 'sent_for_printing') and documents_hash.present?
+									response[group.id.to_s] = documents_hash
 								end
-						end
-						if response.present?
-							render status: "200", json: {
-								groups: response,
-								message: "Success"
-							}
-						else
-							forbidden_error
-						end
-
-					# end
+							end
+					end
+					if response.present?
+						render status: "200", json: {
+							groups: response,
+							message: "Success"
+						}
+					else
+						forbidden_error
+					end
 				rescue Exception => e
 					forbidden_error(e)
 				end

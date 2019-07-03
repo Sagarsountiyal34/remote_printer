@@ -1,0 +1,48 @@
+<!-- Breadcrumbs-->
+<ol class="breadcrumb">
+    <li class="breadcrumb-item">
+        <a href="#">Dashboard</a>
+    </li>
+    <li class="breadcrumb-item active">Progress Group</li>
+</ol>
+<div class="card mb-3">
+    <div class="card-header">
+        <i class="fas fa-table"></i>
+        Progress Group</div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered document_table" id="dataTable" width="100%" cellspacing="0" data-turbolinks="false">
+                <thead>
+                    <tr>
+                        <th width="50%">Updated On</th>
+                        <th width="30%">Status</th>
+                        <th width="20%">Show Details</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% @progress_groups.each do |group| %>
+                    <tr data-id="<%= group.id%>" class="document_record">
+                        <td>
+                            <%= group.updated_at.strftime("%l:%S:%M %p ,     %d %B %Y") %>
+                        </td>
+                        <td>
+                            <%= group.status %>
+                        </td>
+                        <td>
+                            <%= link_to 'Details', { controller: :groups, action: :edit, id: group.id}  %>
+                        </td>
+                    </tr>
+                    <% end %>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
+</div>
+<script>
+$(document).ready(function() {
+    $('#dataTable').DataTable({
+        "ordering": false,
+    });
+});
+</script>

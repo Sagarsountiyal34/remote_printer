@@ -10,6 +10,7 @@ Rails.application.routes.draw do
   get 'edit_group/:id', to: 'groups#edit'
   get 'list_documents', to: 'documents#list_documents'
   get 'printed_groups', to: 'groups#list'
+  get 'progress_groups', to: 'groups#progress_groups'
   post 'add_document_to_group', to: 'groups#add_document_to_group'
   post 'remove_document_from_group', to: 'groups#remove_document_from_group'
   post 'remove_documents', to: 'documents#remove_documents'
@@ -20,8 +21,9 @@ Rails.application.routes.draw do
   namespace 'api' do
 		namespace 'v1' do
 			get 'get_all_documents', to: 'documents#get_all_documents'
-			post 'update_document_and_group_status', to: 'documents#update_document_and_group_status', as: 'update_document_and_group_status'
-      get 'get_groups_with_status', to: 'documents#get_groups_with_status'
+			post 'update_document_status', to: 'documents#update_document_status', as: 'update_document_status'
+      post 'update_group_status', to: 'documents#update_group_status', as: 'update_group_status'
+      post 'get_groups_with_status', to: 'documents#get_groups_with_status'
 		end
 	end
 end
