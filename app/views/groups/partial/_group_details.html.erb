@@ -64,11 +64,11 @@
         </div>
     </div>
     <% end %>
-    <% if @documents.present? %>
-    <div class="card-footer small text-muted">Updated at
-        <%= @documents.first.updated_at.strftime("%d %B %Y , %l:%M %p") %>
-    </div>
-    <% end %>
+    <%# if @documents.present? %>
+    <!-- <div class="card-footer small text-muted">Updated at
+        <%#= @documents.first.updated_at.strftime("%d %B %Y , %l:%M %p") %>
+    </div> -->
+    <%# end %>
     <%= render "groups/partial/from_desktop" %>
     <%= render "groups/partial/from_history" %>
 </div>
