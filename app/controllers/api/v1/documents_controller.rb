@@ -18,7 +18,11 @@ module Api
 							group = Group.find(group_id)
 							document = group.documents.find(document_id)
 							document.status = status
-							group.status = 'processing'
+							if group.documents.map{|g| g.status}.include?('pending')
+								group.status = 'processing'
+							else
+								group.status = 'completed'
+							end
 							if document.save and group.save
 								render status: "201", json: {
 									message: "Status updated successfully"

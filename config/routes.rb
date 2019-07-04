@@ -11,6 +11,7 @@ Rails.application.routes.draw do
   get 'list_documents', to: 'documents#list_documents'
   get 'printed_groups', to: 'groups#list'
   get 'progress_groups', to: 'groups#progress_groups'
+  get 'recently_printed_groups', to: 'groups#recently_printed_groups'
   post 'add_document_to_group', to: 'groups#add_document_to_group'
   post 'remove_document_from_group', to: 'groups#remove_document_from_group'
   post 'remove_documents', to: 'documents#remove_documents'

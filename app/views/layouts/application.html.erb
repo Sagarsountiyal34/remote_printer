@@ -70,15 +70,21 @@
                 <% end %>
             </li>
             <li class="nav-item active">
+                <%= link_to progress_groups_path, class: "nav-link" do %>
+                <i class="fas fa-fw fa-tachometer-alt"></i>
+                <span>Progress Group</span>
+                <% end %>
+            </li>
+            <li class="nav-item active">
                 <%= link_to printed_groups_path, class: "nav-link" do %>
                 <i class="fas fa-fw fa-tachometer-alt"></i>
                 <span>Previous Print</span>
                 <% end %>
             </li>
             <li class="nav-item active">
-                <%= link_to progress_groups_path, class: "nav-link" do %>
+                <%= link_to recently_printed_groups_path, class: "nav-link" do %>
                 <i class="fas fa-fw fa-tachometer-alt"></i>
-                <span>Progress Group</span>
+                <span>Recent Print</span>
                 <% end %>
             </li>
         </ul>

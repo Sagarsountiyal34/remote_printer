@@ -37,7 +37,11 @@
             </table>
         </div>
     </div>
-    <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
+    <% if @printed_groups.present? %>
+    <div class="card-footer small text-muted">Updated at
+        <%= @printed_groups.first.updated_at.strftime("%d %B %Y , %l:%M %p") %>
+    </div>
+    <% end %>
 </div>
 <script>
 $(document).ready(function() {

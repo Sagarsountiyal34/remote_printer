@@ -43,11 +43,15 @@ class GroupsController < ApplicationController
 	end
 
 	def list
-		@printed_groups = current_user.groups.where(:status => 'completed')
+		@printed_groups = current_user.groups.where(:status => 'completed').order_by(updated_at: :desc)
+	end
+
+	def recently_printed_groups
+		@recently_printed = current_user.groups.where(status: 'completed').where(updated_at: (Time.now - 24.hours)..Time.now).order_by(updated_at: :desc)
 	end
 
 	def progress_groups
-		@progress_groups = current_user.groups.where(:status.in => ['sent_for_printing', 'processing'])
+		@progress_groups = current_user.groups.where(:status.in => ['sent_for_printing', 'processing']).order_by(updated_at: :desc)
 	end
 
 	def remove_document_from_group #via ajax
@@ -59,7 +63,7 @@ class GroupsController < ApplicationController
 			if @group.present?
 				render partial: 'groups/partial/group_details'
 			else
-				render json: {  group_present: false, url: request.base_url   }, status: 500
+				redirect_to  upload_doc_path
 			end
 		else
 			render json: 'Please try again later'.to_json, status: 500

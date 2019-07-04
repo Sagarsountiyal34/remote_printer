@@ -64,7 +64,11 @@
         </div>
     </div>
     <% end %>
-    <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
+    <% if @documents.present? %>
+    <div class="card-footer small text-muted">Updated at
+        <%= @documents.first.updated_at.strftime("%d %B %Y , %l:%M %p") %>
+    </div>
+    <% end %>
     <%= render "groups/partial/from_desktop" %>
     <%= render "groups/partial/from_history" %>
 </div>
@@ -77,11 +81,7 @@ $(".remove_group_document").click(function() {
     $(this).hide();
 
     function onSuccess(response) {
-        if (response['group_present'] == false) {
-            window.location.href = response['url']
-        } else {
-            $('#group_content').html(response);
-        }
+        $('#group_content').html(response);
     }
 
     function onError(reponse) {
@@ -123,8 +123,7 @@ $("#proceed_to_payment").click(function() {
         beforeSend: setCsrfToken, // implemented in application.html.erb
         url: "/test_whatsapp_twillio_api",
         data: { group_id: 'group_id' },
-        success: function(data) {
-        },
+        success: function(data) {},
         error: function(exception) {
             // if (successcb) successcb(exception);
         }
