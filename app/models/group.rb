@@ -4,17 +4,12 @@ class Group
   include Mongoid::Timestamps
 
   belongs_to :user
-  embeds_many :documents, class_name: "GroupDocument"
+  embeds_many :documents, class_name: "GroupDocument", cascade_callbacks: true
 
   field :status, type: String, default: "ready_for_payment"
   validates :status, inclusion: { in: ['ready_for_payment', 'ready_for_print','sent_for_printing', 'processing', 'failed', 'completed'] }
 
-  # after_create :set_default_status
   after_save :remove_group_if_needed
-
-  # def set_default_status
-  #   self.status = 'ready_for_payment' # note self.status = 'P' if self.status.nil? might be safer (per @frontendbeauty)
-  # end
 
   def remove_group_if_needed
     self.destroy if self.documents.present? == false
