@@ -28,31 +28,37 @@
                         </ul>
                         <% end %>
                     </div>
-                    <%= f.submit "Upload", :class => 'btn btn-primary btn-block' %>
+                    <%= f.submit "Upload", :class => 'btn btn-primary btn-block', :id => 'from_desktop_upload' %>
                     <% end %>
                 </div>
+            </div>
+            <div id="loader_wrap">
+                <img src="/images/loader.gif" id="loader_img" width="100" height="100">
             </div>
         </div>
     </div>
 </div>
 <script>
-
 $('#new_upload_document').submit(function(e) {
+    jQuery('#loader_wrap').show();
+    jQuery('#from_desktop_upload').hide()
     e.preventDefault();
     var valuesToSubmit = new FormData(this);
-    var url_action =  $(this).attr('action');
+    var url_action = $(this).attr('action');
     $.ajax({
         type: "POST",
         url: url_action, //sumbits it to the given url of the form
         data: valuesToSubmit,
         processData: false,
         contentType: false,
-        success: function(response){
-
+        success: function(response) {
+            jQuery('#from_desktop_upload').show();
+            jQuery('#loader_wrap').hide();
         },
-        error: function(response)
-        {
-            alert(JSON.parse(response.responseText)['document_error'][1]);
+        error: function(response) {
+            alert(JSON.parse(response.responseText)['document_error']);
+            jQuery('#from_desktop_upload').show();
+            jQuery('#loader_wrap').hide();
         }
     });
     return false; // prevents normal behaviour

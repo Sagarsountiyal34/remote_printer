@@ -10,3 +10,10 @@
 	left: 50% !important;
     transform: translate(-50%,0);
 }
+
+#loader_wrap
+{
+	display: block;
+    margin: auto;
+    display: none;
+}

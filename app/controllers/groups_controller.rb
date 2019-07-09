@@ -29,15 +29,19 @@ class GroupsController < ApplicationController
 	end
 
 	def update
-		upload_document = current_user.upload_documents.new(document_params)
-		group = current_user.groups.find(params[:id])
-		if upload_document.save and group.present?
-			upload_document.add_documents(group) # addding into group
-			upload_document.insert_otp_into_document(group.otp)
-			group.save
-			redirect_to action: 'edit', :id =>  group.id
+		if document_params['document'].present?
+			upload_document = current_user.upload_documents.new(document_params)
+			group = current_user.groups.find(params[:id])
+			if upload_document.save and group.present?
+				upload_document.add_documents(group) # addding into group
+				upload_document.insert_otp_into_document(group.otp)
+				group.save
+				redirect_to action: 'edit', :id =>  group.id
+			else
+				render json: {  document_error: upload_document.errors.full_messages_for(:document)   }, status: :unprocessable_entity
+			end
 		else
-			render json: {  document_error: upload_document.errors.full_messages_for(:document)   }, status: :unprocessable_entity
+			render json: {  document_error: 'Please Upload a Document'}, status: :unprocessable_entity
 		end
 	end
 
