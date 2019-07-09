@@ -48,7 +48,7 @@ Rails.application.configure do
 
   # Use the lowest log level to ensure availability of diagnostic information
   # when problems arise.
-  config.log_level = :debug
+
 
   # Prepend all log lines with the following tags.
   config.log_tags = [ :request_id ]
@@ -73,6 +73,7 @@ Rails.application.configure do
   config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }
   # Send deprecation notices to registered listeners.
   config.active_support.deprecation = :log
+  config.log_level = :debug
 
   # Use default logging formatter so that PID and timestamp are not suppressed.
   config.log_formatter = ::Logger::Formatter.new
