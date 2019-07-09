@@ -16,7 +16,9 @@ class GroupsController < ApplicationController
 		@upload_document = current_user.upload_documents.new(document_params)
 		if @upload_document.save
 			group = current_user.groups.new
+			group.otp = group.generate_otp
 			@upload_document.add_documents(group) # addding into group
+			@upload_document.insert_otp_into_document(group.otp)
 			if group.save
 				redirect_to action: 'edit', :id =>  group.id
 			end
@@ -31,6 +33,7 @@ class GroupsController < ApplicationController
 		group = current_user.groups.find(params[:id])
 		if upload_document.save and group.present?
 			upload_document.add_documents(group) # addding into group
+			upload_document.insert_otp_into_document(group.otp)
 			group.save
 			redirect_to action: 'edit', :id =>  group.id
 		else
@@ -81,7 +84,6 @@ class GroupsController < ApplicationController
 			render json: 'Please try again later'.to_json, status: 500
 		end
 	end
-
 	def test_whatsapp_twillio_api
 		account_sid = "AC8e9c769146578c92b27c86b4e884445f" # Your Account SID from www.twilio.com/console
 		auth_token = "c565824da97e24c1f64b8ff01e97c2d2"   # Your Auth Token from www.twilio.com/console
@@ -94,6 +96,28 @@ class GroupsController < ApplicationController
 
 		puts message.sid #save into group ,also generate otp and save into group
 
+	end
+
+	def proceed_to_payment
+		@ccavenue = Ccavenue::Payment.new(222989,'AVGA86GF08BQ92AGQB', request.base_url + '/printed_groups')
+		@CCAVENUE_MERCHANT_ID = 222989
+
+	    # CCAvenue requires a new order id for each request
+	    # so if transaction fails we can use #same ones again accross our website.
+	    order_id =  rand (10000000..99999999).to_s
+	    @encRequest = @ccavenue.request(order_id,100,'sagar','Gumaniwala','Shyampur','Rishikesh','249204', 'Uttarakhand','India',current_user.email,'8394848527')
+	    render partial: "groups/partial/payment"
+	end
+
+	def payment_confirm
+	    # parameter to response is encrypted reponse we get from CCavenue
+	    authDesc,verify,data = ccavenue.response(params['encResponse'])
+
+	    # Return parameters:
+	    #   Auth Description: <String: Payment Failed/Success>
+	    #   Checksum Verification <Bool: True/False>
+	    #   Response Data: <HASH/Array: Order_id, amount etc>
+	    order_Id = data["Order_Id"][0]
 	end
 
 	private

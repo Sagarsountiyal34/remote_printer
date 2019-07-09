@@ -17,7 +17,7 @@ Rails.application.routes.draw do
   post 'remove_documents', to: 'documents#remove_documents'
   post 'start_payment', to: 'groups#start_payment'
 
-  post 'test_whatsapp_twillio_api', to: 'groups#test_whatsapp_twillio_api'
+  post 'proceed_to_payment', to: 'groups#proceed_to_payment'
 
 
   namespace 'api' do

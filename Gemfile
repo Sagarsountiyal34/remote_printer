@@ -47,6 +47,12 @@ gem "rest-client"
 
 
 gem 'twilio-ruby'
+gem 'prawn'
+gem 'combine_pdf'
+gem 'libreconv'
+gem 'rmagick'
+gem 'active_merchant_ccavenue'
+gem 'ccavenue'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

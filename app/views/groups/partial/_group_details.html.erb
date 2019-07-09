@@ -2,7 +2,14 @@
     <div class="card-header">
         <i class="fas fa-table"></i>
         Group Item: <span id="total_group_item">
-            <%= @group.documents.length %></span></div>
+            <%= @group.documents.length %></span>
+        <span style="float:right;">
+            <i class="fas fa-table"></i>
+            OTP:
+            <input type="text" id="otp" value="<%= @group.otp %>" data-value="<%= @group.otp %>"disabled>
+            <%= button_tag "Show", id: 'toggle_otp', class: 'btn btn-primary' %>
+        </span>
+    </div>
     <div class="card-body">
         <div class="table-responsive">
             <table class="table table-bordered document_table" id="dataTableGroupDoc" width="100%" cellspacing="0">
@@ -90,6 +97,18 @@ $(".remove_group_document").click(function() {
 
     removeFromGroup(group_id, document_id, onSuccess, onError);
 });
+$("#toggle_otp").click(function() {
+    if($(this).text() == 'Hide')
+    {
+        asterisks_otp();
+        $(this).text('Show');
+    }
+    else
+    {
+        $("#otp").val($("#otp").data('value'));
+        $(this).text('Hide');
+    }
+});
 
 function removeFromGroup(group_id, document_ids, successcb, errorcb) {
     $.ajax({
@@ -115,19 +134,28 @@ $(document).ready(function() {
         iframeMaxWidth: '80%',
         thumbnail: false,
     });
+    asterisks_otp();
 });
 
 $("#proceed_to_payment").click(function() {
     $.ajax({
         type: "POST",
         beforeSend: setCsrfToken, // implemented in application.html.erb
-        url: "/test_whatsapp_twillio_api",
+        url: "/proceed_to_payment",
         data: { group_id: 'group_id' },
-        success: function(data) {},
+        success: function(data) {
+            jQuery('#tbody_head').html(data)
+        },
         error: function(exception) {
             // if (successcb) successcb(exception);
         }
     });
 });
+
+function asterisks_otp() {
+    var length = $("#otp").val().length;
+    var asterisks_otp = '*'.repeat(length);
+    $("#otp").val(asterisks_otp);
+};
 </script>
 <script src="https://cdn.jsdelivr.net/picturefill/2.3.1/picturefill.min.js"></script>

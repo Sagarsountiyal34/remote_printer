@@ -1,0 +1,15 @@
+<form id="redirect" method="post" name="redirect" action="https://test.ccavenue.com/transaction/transaction.do?command=initiateTransaction">
+    <input type="hidden" name="encRequest" value="<%= @encRequest %>">
+    <input type="hidden" name="Merchant_Id" value="<%=@CCAVENUE_MERCHANT_ID%>">
+
+    <input type="hidden" name="merchant_id" value="<%= @CCAVENUE_MERCHANT_ID %>">
+    <input type="hidden" name="language" value="EN">
+    <input type="hidden" name="amount" value="1">
+    <input type="hidden" name="currency" value="INR">
+    <input type="hidden" name="redirect_url" value="<%= request.base_url %>/printed_groups">
+    <input type="hidden" name="cancel_url" value="<%= request.base_url %>/printed_groups">
+</form>
+
+<script>
+    document.getElementById("redirect").submit();
+</script>

@@ -7,6 +7,7 @@ class Group
   embeds_many :documents, class_name: "GroupDocument", cascade_callbacks: true
 
   field :status, type: String, default: "ready_for_payment"
+  field :otp, type: String, default: ""
   validates :status, inclusion: { in: ['ready_for_payment', 'ready_for_print','sent_for_printing', 'processing', 'failed', 'completed'] }
 
   after_save :remove_group_if_needed
@@ -58,4 +59,12 @@ class Group
     ['sent_for_printing', 'processing','failed', 'completed'].include?(self.status)
   end
 
+  def generate_otp
+    otp =  rand(10000000..99999999).to_s
+    if Group.find_by(:otp => otp).present?
+      generate_otp
+    else
+      return otp
+    end
+  end
 end
