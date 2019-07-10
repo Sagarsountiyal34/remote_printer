@@ -1,24 +1,22 @@
 <%
   merchantData=""
-  working_key="B76E436312C20E042F082D07F7CEBD0B"   #Put in the 32 Bit Working Key provided by CCAVENUES.
-  access_code="AVKD86GG43AS18DKSA"   #Put in the Access Code in quotes provided by CCAVENUES.
+  working_key="DF40061E4894F5376FFD97924949B0FC"   #Put in the 32 Bit Working Key provided by CCAVENUES.
+  access_code="AVVK86GG45AU25KVUA"   #Put in the Access Code in quotes provided by CCAVENUES.
 
   @params.each do |key,value|
       merchantData += key.to_s+"="+value+"&"
   end
   crypto = Crypto.new
   encrypted_data = crypto.encrypt(merchantData,working_key)
-  debugger
 %>
-  <iframe  width="482" height="500" scrolling="No" frameborder="0"  id="paymentFrame" src="https://test.ccavenue.com/transaction/transaction.do?command=initiateTransaction&encRequest=<%=encrypted_data %>&access_code=<%=access_code %>"></iframe>
+<iframe width="482" height="500" scrolling="No" frameborder="0" id="paymentFrame" src="https://test.ccavenue.com/transaction/transaction.do?command=initiateTransaction&encRequest=<%=encrypted_data %>&access_code=<%=access_code %>"></iframe>
 </center>
-
 <script type="text/javascript">
-    $(document).ready(function(){
-	    $('iframe#paymentFrame').load(function() {
-	     window.addEventListener('message', function(e) {
-	         $("#paymentFrame").css("height",e.data['newHeight']+'px');
-	     }, false);
-	    });
+$(document).ready(function() {
+    $('iframe#paymentFrame').load(function() {
+        window.addEventListener('message', function(e) {
+            $("#paymentFrame").css("height", e.data['newHeight'] + 'px');
+        }, false);
     });
+});
 </script>

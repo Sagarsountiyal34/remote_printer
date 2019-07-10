@@ -6,7 +6,7 @@
         <span style="float:right;">
             <i class="fas fa-table"></i>
             OTP:
-            <input type="text" id="otp" value="<%= @group.otp %>" data-value="<%= @group.otp %>"disabled>
+            <input type="text" id="otp" value="<%= @group.otp %>" data-value="<%= @group.otp %>" disabled>
             <%= button_tag "Show", id: 'toggle_otp', class: 'btn btn-primary' %>
         </span>
     </div>
@@ -29,13 +29,12 @@
                     <tr data-id="<%= a.id%>" class="document_record">
                         <td width="30%">
                             <% if get_file_type(a) == 'jpg' %>
-                            <div class="item group_item2" data-src="<%= a.document_url%>">
-                                <img class="preview" data-id="<%= a.id %>" src="<%= a.document_url%>" />
+                            <div class="item group_item2" data-src="<%= a.document_url %>">
+                                <img class="preview" data-id="<%= a.id %>" src="<%= a.document_url %>" />
                             </div>
                             <% else %>
-                            <% url = get_path_with_server_url(request.base_url,a) %>
-                            <div class="item group_item2" data-iframe="true" data-src="https://docs.google.com/gview?url=<%= url %>&embedded=true">
-                                <iframe src="https://docs.google.com/gview?url=<%= url %>&embedded=true"></iframe>
+                            <div class="item group_item2" data-iframe="true" data-src="<%= a.document_url %>">
+                                <embed src="<%= a.document_url %>" width="100%" height="100%"></embed>
                             </div>
                             <% end %>
                         </td>
@@ -98,13 +97,10 @@ $(".remove_group_document").click(function() {
     removeFromGroup(group_id, document_id, onSuccess, onError);
 });
 $("#toggle_otp").click(function() {
-    if($(this).text() == 'Hide')
-    {
+    if ($(this).text() == 'Hide') {
         asterisks_otp();
         $(this).text('Show');
-    }
-    else
-    {
+    } else {
         $("#otp").val($("#otp").data('value'));
         $(this).text('Hide');
     }

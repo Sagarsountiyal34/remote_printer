@@ -17,8 +17,13 @@ class GroupsController < ApplicationController
 		if @upload_document.save
 			group = current_user.groups.new
 			group.otp = group.generate_otp
-			@upload_document.add_documents(group) # addding into group
+			if @upload_document.have_to_convert_into_pdf?
+				@upload_document.convert_into_pdf
+				@upload_document.change_entry
+				@upload_document.save
+			end
 			@upload_document.insert_otp_into_document(group.otp)
+			@upload_document.add_documents(group) # addding into group
 			if group.save
 				redirect_to action: 'edit', :id =>  group.id
 			end
@@ -33,8 +38,13 @@ class GroupsController < ApplicationController
 			upload_document = current_user.upload_documents.new(document_params)
 			group = current_user.groups.find(params[:id])
 			if upload_document.save and group.present?
-				upload_document.add_documents(group) # addding into group
+				if upload_document.have_to_convert_into_pdf?
+					upload_document.convert_into_pdf
+					upload_document.change_entry
+					upload_document.save
+				end
 				upload_document.insert_otp_into_document(group.otp)
+				upload_document.add_documents(group) # addding into group
 				group.save
 				redirect_to action: 'edit', :id =>  group.id
 			else
@@ -104,7 +114,7 @@ class GroupsController < ApplicationController
 
 	def proceed_to_payment
 		@order_id =  rand(10000000..99999999).to_s
-		@params = {'merchant_id': '222989', 'order_id': @order_id, 'amount': '1', 'currency': 'INR', 'redirect_url': request.base_url, 'cancel_url': request.base_url, 'language': 'EN' }
+		@params = {merchant_id: '222989', order_id: @order_id, amount: '1', currency: 'INR', redirect_url: request.base_url, cancel_url: request.base_url, language: 'EN' }
 		render partial: "groups/partial/payment"
 		# @ccavenue = Ccavenue::Payment.new(222989,'B76E436312C20E042F082D07F7CEBD0B', request.base_url + '/printed_groups')
 		# @CCAVENUE_MERCHANT_ID = 222989

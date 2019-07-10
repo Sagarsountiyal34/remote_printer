@@ -9,7 +9,7 @@ class GroupDocument
   belongs_to :upload_document
 
   field :document_name,           type: String, default: ""
-  field :document_data,   		  type: String, default: ""
+  field :document_data,   		  type: Hash, default: {}
   field :status, 				  type: String, default: "pending"
   field :total_pages, type: Integer,default: 0
   field :processed_pages, type: Integer,default: 0
