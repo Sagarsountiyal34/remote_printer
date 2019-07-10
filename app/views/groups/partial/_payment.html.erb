@@ -1,15 +1,24 @@
-<form id="redirect" method="post" name="redirect" action="https://test.ccavenue.com/transaction/transaction.do?command=initiateTransaction">
-    <input type="hidden" name="encRequest" value="<%= @encRequest %>">
-    <input type="hidden" name="Merchant_Id" value="<%=@CCAVENUE_MERCHANT_ID%>">
+<%
+  merchantData=""
+  working_key="B76E436312C20E042F082D07F7CEBD0B"   #Put in the 32 Bit Working Key provided by CCAVENUES.
+  access_code="AVKD86GG43AS18DKSA"   #Put in the Access Code in quotes provided by CCAVENUES.
 
-    <input type="hidden" name="merchant_id" value="<%= @CCAVENUE_MERCHANT_ID %>">
-    <input type="hidden" name="language" value="EN">
-    <input type="hidden" name="amount" value="1">
-    <input type="hidden" name="currency" value="INR">
-    <input type="hidden" name="redirect_url" value="<%= request.base_url %>/printed_groups">
-    <input type="hidden" name="cancel_url" value="<%= request.base_url %>/printed_groups">
-</form>
+  @params.each do |key,value|
+      merchantData += key.to_s+"="+value+"&"
+  end
+  crypto = Crypto.new
+  encrypted_data = crypto.encrypt(merchantData,working_key)
+  debugger
+%>
+  <iframe  width="482" height="500" scrolling="No" frameborder="0"  id="paymentFrame" src="https://test.ccavenue.com/transaction/transaction.do?command=initiateTransaction&encRequest=<%=encrypted_data %>&access_code=<%=access_code %>"></iframe>
+</center>
 
-<script>
-    document.getElementById("redirect").submit();
+<script type="text/javascript">
+    $(document).ready(function(){
+	    $('iframe#paymentFrame').load(function() {
+	     window.addEventListener('message', function(e) {
+	         $("#paymentFrame").css("height",e.data['newHeight']+'px');
+	     }, false);
+	    });
+    });
 </script>

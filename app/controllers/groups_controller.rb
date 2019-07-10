@@ -103,14 +103,16 @@ class GroupsController < ApplicationController
 	end
 
 	def proceed_to_payment
-		@ccavenue = Ccavenue::Payment.new(222989,'AVGA86GF08BQ92AGQB', request.base_url + '/printed_groups')
-		@CCAVENUE_MERCHANT_ID = 222989
-
-	    # CCAvenue requires a new order id for each request
+		@order_id =  rand(10000000..99999999).to_s
+		@params = {'merchant_id': '222989', 'order_id': @order_id, 'amount': '1', 'currency': 'INR', 'redirect_url': request.base_url, 'cancel_url': request.base_url, 'language': 'EN' }
+		render partial: "groups/partial/payment"
+		# @ccavenue = Ccavenue::Payment.new(222989,'B76E436312C20E042F082D07F7CEBD0B', request.base_url + '/printed_groups')
+		# @CCAVENUE_MERCHANT_ID = 222989
+		# @access_code = 'AVKD86GG43AS18DKSA'
+		# CCAvenue requires a new order id for each request
 	    # so if transaction fails we can use #same ones again accross our website.
-	    order_id =  rand (10000000..99999999).to_s
-	    @encRequest = @ccavenue.request(order_id,100,'sagar','Gumaniwala','Shyampur','Rishikesh','249204', 'Uttarakhand','India',current_user.email,'8394848527')
-	    render partial: "groups/partial/payment"
+	 	# order_id =  rand(10000000..99999999).to_s
+	 	# @encRequest = @ccavenue.request(order_id,100,'sagar','Gumaniwala','Shyampur','Rishikesh','249204', 'Uttarakhand','India',current_user.email,'8394848527')
 	end
 
 	def payment_confirm
