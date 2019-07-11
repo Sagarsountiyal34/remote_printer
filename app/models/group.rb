@@ -7,8 +7,11 @@ class Group
   embeds_many :documents, class_name: "GroupDocument", cascade_callbacks: true
 
   field :status, type: String, default: "ready_for_payment"
+  field :payment_type, type: String, default: "pending"
   field :otp, type: String, default: ""
+
   validates :status, inclusion: { in: ['ready_for_payment', 'ready_for_print','sent_for_printing', 'processing', 'failed', 'completed'] }
+  validates :payment_type, inclusion: { in: ['pending', 'online', 'cash_on_delivery'] }
 
   after_save :remove_group_if_needed
 
@@ -32,15 +35,23 @@ class Group
   end
 
   def get_documents_for_api(request)
+    detail_with_docx_hash = {}
     documents_array = []
+    detail = {}
+
     self.documents.each do |document|
         document_hash = {}
         document_hash['id'] = document.id.to_s
-        document_hash['name'] = document.document_name
+        # document_hash['name'] = document.document_name
+        document_hash['name'] = document.document_data["metadata"]["filename"]
         document_hash['path'] = request.base_url + document.document_url
         documents_array << document_hash
     end
-    return documents_array
+    detail['user_id'] = self.user.email
+    detail['otp'] = self.otp
+    detail_with_docx_hash['details'] = detail
+    detail_with_docx_hash['docx'] = documents_array
+    return detail_with_docx_hash
   end
 
   def is_progress_group?
@@ -67,4 +78,9 @@ class Group
       return otp
     end
   end
+
+  def self.any_online_payment_group_sent_for_printing?
+    Group.where(payment_type: 'online').where(:status.in => ['sent_for_printing', 'processing','failed']).present?
+  end
+
 end

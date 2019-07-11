@@ -45,22 +45,42 @@ module Api
 
 			def get_all_documents
 				begin
+					payment_type = params["payment_type"]
 					response = {}
-					Group.not_in(status: 'completed').each do |group|
+					message = "Try Again"
+					if payment_type == 'online'
+						if Group.any_online_payment_group_sent_for_printing? == false
+							group = Group.not_in(status: 'completed').where(payment_type: payment_type).first
+							if group.present? and group.documents.present?
+								documents_hash = group.get_documents_for_api(request)
+								if group.update_attributes(:status => 'sent_for_printing') and documents_hash.present?
+									response[group.id.to_s] = documents_hash
+									message = "Success"
+								end
+							else
+								message = "Group not present for sent."
+							end
+						else
+							message = "A Group with online payment already sent for printing."
+						end
+					else
+						Group.not_in(status: 'completed').each do |group|
 							if group.documents.present?
 								documents_hash = group.get_documents_for_api(request)
 								if group.update_attributes(:status => 'sent_for_printing') and documents_hash.present?
 									response[group.id.to_s] = documents_hash
+									message = "Success"
 								end
 							end
+						end
 					end
 					if response.present?
 						render status: "200", json: {
 							groups: response,
-							message: "Success"
+							message: message
 						}
 					else
-						forbidden_error
+						show_message(message)
 					end
 				rescue Exception => e
 					forbidden_error(e)

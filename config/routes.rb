@@ -22,7 +22,7 @@ Rails.application.routes.draw do
 
   namespace 'api' do
 		namespace 'v1' do
-			get 'get_all_documents', to: 'documents#get_all_documents'
+			post 'get_all_documents', to: 'documents#get_all_documents'
 			post 'update_document_status', to: 'documents#update_document_status', as: 'update_document_status'
       post 'update_group_status', to: 'documents#update_group_status', as: 'update_group_status'
       post 'get_groups_with_status', to: 'documents#get_groups_with_status'

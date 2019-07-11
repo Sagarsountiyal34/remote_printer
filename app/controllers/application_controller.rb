@@ -13,4 +13,11 @@ class ApplicationController < ActionController::Base
 			message: "Internal Server Error. Please try after some time." + e.to_s
         }
 	end
+
+	protected
+	def show_message(message=nil)
+		render status: "500", json: {
+			message: message
+        }
+	end
 end
