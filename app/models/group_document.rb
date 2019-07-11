@@ -1,9 +1,8 @@
 class GroupDocument
   include Mongoid::Document
   include Mongoid::Timestamps
-
   include DocumentUploader::Attachment.new(:document)
-
+  # Shrine.plugin :keep_files, destroyed: true
   embedded_in :group
   
   belongs_to :upload_document

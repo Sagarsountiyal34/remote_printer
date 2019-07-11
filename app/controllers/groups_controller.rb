@@ -57,6 +57,9 @@ class GroupsController < ApplicationController
 
 	def edit
 		get_details_for_group_page
+		if @group.present? == false
+			redirect_to action: 'new'
+		end
 	end
 
 	def list

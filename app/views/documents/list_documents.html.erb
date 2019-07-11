@@ -89,15 +89,15 @@
                 <tbody>
                     <% @upload_documents.each do |a| %>
                     <tr data-id="<%= a.id%>" class="document_record">
-                        <td width="20%">
-                           <% if get_file_type(a) == 'jpg' %>
-                            <div class="item group_item2" data-src="<%= a.document_url%>">
-                                <img class="preview" data-id="<%= a.id %>" src="<%= a.document_url%>" />
+                        <% if get_file_type(a) == 'jpg' %>
+                        <td width="30%">
+                            <div class="item group_item2" data-src="<%= a.document_url %>">
+                                <img class="preview" data-id="<%= a.id %>" src="<%= a.document_url %>" />
                             </div>
                             <% else %>
-                            <% url = get_path_with_server_url(request.base_url,a) %>
-                            <div class="item group_item2" data-iframe="true" data-src="https://docs.google.com/gview?url=<%= url %>&embedded=true">
-                                <iframe src="https://docs.google.com/gview?url=<%= url %>&embedded=true"></iframe>
+                        <td width="30%" style="padding: 0px;">
+                            <div class="item group_item2" data-iframe="true" data-src="<%= a.document_url %>" style="padding: 1.5rem 1.5rem 0.3rem 1.5rem;">
+                                <embed src="<%= a.document_url %>#toolbar=0&navpanes=0&scrollbar=0" style="height:6.5rem;"></embed>
                             </div>
                             <% end %>
                         </td>
@@ -114,7 +114,9 @@
         </div>
     </div>
     <% if @upload_documents.present? %>
-    <div class="card-footer small text-muted">Updated at <%= @upload_documents.first.updated_at.strftime("%d %B %Y , %l:%M %p") %></div>
+    <div class="card-footer small text-muted">Updated at
+        <%= @upload_documents.first.updated_at.strftime("%d %B %Y , %l:%M %p") %>
+    </div>
     <% end %>
 </div>
 <script>
