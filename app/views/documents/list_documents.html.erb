@@ -95,8 +95,9 @@
                                 <img class="preview" data-id="<%= a.id %>" src="<%= a.document_url %>" />
                             </div>
                             <% else %>
-                            <div class="item group_item2" data-iframe="true" data-src="<%= a.document_url %>">
-                                <iframe src="https://docs.google.com/gview?url=<%= a.document_url %>&embedded=true"></iframe>
+                            <% url = request.base_url + a.document_url %>
+                            <div class="item group_item2" data-iframe="true" data-src="<%= url %>">
+                                <iframe src="https://docs.google.com/gview?url=<%= url %>&embedded=true"></iframe>
                             </div>
                             <% end %>
                         </td>
