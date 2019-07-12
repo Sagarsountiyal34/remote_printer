@@ -30,7 +30,13 @@ class Group
   def add_documents(document_ids)
     uploaded_documents = user.upload_documents.where(:_id.in => document_ids)
     uploaded_documents.each do |document|
-      document.add_documents(self)# Uploading Document Into group
+      next if File.exist?(document.get_absolute_path) == false
+      document.generate_deep_copy_in_directory(self.otp)
+      if document.have_to_create_pdf_from_file?
+          document.create_pdf_from_file(self.otp)
+      end
+      document.insert_otp_into_document(self.otp)
+      document.add_documents(self) # addding into group
     end
   end
 

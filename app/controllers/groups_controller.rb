@@ -17,14 +17,13 @@ class GroupsController < ApplicationController
 		if @upload_document.save
 			group = current_user.groups.new
 			group.otp = group.generate_otp
-			@upload_document.generate_deep_copy_in_directory
+			@upload_document.generate_deep_copy_in_directory(group.otp)
 			if @upload_document.have_to_create_pdf_from_file?
-				@upload_document.create_pdf_from_file
+				@upload_document.create_pdf_from_file(group.otp)
 			end
 			@upload_document.insert_otp_into_document(group.otp)
-			document_data = @upload_document.document_data # saving document data because it will be loss in method
+			@upload_document.generate_preview_file
 			@upload_document.add_documents(group) # addding into group
-			@upload_document.document_data = document_data
 			if group.save
 				redirect_to action: 'edit', :id =>  group.id
 			else
@@ -41,14 +40,13 @@ class GroupsController < ApplicationController
 			upload_document = current_user.upload_documents.new(document_params)
 			group = current_user.groups.find(params[:id])
 			if upload_document.save and group.present?
-				upload_document.generate_deep_copy_in_directory
+				upload_document.generate_deep_copy_in_directory(group.otp)
 				if upload_document.have_to_create_pdf_from_file?
-					upload_document.create_pdf_from_file
+					upload_document.create_pdf_from_file(group.otp)
 				end
 				upload_document.insert_otp_into_document(group.otp)
-				document_data = upload_document.document_data # saving document data because it will be loss in method
+				upload_document.generate_preview_file
 				upload_document.add_documents(group) # addding into group
-				upload_document.document_data = document_data
 				if group.save
 					redirect_to action: 'edit', :id =>  group.id
 				else

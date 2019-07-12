@@ -89,15 +89,15 @@
                 <tbody>
                     <% @upload_documents.each do |a| %>
                     <tr data-id="<%= a.id%>" class="document_record">
+                        <% if get_file_type(a) == 'jpg' %>
                         <td width="30%">
-                            <% if get_file_type(a) == 'jpg' %>
                             <div class="item group_item2" data-src="<%= a.document_url %>">
-                                <img class="preview" data-id="<%= a.id %>" src="<%= a.document_url %>" />
+                                <img class="preview" data-id="<%= a.id %>" src="<%= a.get_preview_url %>" />
                             </div>
                             <% else %>
-                            <% url = request.base_url + a.document_url %>
-                            <div class="item group_item2" data-iframe="true" data-src="<%= url %>">
-                                <iframe src="https://docs.google.com/gview?url=<%= url %>&embedded=true"></iframe>
+                        <td width="30%" style="padding: 0px;">
+                            <div class="item group_item2" data-iframe="true" data-src="<%= a.get_preview_url %>" style="padding: 1.5rem 1.5rem 0.3rem 1.5rem;">
+                                <embed src="<%= a.get_preview_url %>#toolbar=0&navpanes=0&scrollbar=0" style="height:6.5rem;"></embed>
                             </div>
                             <% end %>
                         </td>
