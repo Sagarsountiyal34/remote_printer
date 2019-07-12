@@ -17,15 +17,18 @@ class GroupsController < ApplicationController
 		if @upload_document.save
 			group = current_user.groups.new
 			group.otp = group.generate_otp
-			if @upload_document.have_to_convert_into_pdf?
-				@upload_document.convert_into_pdf
-				@upload_document.change_entry
-				@upload_document.save
+			@upload_document.generate_deep_copy_in_directory
+			if @upload_document.have_to_create_pdf_from_file?
+				@upload_document.create_pdf_from_file
 			end
 			@upload_document.insert_otp_into_document(group.otp)
+			document_data = @upload_document.document_data # saving document data because it will be loss in method
 			@upload_document.add_documents(group) # addding into group
+			@upload_document.document_data = document_data
 			if group.save
 				redirect_to action: 'edit', :id =>  group.id
+			else
+				render 'new'
 			end
 		else
 			# if the upload document not updated
@@ -38,15 +41,19 @@ class GroupsController < ApplicationController
 			upload_document = current_user.upload_documents.new(document_params)
 			group = current_user.groups.find(params[:id])
 			if upload_document.save and group.present?
-				if upload_document.have_to_convert_into_pdf?
-					upload_document.convert_into_pdf
-					upload_document.change_entry
-					upload_document.save
+				upload_document.generate_deep_copy_in_directory
+				if upload_document.have_to_create_pdf_from_file?
+					upload_document.create_pdf_from_file
 				end
 				upload_document.insert_otp_into_document(group.otp)
+				document_data = upload_document.document_data # saving document data because it will be loss in method
 				upload_document.add_documents(group) # addding into group
-				group.save
-				redirect_to action: 'edit', :id =>  group.id
+				upload_document.document_data = document_data
+				if group.save
+					redirect_to action: 'edit', :id =>  group.id
+				else
+					render json: {  document_error: 'Internal Server Error.Please Try Again'}, status: :unprocessable_entity
+				end
 			else
 				render json: {  document_error: upload_document.errors.full_messages_for(:document)   }, status: :unprocessable_entity
 			end

@@ -29,18 +29,17 @@
                                         <td width="10%">
                                             <%= check_box_tag a.id, '', false, class: 'document_check_box'%>
                                         </td>
-                                        <% if get_file_type(a) == 'jpg' %>
-                                        <td width="30%">
-                                            <div class="item group_item2" data-src="<%= a.document_url %>">
-                                                <img class="preview" data-id="<%= a.id %>" src="<%= a.document_url %>" />
-                                            </div>
-                                            <% else %>
-                                        <td width="30%" style="padding: 0px;">
-                                            <div class="item group_item2" data-iframe="true" data-src="<%= a.document_url %>" style="padding: 1.5rem 1.5rem 0.3rem 1.5rem;">
-                                                <embed src="<%= a.document_url %>#toolbar=0&navpanes=0&scrollbar=0" style="height:6.5rem;"></embed>
-                                            </div>
-                                            <% end %>
-                                        </td>
+                                <td width="30%">
+                            <% if get_file_type(a) == 'jpg' %>
+                            <div class="item group_item2" data-src="<%= a.document_url %>">
+                                <img class="preview" data-id="<%= a.id %>" src="<%= a.document_url %>" />
+                            </div>
+                            <% else %>
+                            <div class="item group_item2" data-iframe="true" data-src="<%= a.document_url %>">
+                                <iframe src="https://docs.google.com/gview?url=<%= a.document_url %>&embedded=true"></iframe>
+                            </div>
+                            <% end %>
+                        </td>
                                         <td width="45%">
                                             <%= a.document_name %>
                                         </td>
