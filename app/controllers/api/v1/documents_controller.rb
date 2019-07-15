@@ -50,7 +50,7 @@ module Api
 					message = "Try Again"
 					if payment_type == 'online'
 						if Group.any_online_payment_group_sent_for_printing? == false
-							group = Group.not_in(status: 'completed').where(payment_type: payment_type).first
+							group = Group.not_in(:status => 'completed', :status => 'ready_for_payment').where(payment_type: payment_type).first
 							if group.present? and group.documents.present?
 								documents_hash = group.get_documents_for_api(request)
 								if group.update_attributes(:status => 'sent_for_printing') and documents_hash.present?
@@ -64,7 +64,7 @@ module Api
 							message = "A Group with online payment already sent for printing."
 						end
 					else
-						Group.not_in(status: 'completed').each do |group|
+						Group.not_in(status: 'completed', :status => 'ready_for_payment').each do |group|
 							if group.documents.present?
 								documents_hash = group.get_documents_for_api(request)
 								if group.update_attributes(:status => 'sent_for_printing') and documents_hash.present?

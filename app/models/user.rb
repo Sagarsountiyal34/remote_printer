@@ -45,8 +45,14 @@ class User
           total_group = self.groups.length
     end
   end
+  def get_total_progress_group
+    total_group = ''
+    if self.groups.present?
+          total_group = self.groups.where(:status.in => ['ready_for_print', 'sent_for_printing', 'processing','failed']).length
+    end
+  end
 
-  def check_if_any_group_ready_to_print
+  def check_if_any_group_ready_for_payment
     self.groups.find_by(:status => 'ready_for_payment')
   end
 

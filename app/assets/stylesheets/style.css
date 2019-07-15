@@ -43,3 +43,6 @@ table tr td, table tr th
 .fa-trash{
   font-size: 25px;
 }
+embed {
+  pointer-events: none;
+}

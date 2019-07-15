@@ -11,7 +11,7 @@ class Group
   field :otp, type: String, default: ""
 
   validates :status, inclusion: { in: ['ready_for_payment', 'ready_for_print','sent_for_printing', 'processing', 'failed', 'completed'] }
-  validates :payment_type, inclusion: { in: ['pending', 'online', 'cash_on_delivery'] }
+  validates :payment_type, inclusion: { in: ['pending', 'online', 'cash'] }
 
   after_save :remove_group_if_needed
 

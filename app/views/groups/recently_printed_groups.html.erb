@@ -14,8 +14,9 @@
             <table class="table table-bordered document_table" id="dataTable" width="100%" cellspacing="0" data-turbolinks="false">
                 <thead>
                     <tr>
-                        <th width="50%">Printed On</th>
-                        <th width="30%">Status</th>
+                        <th width="40%">Printed On</th>
+                        <th width="20%">Status</th>
+                        <th width="20%">Payment Type</th>
                         <th width="20%">Show Details</th>
                     </tr>
                 </thead>
@@ -27,6 +28,9 @@
                         </td>
                         <td>
                             <%= group.status %>
+                        </td>
+                        <td>
+                            <%= group.payment_type.capitalize %>
                         </td>
                         <td>
                             <%= link_to 'Details', { controller: :groups, action: :edit, id: group.id}  %>
