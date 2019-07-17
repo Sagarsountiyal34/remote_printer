@@ -24,8 +24,9 @@ class UploadDocument
   def get_preview_url
     src_path = self.get_absolute_path
     file_name = File.basename(src_path)
-    ext = FileInfo.get_file_type(src_path)
-    if ext == 'doc' or ext == 'docx' or ext == 'odt'
+    media_type = FileInfo.get_file_media_type(src_path)
+    ext = FileInfo.get_file_extension(src_path)
+    if media_type == 'document'
       File.join('/uploads/preview', file_name).sub(ext, 'pdf')
     else
       File.join('/uploads/preview', file_name)
@@ -63,7 +64,7 @@ class UploadDocument
   end
 
   def insert_otp_into_document(otp)
-    ext = FileInfo.get_file_type(self.document_url)
+    ext = FileInfo.get_file_media_type(self.document_url)
     if ext == 'jpg'
       add_otp_for_image(otp)
     else
@@ -97,7 +98,7 @@ class UploadDocument
   end
 
   def have_to_create_pdf_from_file?
-    ext = FileInfo.get_file_type(self.document_url)
+    ext = FileInfo.get_file_media_type(self.document_url)
     if ext == 'doc' or ext == 'docx' or ext == 'odt'
       return true
     else
@@ -123,7 +124,7 @@ class UploadDocument
   def generate_preview_file
     src_path = self.get_absolute_path
     file_name = File.basename(self.document_url)
-    ext = FileInfo.get_file_type(src_path)
+    ext = FileInfo.get_file_media_type(src_path)
 
     if ext == 'doc' or ext == 'docx' or ext == 'odt'
       dest_src = File.join(Rails.root, 'public/uploads/preview', file_name).sub(ext, 'pdf')

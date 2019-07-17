@@ -14,5 +14,8 @@ class GroupDocument
   field :processed_pages, type: Integer,default: 0
 
   validates :status, inclusion: { in: ['pending', 'completed'] }
+  def get_preview_url
+    self.document_url
+  end
 
 end

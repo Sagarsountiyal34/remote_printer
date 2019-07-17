@@ -23,20 +23,20 @@
                                         <th width="45%">Name</th>
                                     </tr>
                                 </thead>
-                                <tbody>
+                                <tbody id="history_tbody_head">
                                     <% @all_documents.each do |a| %>
                                     <tr data-id="<%= a.id%>" class="document_record_for_add">
                                         <td width="10%">
                                             <%= check_box_tag a.id, '', false, class: 'document_check_box'%>
                                         </td>
-                                        <% if get_file_type(a) == 'jpg' %>
+                                        <% if get_file_type(a) == 'image' %>
                                         <td width="30%">
-                                            <div class="item group_item2" data-src="<%= a.get_preview_url %>">
+                                            <div class="item gallery_item" data-src="<%= a.get_preview_url %>">
                                                 <img class="preview" data-id="<%= a.id %>" src="<%= a.get_preview_url %>" />
                                             </div>
                                             <% else %>
                                         <td width="30%" style="padding: 0px;">
-                                            <div class="item group_item2" data-iframe="true" data-src="<%= a.document_url %>" style="padding: 1.5rem 1.5rem 0.3rem 1.5rem;">
+                                            <div class="item gallery_item" data-iframe="true" data-src="<%= a.get_preview_url %>">
                                                 <embed src="<%= a.get_preview_url %>#toolbar=0&navpanes=0&scrollbar=0" style="height:6.5rem;"></embed>
                                             </div>
                                             <% end %>
@@ -62,19 +62,24 @@
     </div>
 </div>
 <script>
-
 var fromHistoryModal = $('#dataTableFromHistory').DataTable({
-     "pageLength" : 3,
-     "ordering": false,
-     "stateSave": true
+    "pageLength": 3,
+    "ordering": false,
+    "stateSave": true
 });
 
+
+$('#history_tbody_head').lightGallery({
+    selector: '.gallery_item',
+    iframeMaxWidth: '80%',
+    thumbnail: false,
+});
 
 // for multiple using checkboxes
 $("#add_to_group").on('click', function() {
     jQuery('.loader_wrap_from_history').show();
     jQuery('#add_to_group').hide();
-    var allPages = fromHistoryModal.cells( ).nodes( );
+    var allPages = fromHistoryModal.cells().nodes();
     var checked_checkboxes = $('.document_check_box:checked', allPages);
     var document_ids = checked_checkboxes.map(function() {
         return $(this).attr('id');
@@ -103,5 +108,4 @@ function addToGroup(group_id, document_ids, successcb, errorcb) {
         }
     });
 }
-
 </script>

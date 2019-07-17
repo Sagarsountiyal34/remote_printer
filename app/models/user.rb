@@ -46,9 +46,9 @@ class User
     end
   end
   def get_total_progress_group
-    total_group = ''
     if self.groups.present?
-          total_group = self.groups.where(:status.in => ['ready_for_print', 'sent_for_printing', 'processing','failed']).length
+          total_group = self.groups.where(:status.in => ['ready_for_print', 'sent_for_printing', 'processing','failed'])
+          total_group.present?  ? total_group.length : ''
     end
   end
 

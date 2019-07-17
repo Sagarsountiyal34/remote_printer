@@ -35,14 +35,20 @@ table tr td, table tr th
 }
 
 /*for increasing font awesome icon */
-#cart, #user
+#user
 {
   font-size: 20px;
 }
 
-.fa-trash{
+#cart
+{
   font-size: 25px;
 }
+
+.fa-trash, .fa-eye{
+  font-size: 25px;
+}
+
 embed {
   pointer-events: none;
 }
