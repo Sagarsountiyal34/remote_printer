@@ -1,10 +1,10 @@
 image: png, jpg, jpeg, gif, bmp, svg
 video: webm, avi, wmv, m4v, mov, h264, 3gp, mp, mpg, mpeg, mp2, mpg2, mpeg2, mp4, mpg4, mpeg4
 audio: mp3, wav
-office: pps, pptx, ppt, xls, xlsx
-document: pdf, doc, docx, odt
-zip: zip
+office: pps, pptx, ppt, xls, xlsx, doc, docx, odt
+PDF: pdf
+ZIP: zip
 flash: swf, flv
 html: htm, html
-3d: 3d, e3d, ugp
+3D: 3d, e3d, ugp
 subtitle: srt,vtt,wvtt

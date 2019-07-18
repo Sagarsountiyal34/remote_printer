@@ -29,17 +29,10 @@
                                         <td width="10%">
                                             <%= check_box_tag a.id, '', false, class: 'document_check_box'%>
                                         </td>
-                                        <% if get_file_type(a) == 'image' %>
                                         <td width="30%">
-                                            <div class="item gallery_item" data-src="<%= a.get_preview_url %>">
-                                                <img class="preview" data-id="<%= a.id %>" src="<%= a.get_preview_url %>" />
+                                            <div class="item gallery_item" data-iframe="<%= have_to_show_iframe(a) %>" data-src="<%= a.get_preview_url %>">
+                                                <a href="javscript:;"><i class="fas fa-eye"></i></a>
                                             </div>
-                                            <% else %>
-                                        <td width="30%" style="padding: 0px;">
-                                            <div class="item gallery_item" data-iframe="true" data-src="<%= a.get_preview_url %>">
-                                                <embed src="<%= a.get_preview_url %>#toolbar=0&navpanes=0&scrollbar=0" style="height:6.5rem;"></embed>
-                                            </div>
-                                            <% end %>
                                         </td>
                                         <td width="45%">
                                             <%= a.document_name %>

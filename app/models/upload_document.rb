@@ -26,7 +26,7 @@ class UploadDocument
     file_name = File.basename(src_path)
     media_type = FileInfo.get_file_media_type(src_path)
     ext = FileInfo.get_file_extension(src_path)
-    if media_type == 'document'
+    if media_type == 'office'
       File.join('/uploads/preview', file_name).sub(ext, 'pdf')
     else
       File.join('/uploads/preview', file_name)
@@ -64,8 +64,8 @@ class UploadDocument
   end
 
   def insert_otp_into_document(otp)
-    ext = FileInfo.get_file_media_type(self.document_url)
-    if ext == 'jpg'
+    media_type = FileInfo.get_file_media_type(self.document_url)
+    if media_type == 'image'
       add_otp_for_image(otp)
     else
       add_otp_for_pdf(otp)
@@ -98,8 +98,8 @@ class UploadDocument
   end
 
   def have_to_create_pdf_from_file?
-    ext = FileInfo.get_file_media_type(self.document_url)
-    if ext == 'doc' or ext == 'docx' or ext == 'odt'
+    media_type = FileInfo.get_file_media_type(self.document_url)
+    if media_type == 'office'
       return true
     else
       return false
@@ -124,10 +124,10 @@ class UploadDocument
   def generate_preview_file
     src_path = self.get_absolute_path
     file_name = File.basename(self.document_url)
-    ext = FileInfo.get_file_media_type(src_path)
-
-    if ext == 'doc' or ext == 'docx' or ext == 'odt'
-      dest_src = File.join(Rails.root, 'public/uploads/preview', file_name).sub(ext, 'pdf')
+    media_type = FileInfo.get_file_media_type(src_path)
+    ext = File.extname(src_path)
+    if media_type == 'office'
+      dest_src = File.join(Rails.root, 'public/uploads/preview', file_name).sub(ext, '.pdf')
       Libreconv.convert(src_path, dest_src)
     else #for image only copy in preview folder
       dest_src = File.join(Rails.root, 'public/uploads/preview', file_name)

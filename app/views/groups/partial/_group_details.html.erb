@@ -15,34 +15,38 @@
             <table class="table table-bordered document_table" id="dataTableGroupDoc" width="100%" cellspacing="0">
                 <thead>
                     <tr>
-                        <th width="50%">Name</th>
+                        <th width="30%">Name</th>
                         <% if @group.is_group_sent_for_printing? or @group.status == 'ready_for_print' %>
                         <th width="25%">Status</th>
                         <% else %>
                         <th width="25%">Action</th>
                         <% end %>
                         <th width="25%">Preview</th>
+                        <th width="20%">Type</th>
                     </tr>
                 </thead>
                 <tbody id="tbody_head" data-group-id="<%= @group.id.to_s %>">
                     <% @documents.each do |a| %>
                     <tr data-id="<%= a.id%>" class="document_record">
-                        <td width="50%">
+                        <td>
                             <%= a.document_name %>
                         </td>
                         <% if @group.is_group_sent_for_printing? or @group.status == 'ready_for_print'%>
-                        <td width="25%">
+                        <td>
                             <%= a.status %>
                         </td>
                         <% else %>
-                        <td width="25%">
+                        <td>
                             <a class="remove_group_document" alt="remove" href="javscript:;"><i class="fas fa-trash"></i></a>
                         </td>
                         <% end %>
-                        <td width="25%">
+                        <td>
                             <div class="item group_item" data-iframe="<%= have_to_show_iframe(a) %>" data-src="<%= a.get_preview_url %>">
                                 <a href="javscript:;"><i class="fas fa-eye"></i></a>
                             </div>
+                        </td>
+                        <td>
+                            <%= FileInfo.get_file_media_type(a.document_url).capitalize %>
                         </td>
                     </tr>
                     <% end %>
