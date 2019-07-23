@@ -1,7 +1,7 @@
 class OtpGenerator
 	def self.as_pdf(path,otp)
 		Prawn::Document.generate(path) do
-	        bounding_box [bounds.left, bounds.bottom + 10], :width  => bounds.width do
+	        bounding_box [bounds.left, bounds.bottom + 18], :width  => bounds.width do
 	            move_down(5)
 	            text otp,:align => :right, :size => 10, :color => 'ccccd8'
 	        end
