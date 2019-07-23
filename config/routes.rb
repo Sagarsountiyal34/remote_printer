@@ -10,6 +10,7 @@ Rails.application.routes.draw do
   get 'edit_group/:id', to: 'groups#edit'
   get 'list_documents', to: 'documents#list_documents'
   get 'get_documents', to: 'documents#get_documents'
+  get 'get_documents_for_history', to: 'groups#get_documents_for_history'
   get 'printed_groups', to: 'groups#list'
   get 'progress_groups', to: 'groups#progress_groups'
   get 'recently_printed_groups', to: 'groups#recently_printed_groups'

@@ -155,6 +155,45 @@ class GroupsController < ApplicationController
 	    order_Id = data["Order_Id"][0]
 	end
 
+	def get_documents_for_history
+		group = current_user.groups.find(params[:group_id])
+		uploaded_doc_ids = group.documents.map{|d| d.upload_document_id.to_s}
+		all_documents = current_user.upload_documents.not_in(:_id => uploaded_doc_ids).order_by(created_at: :desc)
+		total_record = all_documents.length
+		if params[:search][:value].present?
+			upload_documents =	all_documents.any_of({ :document_name => /.*#{params[:search][:value]}.*/ })
+			filter_record = upload_documents.length
+		else
+			filter_record = total_record
+			page_number_index = params[:page_number].to_i
+			if  page_number_index > 0
+				offset_value = page_number_index * 10
+				upload_documents = all_documents.order_by(created_at: :desc).limit(10).offset(offset_value).to_a
+			else
+				upload_documents = all_documents.order_by(created_at: :desc).to_a.first(10)
+			end
+		end
+		all_doc = []
+		upload_documents.each do |doc|
+			document = {}
+			document[:document_id] = doc.id.to_s
+			document[:document_name] = doc.document_name
+			document[:type] = FileInfo.get_file_media_type(doc.document_url)
+			document[:preview_url] = doc.get_preview_url
+			all_doc.push(document)
+		end
+		respond_to do |f|
+    		f.json {render :json => {
+    			documents: all_doc,
+                draw: params['draw'].to_i,
+                recordsTotal: total_record,
+                recordsFiltered: filter_record,
+    		}
+    	}
+		end
+
+	end
+
 	private
 
 	def document_params
@@ -167,8 +206,8 @@ class GroupsController < ApplicationController
 			@documents = @group.documents.order_by(created_at: :desc)
 			@upload_document = UploadDocument.new
 
-			uploaded_doc_ids = @group.documents.map{|d| d.upload_document_id.to_s}
-			@all_documents = current_user.upload_documents.not_in(:_id => uploaded_doc_ids).order_by(created_at: :desc)
+			# uploaded_doc_ids = @group.documents.map{|d| d.upload_document_id.to_s}
+			# @all_documents = current_user.upload_documents.not_in(:_id => uploaded_doc_ids).order_by(created_at: :desc)
 		end
 	end
 

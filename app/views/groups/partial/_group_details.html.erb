@@ -15,21 +15,29 @@
             <table class="table table-bordered document_table" id="dataTableGroupDoc" width="100%" cellspacing="0">
                 <thead>
                     <tr>
-                        <th width="30%">Name</th>
+                        <th width="15%">Preview</th>
+                        <th width="35%">Name</th>
+                        <th width="35%">Type</th>
                         <% if @group.is_group_sent_for_printing? or @group.status == 'ready_for_print' %>
-                        <th width="25%">Status</th>
+                        <th width="15%">Status</th>
                         <% else %>
-                        <th width="25%">Action</th>
+                        <th width="15%">Action</th>
                         <% end %>
-                        <th width="25%">Preview</th>
-                        <th width="20%">Type</th>
                     </tr>
                 </thead>
                 <tbody id="tbody_head" data-group-id="<%= @group.id.to_s %>">
                     <% @documents.each do |a| %>
                     <tr data-id="<%= a.id%>" class="document_record">
                         <td>
+                            <div class="item group_item" data-iframe="<%= have_to_show_iframe(a) %>" data-src="<%= a.get_preview_url %>">
+                                <a href="javscript:;"><i class="fas fa-eye"></i></a>
+                            </div>
+                        </td>
+                        <td>
                             <%= a.document_name %>
+                        </td>
+                        <td>
+                            <%= FileInfo.get_file_media_type(a.document_url).capitalize %>
                         </td>
                         <% if @group.is_group_sent_for_printing? or @group.status == 'ready_for_print'%>
                         <td>
@@ -40,14 +48,6 @@
                             <a class="remove_group_document" alt="remove" href="javscript:;"><i class="fas fa-trash"></i></a>
                         </td>
                         <% end %>
-                        <td>
-                            <div class="item group_item" data-iframe="<%= have_to_show_iframe(a) %>" data-src="<%= a.get_preview_url %>">
-                                <a href="javscript:;"><i class="fas fa-eye"></i></a>
-                            </div>
-                        </td>
-                        <td>
-                            <%= FileInfo.get_file_media_type(a.document_url).capitalize %>
-                        </td>
                     </tr>
                     <% end %>
                 </tbody>
@@ -87,32 +87,11 @@
     <%= render "groups/partial/from_history" %>
 </div>
 <script type="text/javascript">
-$(".remove_group_document").click(function() {
-    var self = this;
-    var document_id = [$(this).closest('.document_record').data('id')];
-    var main_tr = $('tr.document_record[data-id="' + document_id[0] + '"]')
-    var group_id = main_tr.parent().data('group-id')
-    $(this).hide();
-
-    function onSuccess(response) {
-        $('#group_content').html(response);
-    }
-
-    function onError(reponse) {
-        $(self).show();
-    }
-
-    removeFromGroup(group_id, document_id, onSuccess, onError);
-});
-$("#toggle_otp").click(function() {
-    if ($(this).text() == 'Hide') {
-        asterisks_otp();
-        $(this).text('Show');
-    } else {
-        $("#otp").val($("#otp").data('value'));
-        $(this).text('Hide');
-    }
-});
+function asterisks_otp() {
+    var length = $("#otp").val().length;
+    var asterisks_otp = '*'.repeat(length);
+    $("#otp").val(asterisks_otp);
+};
 
 function removeFromGroup(group_id, document_ids, successcb, errorcb) {
     $.ajax({
@@ -128,20 +107,22 @@ function removeFromGroup(group_id, document_ids, successcb, errorcb) {
         }
     });
 }
+
 $(document).ready(function() {
     $('#dataTableGroupDoc').DataTable({
         "ordering": false
     });
-
-    $('#tbody_head').lightGallery({
-        selector: '.group_item',
-        iframeMaxWidth: '80%',
-        thumbnail: false,
-    });
     asterisks_otp();
 });
 
+$('#tbody_head').lightGallery({
+    selector: '.group_item',
+    iframeMaxWidth: '80%',
+    thumbnail: false,
+});
+
 $("#online_payment").click(function() {
+    debugger
     $.ajax({
         type: "POST",
         beforeSend: setCsrfToken, // implemented in application.html.erb
@@ -171,10 +152,31 @@ $("#cash_payment").click(function() {
     });
 });
 
-function asterisks_otp() {
-    var length = $("#otp").val().length;
-    var asterisks_otp = '*'.repeat(length);
-    $("#otp").val(asterisks_otp);
-};
+$("#toggle_otp").click(function() {
+    if ($(this).text() == 'Hide') {
+        asterisks_otp();
+        $(this).text('Show');
+    } else {
+        $("#otp").val($("#otp").data('value'));
+        $(this).text('Hide');
+    }
+});
+
+$(".remove_group_document").click(function() {
+    var self = this;
+    var document_id = [$(this).closest('.document_record').data('id')];
+    var main_tr = $('tr.document_record[data-id="' + document_id[0] + '"]')
+    var group_id = main_tr.parent().data('group-id')
+    $(this).hide();
+
+    function onSuccess(response) {
+        $('#group_content').html(response);
+    }
+
+    function onError(reponse) {
+        $(self).show();
+    }
+    removeFromGroup(group_id, document_id, onSuccess, onError);
+});
 </script>
 <script src="https://cdn.jsdelivr.net/picturefill/2.3.1/picturefill.min.js"></script>

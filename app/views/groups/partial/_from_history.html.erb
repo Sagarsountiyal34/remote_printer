@@ -18,27 +18,13 @@
                             <table class="table table-bordered document_table" id="dataTableFromHistory" width="100%" cellspacing="0">
                                 <thead>
                                     <tr>
-                                        <th width="10%">Select</th>
-                                        <th width="45%">Preview</th>
-                                        <th width="45%">Name</th>
+                                        <th width="15%">Select</th>
+                                        <th width="15%">Preview</th>
+                                        <th width="35%">Name</th>
+                                        <th width="35%">Type</th>
                                     </tr>
                                 </thead>
                                 <tbody id="history_tbody_head">
-                                    <% @all_documents.each do |a| %>
-                                    <tr data-id="<%= a.id%>" class="document_record_for_add">
-                                        <td width="10%">
-                                            <%= check_box_tag a.id, '', false, class: 'document_check_box'%>
-                                        </td>
-                                        <td width="30%">
-                                            <div class="item gallery_item" data-iframe="<%= have_to_show_iframe(a) %>" data-src="<%= a.get_preview_url %>">
-                                                <a href="javscript:;"><i class="fas fa-eye"></i></a>
-                                            </div>
-                                        </td>
-                                        <td width="45%">
-                                            <%= a.document_name %>
-                                        </td>
-                                    </tr>
-                                    <% end %>
                                 </tbody>
                             </table>
                         </div>
@@ -55,19 +41,92 @@
     </div>
 </div>
 <script>
-var fromHistoryModal = $('#dataTableFromHistory').DataTable({
-    "pageLength": 3,
-    "ordering": false,
-    "stateSave": true
+var fromHistoryModal = null;
+
+$(document).ready(function() {
+    initDataTable();
 });
 
+function initDataTable() {
+    fromHistoryModal = $('#dataTableFromHistory').DataTable({
+        "serverSide": true,
+        "processing": true,
+        // "searching": false,
+        "stateSave": true,
+        "lengthMenu": [10],
+        "ajax": {
+            "url": "/get_documents_for_history",
+            "dataSrc": function(json) {
+                return json.documents;
+            },
+            "data": function(data) {
+                var page_number = $('#dataTableFromHistory').DataTable().page.info().page;
+                data['page_number'] = page_number
+                data['group_id'] = "<%= @group.id %>"
+                return data;
+            }
+        },
+        "columns": [
+            { "data": "document_id" },
+            { "data": "preview_url" },
+            { "data": "document_name" },
+            { "data": "type" },
+        ],
+        "createdRow": function(row, data, dataIndex) {
+            $(row).addClass('document_record_for_add');
+        },
+        "columnDefs": [{
+                "targets": 0,
+                "data": "document_id",
+                "render": function(data, type, row, meta) {
+                    return '<input type="checkbox" name=' + data + ' id=' + data + ' class="document_check_box">'
+                }
+            },
+            {
+                "targets": 1,
+                "data": "preview_url",
+                "render": function(data, type, row, meta) {
+                    return '<div class="item gallery_item" data-iframe="true"  data-src=' + data + '><a href="javscript:;"><i class="fas fa-eye"></i></a></div>';
+                }
+            }
+        ],
+        "fnDrawCallback": function() {
+            if ($("#history_tbody_head").data("lightGallery")) {
+                $("#history_tbody_head").data("lightGallery").destroy(true);
+            }
+            createLightGallery();
+            $('.dataTables_filter input').unbind();
+            $('.dataTables_filter input').bind('keyup', function(e) {
+                if (e.keyCode == 13) {
+                    document_table.search(this.value).draw();
+                }
+            });
+        }
+    });
+}
 
-$('#history_tbody_head').lightGallery({
-    selector: '.gallery_item',
-    iframeMaxWidth: '80%',
-    thumbnail: false,
-});
+function createLightGallery() {
+    $('#history_tbody_head').lightGallery({
+        selector: '.gallery_item',
+        iframeMaxWidth: '80%',
+        thumbnail: false
+    });
+}
 
+function addToGroup(group_id, document_ids, successcb, errorcb) {
+    $.ajax({
+        type: "POST",
+        beforeSend: setCsrfToken, // implemented in
+        url: "/add_document_to_group",
+        data: { document_ids: document_ids, id: group_id },
+        success: function(data) {
+            if (successcb) successcb(data);
+        },
+        error: function(exception) {
+            if (successcb) successcb(exception);
+        }
+    });
+}
 // for multiple using checkboxes
 $("#add_to_group").on('click', function() {
     jQuery('.loader_wrap_from_history').show();
@@ -85,20 +144,4 @@ $("#add_to_group").on('click', function() {
     }
     addToGroup(group_id, document_ids, onSuccess);
 });
-
-
-function addToGroup(group_id, document_ids, successcb, errorcb) {
-    $.ajax({
-        type: "POST",
-        beforeSend: setCsrfToken, // implemented in
-        url: "/add_document_to_group",
-        data: { document_ids: document_ids, id: group_id },
-        success: function(data) {
-            if (successcb) successcb(data);
-        },
-        error: function(exception) {
-            if (successcb) successcb(exception);
-        }
-    });
-}
 </script>

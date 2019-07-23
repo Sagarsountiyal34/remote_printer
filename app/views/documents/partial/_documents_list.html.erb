@@ -24,10 +24,6 @@
     <% end %>
 </div>
 <script>
-$(document).ready(function() {
-    initDataTable();
-});
-
 function initDataTable() {
     var document_table = $('#dataTable').DataTable({
         "serverSide": true,
@@ -82,4 +78,7 @@ function createLightGallery() {
         thumbnail: false
     });
 }
+$(document).ready(function() {
+    initDataTable();
+});
 </script>
