@@ -1,0 +1,77 @@
+<div class="card mb-3">
+    <div class="card-header">
+        <i class="fas fa-table"></i>
+        Documents</div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered document_table" id="dataTable" width="100%" cellspacing="0" data-next-page="1">
+                <thead>
+                    <tr>
+                        <th width="20%">Preview</th>
+                        <th width="40%">Name</th>
+                        <th width="40%">Type</th>
+                    </tr>
+                </thead>
+                <tbody id="tbody_head">
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <% if @last_updated.present? %>
+    <div class="card-footer small text-muted">Updated at
+        <%= @last_updated %>
+    </div>
+    <% end %>
+</div>
+<script>
+$(document).ready(function() {
+    initDataTable();
+});
+
+function initDataTable() {
+    $('#dataTable').DataTable({
+        "serverSide": true,
+        "processing": true,
+        "ajax": {
+            "url": "/get_documents",
+            "dataSrc": function(json) {
+                return json.documents;
+            },
+            "data": function(data) {
+                var page_number = $('#dataTable').DataTable().page.info().page;
+                data['page_number'] = page_number
+                return data;
+            }
+        },
+        "columns": [
+            { "data": "preview_url" },
+            { "data": "document_name" },
+            { "data": "type" },
+        ],
+        "createdRow": function(row, data, dataIndex) {
+            $(row).addClass('document_record');
+        },
+        "columnDefs": [{
+            "targets": 0,
+            "data": "preview_url",
+            "render": function(data, type, row, meta) {
+                return '<div class="item gallery_item" data-iframe="true"  data-src=' + data + '><a href="javscript:;"><i class="fas fa-eye"></i></a></div>';
+            }
+        }],
+        "fnDrawCallback": function() {
+            if ($("#tbody_head").data("lightGallery")) {
+                $("#tbody_head").data("lightGallery").destroy(true);
+            }
+            createLightGallery();
+        }
+    });
+}
+
+function createLightGallery() {
+    $('#tbody_head').lightGallery({
+        selector: '.gallery_item',
+        iframeMaxWidth: '80%',
+        thumbnail: false
+    });
+}
+</script>

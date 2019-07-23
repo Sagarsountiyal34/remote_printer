@@ -24,7 +24,37 @@ class DocumentsController < ApplicationController
 	# end
 
 	def list_documents
-		@upload_documents = current_user.upload_documents.order_by(created_at: :desc)
+		@last_updated = current_user.upload_documents.order_by(created_at: :desc).first.updated_at.strftime("%d %B %Y , %l:%M %p")
 	end
 
+
+
+	def get_documents
+		total_record = current_user.upload_documents.length
+		page_number_index = params[:page_number].to_i
+		if  page_number_index > 0
+			offset_value = page_number_index * 10
+			upload_documents = current_user.upload_documents.order_by(created_at: :desc).limit(10).offset(offset_value).to_a
+		else
+			upload_documents = current_user.upload_documents.order_by(created_at: :desc).to_a.first(10)
+		end
+		all_doc = []
+		upload_documents.each do |doc|
+			document = {}
+			document[:document_name] = doc.document_name
+			document[:type] = FileInfo.get_file_media_type(doc.document_url)
+			document[:preview_url] = doc.get_preview_url
+			all_doc.push(document)
+		end
+		respond_to do |f|
+    		f.json {render :json => {
+    			documents: all_doc,
+                draw: params['draw'].to_i,
+                recordsTotal: total_record,
+                recordsFiltered: total_record,
+    		}
+    	}
+		end
+
+	end
 end
