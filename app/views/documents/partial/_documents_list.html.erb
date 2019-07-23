@@ -29,9 +29,11 @@ $(document).ready(function() {
 });
 
 function initDataTable() {
-    $('#dataTable').DataTable({
+    var document_table = $('#dataTable').DataTable({
         "serverSide": true,
         "processing": true,
+        // "searching": false,
+        "lengthMenu": [10],
         "ajax": {
             "url": "/get_documents",
             "dataSrc": function(json) {
@@ -63,6 +65,12 @@ function initDataTable() {
                 $("#tbody_head").data("lightGallery").destroy(true);
             }
             createLightGallery();
+            $('.dataTables_filter input').unbind();
+            $('.dataTables_filter input').bind('keyup', function(e) {
+                if (e.keyCode == 13) {
+                    document_table.search(this.value).draw();
+                }
+            });
         }
     });
 }

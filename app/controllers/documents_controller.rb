@@ -31,12 +31,18 @@ class DocumentsController < ApplicationController
 
 	def get_documents
 		total_record = current_user.upload_documents.length
-		page_number_index = params[:page_number].to_i
-		if  page_number_index > 0
-			offset_value = page_number_index * 10
-			upload_documents = current_user.upload_documents.order_by(created_at: :desc).limit(10).offset(offset_value).to_a
+		if params[:search][:value].present?
+			upload_documents =	current_user.upload_documents.any_of({ :document_name => /.*#{params[:search][:value]}.*/ })
+			filter_record = upload_documents.length
 		else
-			upload_documents = current_user.upload_documents.order_by(created_at: :desc).to_a.first(10)
+			filter_record = total_record
+			page_number_index = params[:page_number].to_i
+			if  page_number_index > 0
+				offset_value = page_number_index * 10
+				upload_documents = current_user.upload_documents.order_by(created_at: :desc).limit(10).offset(offset_value).to_a
+			else
+				upload_documents = current_user.upload_documents.order_by(created_at: :desc).to_a.first(10)
+			end
 		end
 		all_doc = []
 		upload_documents.each do |doc|
@@ -51,7 +57,7 @@ class DocumentsController < ApplicationController
     			documents: all_doc,
                 draw: params['draw'].to_i,
                 recordsTotal: total_record,
-                recordsFiltered: total_record,
+                recordsFiltered: filter_record,
     		}
     	}
 		end
