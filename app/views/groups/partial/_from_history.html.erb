@@ -95,10 +95,10 @@ function initDataTable() {
                 $("#history_tbody_head").data("lightGallery").destroy(true);
             }
             createLightGallery();
-            $('.dataTables_filter input').unbind();
-            $('.dataTables_filter input').bind('keyup', function(e) {
+            $('#dataTableFromHistory_filter input').unbind();
+            $('#dataTableFromHistory_filter input').bind('keyup', function(e) {
                 if (e.keyCode == 13) {
-                    document_table.search(this.value).draw();
+                    fromHistoryModal.search(this.value).draw();
                 }
             });
         }

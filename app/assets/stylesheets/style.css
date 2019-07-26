@@ -1,54 +1,55 @@
-.preview
-{
-  border-radius: 15px;
-  background-position: center;
-  width: 275px;
-  height: 100px;
+.preview {
+    border-radius: 15px;
+    background-position: center;
+    width: 275px;
+    height: 100px;
 }
 
-.notifyjs-corner{
-	left: 50% !important;
-    transform: translate(-50%,0);
+.notifyjs-corner {
+    left: 50% !important;
+    transform: translate(-50%, 0);
 }
 
-#loader_wrap
-{
-	display: block;
-  margin: auto;
-  display: none;
-  text-align: center;
+#loader_wrap {
+    display: block;
+    margin: auto;
+    display: none;
+    text-align: center;
 }
 
 
-table tr td, table tr th
-{
-	text-align: center;
-	vertical-align: middle !important
+table tr td,
+table tr th {
+    text-align: center;
+    vertical-align: middle !important
 }
 
-#fromDesktopModalContent, #fromHistoryModalContent
-{
-  box-shadow:  0 0 10px 5px rgba(45, 125, 193, 0.6);
-  -moz-box-shadow: 0 0 10px  5px rgba(45, 125, 193, 0.6);
-  -webkit-box-shadow: 0 0 10px 5px rgba(45, 125, 193, 0.6);
-  -o-box-shadow: 0 0 10px 5px rgba(45, 125, 193, 0.6);
+#fromDesktopModalContent,
+#fromHistoryModalContent {
+    box-shadow: 0 0 10px 5px rgba(45, 125, 193, 0.6);
+    -moz-box-shadow: 0 0 10px 5px rgba(45, 125, 193, 0.6);
+    -webkit-box-shadow: 0 0 10px 5px rgba(45, 125, 193, 0.6);
+    -o-box-shadow: 0 0 10px 5px rgba(45, 125, 193, 0.6);
 }
 
 /*for increasing font awesome icon */
-#user
-{
-  font-size: 20px;
+#user {
+    font-size: 20px;
 }
 
-#cart
-{
-  font-size: 25px;
+#cart {
+    font-size: 25px;
 }
 
-.fa-trash, .fa-eye{
-  font-size: 25px;
+.fa-trash,
+.fa-eye {
+    font-size: 25px;
 }
 
 embed {
-  pointer-events: none;
+    pointer-events: none;
+}
+
+.lg-backdrop {
+    z-index: 1050;
 }
