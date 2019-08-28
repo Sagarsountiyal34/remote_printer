@@ -9,6 +9,7 @@ gem 'rails', '~> 5.2.3'
 # gem 'passenger'
 
 gem 'devise'
+gem 'rack-cors'
 
 gem 'puma', '~> 3.11'
 # Use SCSS for stylesheets
