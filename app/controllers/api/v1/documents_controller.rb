@@ -155,8 +155,38 @@ module Api
 			        }
 				end
 			end
+
+			def print_document
+				begin
+					group = Group.find(params["groupID"])
+					document = group.documents.find(params["documentID"])
+					if document.present?
+						document.status = "sent_for_printing"
+							if document.save
+								render status: "201", json: {
+									document: document,
+									message: "Status updated successfully"
+								}
+							else
+								render status: "500", json: {
+												message: "Please Enter Valid Status"
+											}
+							end
+					else
+						render status: "422", json: {
+										message: "Group not found with given ID"
+									}
+					end
+
+				rescue Exception => e
+					render status: "500", json: {
+        				message: e.message
+			        }
+				end
+
+
+			end
+
 		end
 	end
 end
-
-
