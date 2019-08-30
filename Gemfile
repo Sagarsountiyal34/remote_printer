@@ -52,8 +52,8 @@ gem 'prawn'
 gem 'combine_pdf'
 gem 'libreconv'
 gem 'rmagick'
-gem 'active_merchant_ccavenue'
-gem 'ccavenue'
+# gem 'active_merchant_ccavenue'
+# gem 'ccavenue'
 gem 'prawn-templates'
 
 group :development, :test do
