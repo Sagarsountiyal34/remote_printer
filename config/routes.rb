@@ -33,6 +33,7 @@ Rails.application.routes.draw do
       post 'print_group_again', to: 'groups#print_group_again'
       post 'send_error_to_admin', to: 'documents#send_error_to_admin'
       post 'print_document', to: 'documents#print_document'
+      get 'print_document2', to: 'documents#print_document2'
 		end
 	end
 end

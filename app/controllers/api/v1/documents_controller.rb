@@ -184,9 +184,41 @@ module Api
 			        }
 				end
 
+			end
+
+			def print_document2
+				begin
+					group = Group.find(params["groupID"])
+					document = group.documents.find(params["documentID"])
+					if document.present?
+						document.processed_pages = params[:pcount]
+							if document.save
+								render status: "201", json: {
+									document: document,
+									page_number_updated: true,
+									message: "page number updated"
+								}
+							else
+								render status: "500", json: {
+												message: "Something Went Wrong!"
+											}
+							end
+					else
+						render status: "422", json: {
+										message: "Group not found with given ID"
+									}
+					end
+
+				rescue Exception => e
+					render status: "500", json: {
+        				message: e.message
+			        }
+				end
 
 			end
 
 		end
+
+
 	end
 end
