@@ -12,6 +12,8 @@ class GroupDocument
   field :status, 				  type: String, default: "pending"
   field :total_pages, type: Integer,default: 0
   field :processed_pages, type: Integer,default: 0
+  field :active, type: Boolean,default: false
+
 
   validates :status, inclusion: { in: ['pending','sent_for_printing', 'processing', 'failed', 'completed'] }
   def get_preview_url

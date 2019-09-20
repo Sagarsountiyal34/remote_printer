@@ -34,6 +34,7 @@ Rails.application.routes.draw do
       post 'send_error_to_admin', to: 'documents#send_error_to_admin'
       post 'print_document', to: 'documents#print_document'
       get 'print_document2', to: 'documents#print_document2'
+      get 'fetch_in_printing_doc_to_print', to: 'documents#fetch_in_printing_doc_to_print'
 		end
 	end
 end

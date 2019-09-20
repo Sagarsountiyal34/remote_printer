@@ -190,8 +190,13 @@ module Api
 				begin
 					group = Group.find(params["groupID"])
 					document = group.documents.find(params["documentID"])
+					# debugger
 					if document.present?
 						document.processed_pages = params[:pcount]
+							if (params[:pcount].to_i== document.total_pages )
+								document.active = false
+								document.status = "completed"
+							end
 							if document.save
 								render status: "201", json: {
 									document: document,
@@ -216,6 +221,51 @@ module Api
 				end
 
 			end
+
+			def fetch_in_printing_doc_to_print
+				begin
+					doc_to_print = ""
+					active_group = Group.all_of({:'documents.active' => true }).map{|grp| grp.attributes.merge(documents: grp.documents.where(active: true),user_email: grp.user.email)}
+					# check if any group with active document is there
+
+					if active_group.present?
+						# return first active document
+						doc_to_print= active_group.first[:documents].first
+
+						render status: "201", json: {
+							document: doc_to_print,
+							groupID: active_group.first[:_id].to_str,
+							continue_printing: true
+						}
+					else
+						groups = Group.all_of({:'documents.status' => "sent_for_printing" }).map{|grp| grp.attributes.merge(documents: grp.documents.where(status: "sent_for_printing"),user_email: grp.user.email)}
+						if groups.present?
+							doc_to_print = groups.first[:documents].first
+
+							if doc_to_print.update(active: true)
+
+									render status: "200", json: {
+										document: doc_to_print,
+										groupID: groups.first[:_id].to_str,
+										continue_printing: true
+									}
+							else
+									# bacho
+							end
+						else
+							render status: "201", json: {
+								continue_printing: false
+							}
+
+						end
+					end
+
+
+				rescue Exception => e
+					forbidden_error(e)
+				end
+			end
+
 
 		end
 
