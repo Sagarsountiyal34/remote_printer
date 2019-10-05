@@ -10670,7 +10670,7 @@ body {
 
 .sidebar {
   width: 90px !important;
-  background-color: #212529;
+  background-color: #f7f7f7;
   min-height: calc(100vh - 56px);
 }
 
@@ -10707,11 +10707,11 @@ body {
 }
 
 .sidebar .nav-item .nav-link {
-  color: rgba(255, 255, 255, 0.5);
+  color: rgb(12, 46, 96)!important;
 }
 
 .sidebar .nav-item .nav-link:active, .sidebar .nav-item .nav-link:focus, .sidebar .nav-item .nav-link:hover {
-  color: rgba(255, 255, 255, 0.75);
+  color: rgb(250, 73, 60)!important;
 }
 
 .sidebar.toggled {

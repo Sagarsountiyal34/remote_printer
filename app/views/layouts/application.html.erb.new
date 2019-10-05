@@ -1,0 +1,309 @@
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightgallery/1.6.0/css/lightgallery.min.css">
+    <title>PrintPdf</title>
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lightgallery/1.3.2/js/lightgallery.js"></script>
+    <link rel="icon" href="/assets/favicon.png">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="/assets/bootstrap.min.css">
+    <!-- animate CSS -->
+    <link rel="stylesheet" href="/assets/animate.css">
+    <!-- owl carousel CSS -->
+    <link rel="stylesheet" href="/assets/owl.carousel.min.css">
+    <!-- themify CSS -->
+    <link rel="stylesheet" href="/assets/themify-icons.css">
+    <!-- flaticon CSS -->
+    <link rel="stylesheet" href="/assets/flaticon.css">
+    <!-- font awesome CSS -->
+    <link rel="stylesheet" href="/assets/magnific-popup.css">
+    <!-- swiper CSS -->
+    <link rel="stylesheet" href="/assets/slick.css">
+    <!-- style CSS -->
+    <link rel="stylesheet" href="/assets/home-style.css">
+</head>
+
+<body>
+    <!--::header part start::-->
+    <header class="main_menu home_menu">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-12">
+                    <nav class="navbar navbar-expand-lg navbar-light">
+                        <a class="navbar-brand" href="<%= root_path %>"> <img src="/assets/logo.png" alt="logo"> </a>
+                        <button class="navbar-toggler" type="button" data-toggle="collapse"
+                            data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                            aria-expanded="false" aria-label="Toggle navigation">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+
+                        <div class="collapse navbar-collapse main-menu-item justify-content-end"
+                            id="navbarSupportedContent">
+                            <ul class="navbar-nav align-items-center">
+                                <li class="nav-item active">
+                                    <a class="nav-link" href="<%= root_path %>">Home</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="<%= about_path %>">About</a>
+                                </li>
+                                <!-- <li class="nav-item">
+                                    <a class="nav-link" href="cource.html">Courses</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="blog.html">Blog</a>
+                                </li> -->
+                                <!-- <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="blog.html" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Pages
+                                    </a>
+                                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                        <a class="dropdown-item" href="single-blog.html">Single blog</a>
+                                        <a class="dropdown-item" href="elements.html">Elements</a>
+                                    </div>
+                                </li> -->
+                                <li class="nav-item">
+                                    <a class="nav-link" href="<%= contact_path %>">Contact</a>
+                                </li>
+                                <li class="nav-item hideSignIn">
+                                    <% if current_user.present? %>
+                                        <%= link_to 'Logout', destroy_user_session_path,{ method: :delete, class: :'nav-link', :data => {:toggle => 'modal', :target => '#logoutModal'} }  %>
+                                        <!-- <a class="nav-link" data-method="DELETE" rel="nofollow" href="<%#= destroy_user_session_path %>">LogOut</a> -->
+                                    <%else%>
+                                        <a class="nav-link" href="<%= new_user_session_path %>">SignIn</a>
+                                    <%end%>
+                                </li>
+                                <!-- <li class="d-none d-lg-block">
+                                    <a class="btn_1" href="#">Get a Quote</a>
+                                </li> -->
+                            </ul>
+                        </div>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </header>
+    <!-- Header part end-->
+    <%= yield %>
+    <!-- footer part start-->
+    <footer class="footer-area">
+        <div class="container">
+            <div class="row justify-content-between">
+                <div class="col-sm-6 col-md-4 col-xl-3">
+                    <div class="single-footer-widget footer_1">
+                        <a href="<%= root_path %>"> <img src="/assets/logo.png" alt=""> </a>
+                        <p>But when shot real her. Chamber her one visite removal six
+                            sending himself boys scot exquisite existend an </p>
+                        <p>But when shot real her hamber her </p>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-md-4 col-xl-4">
+                    <div class="single-footer-widget footer_2">
+                        <h4>Newsletter</h4>
+                        <p>Stay updated with our latest trends Seed heaven so said place winged over given forth fruit.
+                        </p>
+                        <form action="#">
+                            <div class="form-group">
+                                <div class="input-group mb-3">
+                                    <input type="text" class="form-control" placeholder='Enter email address'
+                                        onfocus="this.placeholder = ''"
+                                        onblur="this.placeholder = 'Enter email address'">
+                                    <div class="input-group-append">
+                                        <button class="btn btn_1" type="button"><i class="ti-angle-right"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                        <div class="social_icon">
+                            <a href="#"> <i class="ti-facebook"></i> </a>
+                            <a href="#"> <i class="ti-twitter-alt"></i> </a>
+                            <a href="#"> <i class="ti-instagram"></i> </a>
+                            <a href="#"> <i class="ti-skype"></i> </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-sm-6 col-md-4">
+                    <div class="single-footer-widget footer_2">
+                        <h4>Contact us</h4>
+                        <div class="contact_info">
+                            <p><span> Address :</span> Hath of it fly signs bear be one blessed after </p>
+                            <p><span> Phone :</span> +2 36 265 (8060)</p>
+                            <p><span> Email : </span>info@colorlib.com </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="copyright_part_text text-center">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <p class="footer-text m-0"><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                                Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="ti-heart" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
+                                <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!-- footer part end-->
+
+    <!-- jquery plugins here-->
+    <!-- jquery -->
+    <!-- <script src="/assets/jquery.min.js"></script> -->
+    <!-- <script src="/assets/turbolinks.js"></script> -->
+    <!-- popper js -->
+    <!-- <script src="/assets/popper.min.js"></script> -->
+    <!-- bootstrap js -->
+    <!-- <script src="/assets/bootstrap.min.js"></script> -->
+    <!-- easing js -->
+    <!-- <script src="/assets/jquery.magnific-popup.js"></script> -->
+    <!-- swiper js -->
+    <!-- <script src="/assets/swiper.min.js"></script> -->
+    <!-- swiper js -->
+    <!-- <script src="/assets/masonry.pkgd.js"></script> -->
+    <!-- particles js -->
+    <!-- <script src="/assets/owl.carousel.min.js"></script> -->
+    <!-- <script src="/assets/jquery.nice-select.min.js"></script> -->
+    <!-- swiper js -->
+    <!-- <script src="/assets/slick.min.js"></script> -->
+    <!-- <script src="/assets/jquery.counterup.min.js"></script> -->
+    <!-- <script src="/assets/waypoints.min.js"></script> -->
+    <!-- custom js -->
+    <script src="/assets/custom.js"></script>
+</body>
+
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+===================================================================================================
+
+
+
+
+
+    <nav class="navbar navbar-expand navbar-dark bg-dark static-top">
+        <a class="navbar-brand mr-1" href="index.html">Remote Print</a>
+        <button class="btn btn-link btn-sm text-white order-1 order-sm-0" id="sidebarToggle" href="#">
+            <i class="fas fa-bars"></i>
+        </button>
+        <!-- Navbar Search -->
+        <form class="d-none d-md-inline-block form-inline ml-auto mr-0 mr-md-3 my-2 my-md-0">
+            <div class="input-group">
+                <input type="text" class="form-control" placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2">
+                <div class="input-group-append">
+                    <button class="btn_1" type="button">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+            </div>
+        </form>
+        <!-- Navbar -->
+        <ul class="navbar-nav ml-auto ml-md-0">
+            <li class="nav-item dropdown no-arrow mx-1 show">
+                <%= link_to  progress_groups_path,{ method: :get, class: :'nav-link dropdown-toggle', role: :'button' } do %>
+                <i class="fab fa-pinterest-p cart"></i>
+                <% if current_user.get_total_progress_group.present? %>
+                <span class="badge badge-danger total_group" style="margin-left:0px;font-size: 0.6rem;">
+                    <%= current_user.get_total_progress_group %></span>
+                <% end %>
+                <% end %>
+            </li>
+            <li class="nav-item dropdown no-arrow">
+                <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="fas fa-user-circle fa-fw" id="user"></i>
+                </a>
+                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
+                    <a class="dropdown-item" href="#">Settings</a>
+                    <a class="dropdown-item" href="#">Activity Log</a>
+                    <div class="dropdown-divider"></div>
+                    <%= link_to 'Logout', destroy_user_session_path,{ method: :delete, class: :'dropdown-item', :data => {:toggle => 'modal', :target => '#logoutModal'} }  %>
+                </div>
+            </li>
+        </ul>
+    </nav>
+    <div id="wrapper">
+        <!-- Sidebar -->
+        <ul class="sidebar navbar-nav">
+            <li class="nav-item active">
+                <!-- <a class="nav-link" href="/"> -->
+                <%= link_to upload_doc_path, class: "nav-link" do %>
+                <span>Set Document for Printing</span>
+                <% end %>
+            </li>
+            <li class="nav-item active">
+                <%= link_to list_documents_path, class: "nav-link" do %>
+                <span>Upload Doc History</span>
+                <% end %>
+            </li>
+            <li class="nav-item active">
+                <%= link_to progress_groups_path, class: "nav-link" do %>
+                <span>In Progress Printing</span>
+                <% end %>
+            </li>
+            <li class="nav-item active">
+                <%= link_to recently_printed_groups_path, class: "nav-link" do %>
+                <span>Recently Printed</span>
+                <% end %>
+            </li>
+            <li class="nav-item active">
+                <%= link_to printed_groups_path, class: "nav-link" do %>
+                <span>Previously Printed</span>
+                <% end %>
+            </li>
+        </ul>
+        <div id="content-wrapper">
+            <div class="container-fluid">
+            </div>
+            <!-- Sticky Footer -->
+            <footer class="sticky-footer">
+                <div class="container my-auto">
+                    <div class="copyright text-center my-auto">
+                        <span>Copyright © Remote Printer 2019</span>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>

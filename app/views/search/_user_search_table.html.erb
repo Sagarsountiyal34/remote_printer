@@ -1,0 +1,21 @@
+<div class="text-center">
+        <h5>Users</h5>
+</div>
+<table id="example" class="table table-striped table-bordered" style="width:100%">
+    <thead>
+        <tr>
+            <th>Email</th>
+            <th>Groups</th>
+            <th>Doucuments</th>
+        </tr>
+    </thead>
+    <tbody>
+        <% users.each do |user| %>
+            <tr>
+                <td><%= user.email %></td>
+                <td><%= user.groups.size %></td>
+                <td><%= user.groups.map{|a| a.documents.size}.sum %></td>
+            </tr>
+        <% end %>
+    </tbody>
+</table>

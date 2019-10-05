@@ -53,3 +53,11 @@ embed {
 .lg-backdrop {
     z-index: 1050;
 }
+
+.bg-color {
+    background: #343a3f26;
+    border: #343a3f;
+    border-style: solid;
+    padding: 30px;
+    margin: 0px 20px;
+}

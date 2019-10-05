@@ -7,6 +7,7 @@ class User
 
   ## Database authenticatable
   field :email,              type: String, default: ""
+  field :role,              type: String, default: "user"
   field :encrypted_password, type: String, default: ""
 
   ## Recoverable

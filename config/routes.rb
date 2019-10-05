@@ -1,8 +1,24 @@
 Rails.application.routes.draw do
   get 'group/view'
   devise_for :users
-	root to: 'groups#new'
+	root to: 'home#home'
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
+  get '/admin' =>"admins#dashbord"
+  resource :admins do
+    get '/users' =>"admins#users"
+  end
+  #------------------ Search ------------------
+  get "/search",to: "search#show"
+
+  #------------------- end --------------------
+
+  #---------------- Home url's ----------------
+
+  # get "/home",to: "home#home"
+  get "/about",to: "home#about_us"
+  get "/contact",to: "home#contact"
+
+  #------------------ End ---------------------
 
   get 'upload_doc', to: 'groups#new'
   post 'save_group', to: 'groups#create'
