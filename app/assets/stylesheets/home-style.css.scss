@@ -2471,7 +2471,7 @@ ul {
   height: 880px;
   position: relative;
   overflow: hidden;
-  background-image: url(/assets/banner_bg.png);
+  background-image: url(asset-path('banner_bg.png'));
   background-repeat: no-repeat;
   background-size: 68%;
   background-position: top right;
@@ -2746,7 +2746,7 @@ ul {
   width: 41%;
   height: 69%;
   content: "";
-  background-image: url(/assets/banner_img.jpg);
+  background-image: url(asset-path('banner_img.jpg'));
   background-size: 100% 100%;
   right: 9%;
 }
@@ -2759,7 +2759,7 @@ ul {
     max-width: 100%;
     max-height: 100%;
     content: "";
-    background-image: url(/assets/banner_img.jpg);
+    background-image: url(asset-path('banner_img.jpg'));
     background-size: contain;
     right: 0;
     left: 0;
@@ -2777,7 +2777,7 @@ ul {
     max-width: 100%;
     max-height: 100%;
     content: "";
-    background-image: url(/assets/banner_img.jpg);
+    background-image: url(asset-path('banner_img.jpg'));
     background-size: contain;
     right: 0;
     left: 0;
@@ -2795,7 +2795,7 @@ ul {
     max-width: 100%;
     max-height: 100%;
     content: "";
-    background-image: url(/assets/banner_img.jpg);
+    background-image: url(asset-path('banner_img.jpg'));
     background-size: contain;
     right: 0;
     left: 0;
@@ -2812,7 +2812,7 @@ ul {
     max-width: 100%;
     max-height: 100%;
     content: "";
-    background-image: url(/assets/banner_img.jpg);
+    background-image: url(asset-path('banner_img.jpg'));
     background-size: contain;
     right: 5%;
     bottom: 0;
@@ -2828,7 +2828,7 @@ ul {
   position: relative;
   z-index: 1;
   padding: 70px 0px 140px;
-  background-image: url(/assets/about_overlay.png);
+  background-image: url(asset-path('about_overlay.png'));
   background-repeat: no-repeat;
   background-position: left;
   background-size: 33% 73%;
@@ -3263,7 +3263,7 @@ ul {
 
 /* line 18, E:/172 Etrain Education/172_Etrain_Education_html/sass/_learning.scss */
 .learning_part .learning_img {
-  background-image: url("/assets/learning_img_bg.png");
+  background-image: url(asset-path("learning_img_bg.png"));
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
@@ -3623,7 +3623,7 @@ ul {
 
 /* line 261, E:/172 Etrain Education/172_Etrain_Education_html/sass/_learning.scss */
 .advance_feature .learning_img {
-  background-image: url("/assets/advance_feature_bg.png");
+  background-image: url(asset-path("advance_feature_bg.png"));
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
@@ -4572,7 +4572,7 @@ ul {
   top: 59px;
   width: 148px;
   height: 124px;
-  background-image: url(/assets/quote.png);
+  background-image: url(asset-path("quote.png"));
   content: "";
   background-size: cover;
   background-repeat: no-repeat;
@@ -5975,7 +5975,7 @@ h1, h2, h3, h4, h5, h6 {
 
 /* line 798, E:/172 Etrain Education/172_Etrain_Education_html/sass/_elements.scss */
 .primary-checkbox input:checked + label {
-  background: url(/assets/elements/primary-check.png) no-repeat center center/cover;
+  background: url(asset-path('elements/primary-check.png')) no-repeat center center/cover;
   border: none;
 }
 
@@ -6017,7 +6017,7 @@ h1, h2, h3, h4, h5, h6 {
 
 /* line 835, E:/172 Etrain Education/172_Etrain_Education_html/sass/_elements.scss */
 .confirm-checkbox input:checked + label {
-  background: url(/assets/elements/success-check.png) no-repeat center center/cover;
+  background: url(asset-path('/elements/success-check.png')) no-repeat center center/cover;
   border: none;
 }
 
@@ -6065,7 +6065,7 @@ h1, h2, h3, h4, h5, h6 {
 
 /* line 876, E:/172 Etrain Education/172_Etrain_Education_html/sass/_elements.scss */
 .disabled-checkbox input:checked + label {
-  background: url(/assets/elements/disabled-check.png) no-repeat center center/cover;
+  background: url(asset-path("/elements/disabled-check.png")) no-repeat center center/cover;
   border: none;
 }
 
@@ -6107,7 +6107,7 @@ h1, h2, h3, h4, h5, h6 {
 
 /* line 913, E:/172 Etrain Education/172_Etrain_Education_html/sass/_elements.scss */
 .primary-radio input:checked + label {
-  background: url(/assets/elements/primary-radio.png) no-repeat center center/cover;
+  background: url(asset-path('/elements/primary-radio.png')) no-repeat center center/cover;
   border: none;
 }
 
@@ -6149,7 +6149,7 @@ h1, h2, h3, h4, h5, h6 {
 
 /* line 950, E:/172 Etrain Education/172_Etrain_Education_html/sass/_elements.scss */
 .confirm-radio input:checked + label {
-  background: url(/assets/elements/success-radio.png) no-repeat center center/cover;
+  background: url(asset-path('/elements/success-radio.png')) no-repeat center center/cover;
   border: none;
 }
 
@@ -6197,7 +6197,7 @@ h1, h2, h3, h4, h5, h6 {
 
 /* line 991, E:/172 Etrain Education/172_Etrain_Education_html/sass/_elements.scss */
 .disabled-radio input:checked + label {
-  background: url(/assets/elements/disabled-radio.png) no-repeat center center/cover;
+  background: url(asset-path('/elements/disabled-radio.png')) no-repeat center center/cover;
   border: none;
 }
 
@@ -6871,7 +6871,7 @@ h1, h2, h3, h4, h5, h6 {
 
 /* line 1, E:/172 Etrain Education/172_Etrain_Education_html/sass/_breadcrumb.scss */
 .breadcrumb_bg {
-  background-image: url("/assets/breadcrumb.jpg");
+  background-image: url(asset-path("breadcrumb.jpg"));
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
