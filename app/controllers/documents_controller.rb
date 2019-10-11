@@ -24,7 +24,7 @@ class DocumentsController < ApplicationController
 	# end
 
 	def list_documents
-		@last_updated = current_user.upload_documents.present? : current_user.upload_documents.order_by(created_at: :desc).first.updated_at.strftime("%d %B %Y , %l:%M %p") : []
+		@last_updated = current_user.upload_documents.present? ? current_user.upload_documents.order_by(created_at: :desc).first.updated_at.strftime("%d %B %Y , %l:%M %p") : []
 	end
 
 
