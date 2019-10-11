@@ -16,6 +16,10 @@ class ApplicationController < ActionController::Base
 		end
 	end
 
+	def after_sign_in_path_for(resource)
+	  progress_groups_path || root_path
+	end
+
 	protected
 	
 	def forbidden_error(e=nil)
