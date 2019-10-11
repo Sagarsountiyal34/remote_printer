@@ -90,7 +90,8 @@
                     </div>
                 </div>
                 <div class="col-sm-6 col-md-4 col-xl-4">
-                    <div class="single-footer-widget footer_2">
+                    <%= image_tag('footer_pic.jpg')%>
+                    <!-- <div class="single-footer-widget footer_2">
                         <h4>Newsletter</h4>
                         <p>Stay updated with our latest trends Seed heaven so said place winged over given forth fruit.
                         </p>
@@ -112,15 +113,15 @@
                             <a href="#"> <i class="ti-instagram"></i> </a>
                             <a href="#"> <i class="ti-skype"></i> </a>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
                 <div class="col-xl-3 col-sm-6 col-md-4">
                     <div class="single-footer-widget footer_2">
                         <h4>Contact us</h4>
                         <div class="contact_info">
-                            <p><span> Address :</span> Hath of it fly signs bear be one blessed after </p>
-                            <p><span> Phone :</span> +2 36 265 (8060)</p>
-                            <p><span> Email : </span>info@colorlib.com </p>
+                            <p><span> Address :</span> Main bazar Vikas Nagar,  Khandwala Chheharta Amritsar </p>
+                            <p><span> Phone :</span> +91 7710706771</p>
+                            <p><span> Email : </span>apcom321@gmail.com</p>
                         </div>
                     </div>
                 </div>
@@ -143,59 +144,59 @@
     </footer>
 
     <script>
-    <% if flash[:notice].present? %>
-    message = "<%= flash[:notice]%>"
-    type = 'success'
-    notification(message, type)
-    <%end%>
+        <% if flash[:notice].present? %>
+            message = "<%= flash[:notice]%>"
+            type = 'success'
+            notification(message, type)
+        <%end%>
 
-    <% if flash[:alert].present? %>
-    message = "<%= flash[:alert]%>"
-    type = 'warn'
-    notification(message, type)
-    <%end%>
+        <% if flash[:alert].present? %>
+            message = "<%= flash[:alert]%>"
+            type = 'warn'
+            notification(message, type)
+        <%end%>
 
-    <% if flash[:message].present?%>
-    message = "<%= flash[:message]%>"
-    type = 'info'
-    notification(message, type)
-    <%end%>
+        <% if flash[:message].present?%>
+            message = "<%= flash[:message]%>"
+            type = 'info'
+            notification(message, type)
+        <%end%>
 
-    <% if flash[:errors].present?%>
-    <% if flash[:errors].class == Array %>
-    <%flash[:errors].each do |err|%>
-    message = "<%= err.html_safe %>"
-    type = 'error'
-    notification(message, type)
-    <%end%>
-    <% else %>
-    message = "<%= flash[:errors] %>"
-    type = 'error'
-    notification(message, type)
-    <% end %>
-    <% end %>
+        <% if flash[:errors].present?%>
+            <% if flash[:errors].class == Array %>
+                <%flash[:errors].each do |err|%>
+                    message = "<%= err.html_safe %>"
+                    type = 'error'
+                    notification(message, type)
+                <%end%>
+            <% else %>
+                message = "<%= flash[:errors] %>"
+                type = 'error'
+                notification(message, type)
+            <% end %>
+        <% end %>
 
-    function notification(message, type) {
-        $.notify(message, {
-            className: type,
-            clickToHide: true,
-            globalPosition: 'top center',
-            autoHideDelay: 10000000,
-            width: 500,
-            height: 300
+        function notification(message, type) {
+            $.notify(message, {
+                className: type,
+                clickToHide: true,
+                globalPosition: 'top center',
+                autoHideDelay: 10000000,
+                width: 500,
+                height: 300
+            });
+        }
+
+        document.addEventListener('turbolinks:before-visit', function(e) {
+          if (e.data.url.split(window.location.href)[1].length > 0) {
+            e.preventDefault();
+            window.location.href = e.data.url;
+          }
         });
-    }
 
-    document.addEventListener('turbolinks:before-visit', function(e) {
-      if (e.data.url.split(window.location.href)[1].length > 0) {
-        e.preventDefault();
-        window.location.href = e.data.url;
-      }
-    });
-
-    function setCsrfToken(xhr) {
-        xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))
-    }
+        function setCsrfToken(xhr) {
+            xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))
+        }
     </script>
 </body>
 
