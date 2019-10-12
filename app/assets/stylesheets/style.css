@@ -1,3 +1,10 @@
+html {
+  height: 100%;
+}
+body {
+  min-height: 100%;
+}
+
 .preview {
     border-radius: 15px;
     background-position: center;
@@ -17,11 +24,64 @@
     text-align: center;
 }
 
+.rightMenu{
+    display: block;
+}
+
+@media only screen and (min-width: 992px) and (max-width: 1200px) {
+  /* line 18, E:/172 Etrain Education/172_Etrain_Education_html/sass/_common.scss */
+  .section_padding {
+    padding: 80px 0px;
+  }
+}
+
+@media only screen and (min-width: 768px) and (max-width: 991px) {
+  /* line 18, E:/172 Etrain Education/172_Etrain_Education_html/sass/_common.scss */
+  .section_padding {
+    padding: 70px 0px;
+  }
+  .rightMenu{
+    display: none;
+  }
+}
+
+@media only screen and (min-width: 576px) and (max-width: 767px) {
+  /* line 18, E:/172 Etrain Education/172_Etrain_Education_html/sass/_common.scss */
+  .section_padding {
+    padding: 70px 0px;
+  }
+  .rightMenu{
+    display: none;
+  }
+}
+
+@media (max-width: 576px) {
+  /* line 18, E:/172 Etrain Education/172_Etrain_Education_html/sass/_common.scss */
+  .section_padding {
+    padding: 70px 0px;
+  }
+  .rightMenu{
+    display: none;
+  }
+}
+
+
 
 table tr td,
 table tr th {
     text-align: center;
     vertical-align: middle !important
+}
+
+.backGroundColor{
+    background-size: 200% auto !important;
+    background-image: linear-gradient(to left, #ee390f 0%, #f9b700 51%, #ee390f 100%) !important; 
+}
+
+.backGroundColor:hover{
+    color: #fff;
+    background-position: right center !important;
+    box-shadow: 0px 10px 30px 0px rgba(193, 34, 10, 0.2) !important;
 }
 
 #fromDesktopModalContent,
