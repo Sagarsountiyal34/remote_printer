@@ -1,31 +1,23 @@
 <div class="d-flex" style="width: 100%">
+    <a id="show-sidebar" class="btn btn-sm btn-dark" href="#">
+        <i class="fas fa-bars"></i>
+    </a>
     <div class="col col-2 rightMenu" style="margin-top:55px;padding-left: 2px !important;">
         <ul class="sidebar navbar-nav" style="box-shadow: inset 0px 0px 10px 0px;">
             <li class="nav-item active">
-                <!-- <a class="nav-link" href="/"> -->
-                <%= link_to "Set Document for Printing", upload_doc_path, class: "nav-link" %>
-                <!-- <span></span> -->
-                <%# end %>
+                <%= link_to "Upload Documents", upload_doc_path, class: "nav-link" %>
             </li>
-            <li class="nav-item active">
-                <%= link_to "Upload Doc History", list_documents_path, class: "nav-link" %>
-                <!-- <span>Upload Doc History</span> -->
-                <%# end %>
+            <li class="nav-item ">
+                <%= link_to "Printed Documents", printed_groups_path, class: "nav-link" %>
             </li>
-            <li class="nav-item active">
-                <%= link_to "In Progress Printing", progress_groups_path, class: "nav-link" %>
-                <!-- <span>In Progress Printing</span> -->
-                <%# end %>
+            <li class="nav-item ">
+                <%= link_to "Documents Under Process", progress_groups_path, class: "nav-link" %>
             </li>
-            <li class="nav-item active">
+            <li class="nav-item ">
                 <%= link_to "Recently Printed", recently_printed_groups_path, class: "nav-link" %>
-                <!-- <span>Recently Printed</span> -->
-                <%# end %>
             </li>
-            <li class="nav-item active">
-                <%= link_to "Previously Printed", printed_groups_path, class: "nav-link" %>
-                <!-- <span>Previously Printed</span> -->
-                <%# end %>
+            <li class="nav-item ">
+                <%= link_to "History", list_documents_path, class: "nav-link" %>
             </li>
         </ul>
     </div>

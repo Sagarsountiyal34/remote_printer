@@ -27,6 +27,26 @@ body {
 .rightMenu{
     display: block;
 }
+#show-sidebar{
+    display: none;
+}
+
+#show-sidebar:hover .rightMenu{
+  display: block;
+}
+
+#show-sidebar {
+  position: fixed;
+  left: 0;
+  top: 85px;
+  border-radius: 0 4px 4px 0px;
+  width: 35px;
+  transition-delay: 0.3s;
+  z-index: 10;
+}
+.page-wrapper.toggled #show-sidebar {
+  left: -40px;
+}
 
 @media only screen and (min-width: 992px) and (max-width: 1200px) {
   /* line 18, E:/172 Etrain Education/172_Etrain_Education_html/sass/_common.scss */
@@ -43,15 +63,15 @@ body {
   .rightMenu{
     display: none;
   }
+  #show-sidebar{
+      display: block;
+  }
 }
 
 @media only screen and (min-width: 576px) and (max-width: 767px) {
   /* line 18, E:/172 Etrain Education/172_Etrain_Education_html/sass/_common.scss */
   .section_padding {
     padding: 70px 0px;
-  }
-  .rightMenu{
-    display: none;
   }
 }
 
