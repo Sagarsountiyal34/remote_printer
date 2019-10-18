@@ -15,137 +15,140 @@
 
 <body>
 <!--::header part start::-->
-    <header class="main_menu home_menu">
-        <div class="container">
-            <div class="row align-items-center">
-                <div class="col-lg-12">
-                    <nav class="navbar navbar-expand-lg navbar-light">
-                        <a class="navbar-brand" href="<%= root_path %>"><%= image_tag("logo.png")%> <!-- <img src="/assets/logo.png" alt="logo"> --> </a>
-                        <button class="navbar-toggler" type="button" data-toggle="collapse"
-                            data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-                            aria-expanded="false" aria-label="Toggle navigation">
-                            <span class="navbar-toggler-icon"></span>
-                        </button>
+    <section class="main-header">
+        <header class="main_menu home_menu">
+            <div class="container-fluid">
+                <div class="row align-items-center">
+                    <div class="col-lg-12">
+                        <nav class="navbar navbar-expand-lg navbar-light">
+                            <a class="navbar-brand" href="<%= root_path %>"><%= image_tag("logo.png")%> <!-- <img src="/assets/logo.png" alt="logo"> --> </a>
+                            <button class="navbar-toggler" type="button" data-toggle="collapse"
+                                data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                                aria-expanded="false" aria-label="Toggle navigation">
+                                <span class="navbar-toggler-icon"></span>
+                            </button>
 
-                        <div class="collapse navbar-collapse main-menu-item justify-content-end"
-                            id="navbarSupportedContent">
-                            <ul class="navbar-nav align-items-center">
-                                <li class="nav-item active">
-                                    <a class="nav-link" href="<%= root_path %>">Home</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="<%= about_path %>">About</a>
-                                </li>
-                                <!-- <li class="nav-item">
-                                    <a class="nav-link" href="cource.html">Courses</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="blog.html">Blog</a>
-                                </li> -->
-                                <!-- <li class="nav-item dropdown">
-                                    <a class="nav-link dropdown-toggle" href="blog.html" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        Pages
-                                    </a>
-                                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                        <a class="dropdown-item" href="single-blog.html">Single blog</a>
-                                        <a class="dropdown-item" href="elements.html">Elements</a>
-                                    </div>
-                                </li> -->
-                                <!-- <li class="nav-item">
-                                    <a class="nav-link" href="<%#= contact_path %>">Contact</a>
-                                </li> -->
-                                <% if current_user.present? %>
-                                    <li class="nav-item hideSignIn">
-                                        <a class="nav-link" href="<%= progress_groups_path %>">Documents</a>
+                            <div class="collapse navbar-collapse main-menu-item justify-content-end"
+                                id="navbarSupportedContent">
+                                <ul class="navbar-nav align-items-center">
+                                    <li class="nav-item active">
+                                        <a class="nav-link" href="<%= root_path %>">Home</a>
                                     </li>
-                                <% end %>
-                                <li class="nav-item hideSignIn">
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="<%= about_path %>">About</a>
+                                    </li>
+                                    <!-- <li class="nav-item">
+                                        <a class="nav-link" href="cource.html">Courses</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="blog.html">Blog</a>
+                                    </li> -->
+                                    <!-- <li class="nav-item dropdown">
+                                        <a class="nav-link dropdown-toggle" href="blog.html" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            Pages
+                                        </a>
+                                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                            <a class="dropdown-item" href="single-blog.html">Single blog</a>
+                                            <a class="dropdown-item" href="elements.html">Elements</a>
+                                        </div>
+                                    </li> -->
+                                    <!-- <li class="nav-item">
+                                        <a class="nav-link" href="<%#= contact_path %>">Contact</a>
+                                    </li> -->
                                     <% if current_user.present? %>
-                                        <%= link_to 'Logout', destroy_user_session_path,{ method: :delete, class: :'nav-link', :data => {:toggle => 'modal', :target => '#logoutModal'} }  %>
-                                        <!-- <a class="nav-link" data-method="DELETE" rel="nofollow" href="<%#= destroy_user_session_path %>">LogOut</a> -->
-                                    <%else%>
-                                        <a class="nav-link" href="<%= new_user_session_path %>">SignIn</a>
-                                    <%end%>
-                                </li>
-                                <!-- <li class="d-none d-lg-block">
-                                    <a class="btn_1" href="#">Get a Quote</a>
-                                </li> -->
-                            </ul>
-                        </div>
-                    </nav>
-                </div>
-            </div>
-        </div>
-    </header>
-    <div class="wrapper">
-        <%= yield %>
-    </div>
-    <!-- Header part end-->
-    <footer class="footer-area">
-        <div class="container">
-            <div class="row justify-content-between">
-                <div class="col-sm-6 col-md-4 col-xl-3">
-                    <div class="single-footer-widget footer_1">
-                        <a href="<%= root_path %>"> <%= image_tag("logo.png")%> </a>
-                        <p>But when shot real her. Chamber her one visite removal six
-                            sending himself boys scot exquisite existend an </p>
-                        <p>But when shot real her hamber her </p>
+                                        <li class="nav-item hideSignIn">
+                                            <a class="nav-link" href="<%= progress_groups_path %>">Documents</a>
+                                        </li>
+                                    <% end %>
+                                    <li class="nav-item hideSignIn">
+                                        <% if current_user.present? %>
+                                            <%= link_to 'Logout', destroy_user_session_path,{ method: :delete, class: :'nav-link', :data => {:toggle => 'modal', :target => '#logoutModal'} }  %>
+                                            <!-- <a class="nav-link" data-method="DELETE" rel="nofollow" href="<%#= destroy_user_session_path %>">LogOut</a> -->
+                                        <%else%>
+                                            <a class="nav-link" href="<%= new_user_session_path %>">SignIn</a>
+                                        <%end%>
+                                    </li>
+                                    <!-- <li class="d-none d-lg-block">
+                                        <a class="btn_1" href="#">Get a Quote</a>
+                                    </li> -->
+                                </ul>
+                            </div>
+                        </nav>
                     </div>
                 </div>
-                <div class="col-sm-6 col-md-4 col-xl-4">
-                    <div class="single-footer-widget footer_2">
-                        <h4>Suggestions:</h4>
-                        <p>In order to express your experience and suggestion. Please send an email at <a href = "mailto:info@codegaragetech.com">info@codegaragetech.com</a>.
-                        </p>
-                        <%= image_tag('footer_pic.jpg')%>
-                        <!-- <form action="#">
-                            <div class="form-group">
-                                <div class="input-group mb-3">
-                                    <input type="text" class="form-control" placeholder='Enter email address'
-                                        onfocus="this.placeholder = ''"
-                                        onblur="this.placeholder = 'Enter email address'">
-                                    <div class="input-group-append">
-                                        <button class="btn btn_1" type="button"><i class="ti-angle-right"></i></button>
+            </div>
+        </header>
+    </section>
+    <section class="container-fluid col-lg-12 main-container">
+            <%= yield %>
+    </section>
+    <!-- Header part end-->
+    <section>
+        <footer class="footer-area">
+            <div class="container">
+                <div class="row justify-content-between">
+                    <div class="col-sm-6 col-md-4 col-xl-3">
+                        <div class="single-footer-widget footer_1">
+                            <a href="<%= root_path %>"> <%= image_tag("logo.png")%> </a>
+                            <p>But when shot real her. Chamber her one visite removal six
+                                sending himself boys scot exquisite existend an </p>
+                            <p>But when shot real her hamber her </p>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-4 col-xl-4">
+                        <div class="single-footer-widget footer_2">
+                            <h4>Suggestions:</h4>
+                            <p>In order to express your experience and suggestion. Please send an email at <a href = "mailto:info@codegaragetech.com">info@codegaragetech.com</a>.
+                            </p>
+                            <%= image_tag('footer_pic.jpg')%>
+                            <!-- <form action="#">
+                                <div class="form-group">
+                                    <div class="input-group mb-3">
+                                        <input type="text" class="form-control" placeholder='Enter email address'
+                                            onfocus="this.placeholder = ''"
+                                            onblur="this.placeholder = 'Enter email address'">
+                                        <div class="input-group-append">
+                                            <button class="btn btn_1" type="button"><i class="ti-angle-right"></i></button>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        </form>
-                        <div class="social_icon">
-                            <a href="#"> <i class="ti-facebook"></i> </a>
-                            <a href="#"> <i class="ti-twitter-alt"></i> </a>
-                            <a href="#"> <i class="ti-instagram"></i> </a>
-                            <a href="#"> <i class="ti-skype"></i> </a>
-                        </div> -->
-                    </div>
-                </div>
-                <div class="col-xl-3 col-sm-6 col-md-4">
-                    <div class="single-footer-widget footer_2">
-                        <h4>Contact us</h4>
-                        <div class="contact_info">
-                            <p><span> Address :</span> Main bazar Vikas Nagar,  Khandwala Chheharta Amritsar </p>
-                            <p><span> Phone :</span> +91 7710706771</p>
-                            <p><span> Email : </span>apcom321@gmail.com</p>
+                            </form>
+                            <div class="social_icon">
+                                <a href="#"> <i class="ti-facebook"></i> </a>
+                                <a href="#"> <i class="ti-twitter-alt"></i> </a>
+                                <a href="#"> <i class="ti-instagram"></i> </a>
+                                <a href="#"> <i class="ti-skype"></i> </a>
+                            </div> -->
                         </div>
                     </div>
-                </div>
-            </div>
-
-        </div>
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="copyright_part_text text-center">
-                        <div class="row">
-                            <div class="col-lg-12">
-                                <p class="footer-text m-0">Copyright © Remote Printer 2019</p>
+                    <div class="col-xl-3 col-sm-6 col-md-4">
+                        <div class="single-footer-widget footer_2">
+                            <h4>Contact us</h4>
+                            <div class="contact_info">
+                                <p><span> Address :</span> Main bazar Vikas Nagar,  Khandwala Chheharta Amritsar </p>
+                                <p><span> Phone :</span> +91 7710706771</p>
+                                <p><span> Email : </span>apcom321@gmail.com</p>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-    </footer>
 
+            </div>
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="copyright_part_text text-center">
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <p class="footer-text m-0">Copyright © Remote Printer 2019</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </section>
     <script>
         <% if flash[:notice].present? %>
             message = "<%= flash[:notice]%>"

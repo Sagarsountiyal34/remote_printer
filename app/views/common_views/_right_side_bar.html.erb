@@ -1,8 +1,8 @@
-<div class="d-flex" style="width: 100%">
-    <a id="show-sidebar" class="btn btn-sm btn-dark" href="#">
-        <i class="fas fa-bars"></i>
-    </a>
-    <div class="col col-2 rightMenu" style="margin-top:55px;padding-left: 2px !important;">
+<section class="col-3 left-section-div">
+    <button id="show-sidebar" class="btn btn-sm btn-dark" href="#">
+        <i class="fas fa-bars"></i>Menu
+    </button>
+    <div class="rightMenu">
         <ul class="sidebar navbar-nav" style="box-shadow: inset 0px 0px 10px 0px;">
             <li class="nav-item active">
                 <%= link_to "Upload Documents", upload_doc_path, class: "nav-link" %>
@@ -21,4 +21,54 @@
             </li>
         </ul>
     </div>
-</dir>
+    <script type="text/javascript">
+        $(document).ready(function(){
+            var class_name1 = "rightMenu"
+            var class_name2 = "table-section"
+            if ($("."+ class_name1 +":hidden").length){
+                debugger
+                $("." + class_name1).parent().removeClass("col-3")
+                // $("." + class_name1).parent().addClass("col-2")
+                $("." + class_name2).removeClass("col-9")
+                $("." + class_name2).addClass("col-11")
+            } 
+            else {
+                $("." + class_name1).parent().addClass("col-3")
+                // $("." + class_name1).parent().removeClass("col-2")
+                $("." + class_name2).addClass("col-9")
+                $("." + class_name2).removeClass("col-11")
+            }
+        });
+
+        $(document).on("click","#show-sidebar",function(e) {
+            set_div_classes("rightMenu","table-section")
+            div_animation("rightMenu")
+        });
+
+        function set_div_classes(class_name1,class_name2){
+            debugger
+            if ($("."+ class_name1 +":hidden").length){
+                debugger
+                $("." + class_name1).parent().removeClass("col-3")
+                // $("." + class_name1).parent().addClass("col-2")
+                $("." + class_name2).removeClass("col-9")
+                $("." + class_name2).addClass("col-11")
+            } 
+            else {
+                $("." + class_name1).parent().addClass("col-3")
+                // $("." + class_name1).parent().removeClass("col-2")
+                $("." + class_name2).addClass("col-9")
+                $("." + class_name2).removeClass("col-11")
+            }
+        }
+
+        function add_or_remove_class(_this,addClass_name,removeClass_name){
+            $("." + _this).addClass(addClass_name)
+            $("." + _this).removeClass(removeClass_name)
+        }
+
+        function div_animation(class_name1){
+           $("."+ class_name1).toggle(1000); 
+        }
+    </script>
+</section>

@@ -11,12 +11,4 @@
 // about supported directives.
 //
 //= require jquery.min
-//= require jquery.mousewheel.min
-//= require rails-ujs
-//= require turbolinks
-//= require bootstrap.bundle.min
-//= require jquery.easing.min
-//= require jquery.dataTables
-//= require dataTables.bootstrap4
-//= require sb-admin.min
 //= require_tree .
