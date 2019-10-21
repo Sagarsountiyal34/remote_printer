@@ -13,10 +13,15 @@ class GroupsController < ApplicationController
 	end
 
 	def create
+		debugger
 		@upload_document = current_user.upload_documents.new(document_params)
 		if @upload_document.save
-			group = current_user.groups.new
-			group.otp = group.generate_otp
+			if params[:counter] == "1"
+				group = current_user.groups.new
+				group.otp = group.generate_otp
+			else
+				group = current_user.groups.find(params[:group_id])
+			end
 			@upload_document.generate_deep_copy_in_directory(group.otp)
 			if @upload_document.have_to_create_pdf_from_file?
 				@upload_document.create_pdf_from_file(group.otp)
@@ -25,13 +30,12 @@ class GroupsController < ApplicationController
 			@upload_document.generate_preview_file
 			@upload_document.add_documents(group) # addding into group
 			if group.save
-				redirect_to action: 'edit', :id =>  group.id
+				render json: {status: true, message: 'Document Uploaded'.to_json, group_id: group.id.to_s}, status: 200
 			else
-				render 'new'
+				render json: {status: false, message: 'Try Again'.to_json}, status: 200
 			end
 		else
-			# if the upload document not updated
-			render 'new'
+			render json: {status: false, message: 'Try Again'.to_json}, status: 200
 		end
 	end
 
@@ -48,7 +52,8 @@ class GroupsController < ApplicationController
 				upload_document.generate_preview_file
 				upload_document.add_documents(group) # addding into group
 				if group.save
-					redirect_to action: 'edit', :id =>  group.id
+					# redirect_to action: 'edit', :id =>  group.id
+					render json: 'success'.to_json, status: 200
 				else
 					render json: {  document_error: 'Internal Server Error.Please Try Again'}, status: :unprocessable_entity
 				end
@@ -157,8 +162,12 @@ class GroupsController < ApplicationController
 
 	def get_documents_for_history
 		group = current_user.groups.find(params[:group_id])
-		uploaded_doc_ids = group.documents.map{|d| d.upload_document_id.to_s}
-		all_documents = current_user.upload_documents.not_in(:_id => uploaded_doc_ids).order_by(created_at: :desc)
+		if group.present?
+			uploaded_doc_ids = group.documents.map{|d| d.upload_document_id.to_s}
+			all_documents = current_user.upload_documents.not_in(:_id => uploaded_doc_ids).order_by(created_at: :desc)
+		else
+			all_documents = current_user.upload_documents.order_by(created_at: :desc)
+		end
 		total_record = all_documents.length
 		if params[:search][:value].present?
 			upload_documents =	all_documents.any_of({ :document_name => /.*#{params[:search][:value]}.*/ })

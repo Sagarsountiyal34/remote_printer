@@ -1,0 +1,142 @@
+<!-- From History Modal -->
+<div class="modal" id="fromHistory" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document" style="max-width:1000px;">
+        <div class="modal-content" id="fromHistoryModalContent">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Upload Document into group</h5>
+                <button type="button" class="close" data-dismiss="modal" id="close_history_modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="card mb-3">
+                    <div class="card-header">
+                        <i class="fas fa-table"></i>
+                        All Documents</div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered document_table" id="dataTableForNewDocumentHistory" width="100%" cellspacing="0">
+                                <thead>
+                                    <tr>
+                                        <th width="15%">Select</th>
+                                        <th width="15%">Preview</th>
+                                        <th width="35%">Name</th>
+                                        <th width="35%">Type</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="history_tbody_head">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="card-footer small text-muted">
+                        <%= button_tag "Add for printing", id: 'add_to_list', class: 'btn_1'%>
+                    </div>
+                    <div id="loader_wrap" class="loader_wrap_from_history">
+                        <img src="/images/loader.gif" id="loader_img" width="100" height="100">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+var fromHistoryModal = null;
+
+$(document).ready(function() {
+    initNewGroupDataTable();
+});
+
+function initNewGroupDataTable() {
+    fromHistoryModal = $('#dataTableForNewDocumentHistory').DataTable({
+        "serverSide": true,
+        "processing": true,
+        // "searching": false,
+        "stateSave": true,
+        "lengthMenu": [10],
+        "ajax": {
+            "url": "/get_documents_for_history",
+            "dataSrc": function(json) {
+                return json.documents;
+            },
+            "data": function(data) {
+                var page_number = $('#dataTableForNewDocumentHistory').DataTable().page.info().page;
+                data['page_number'] = page_number
+                data['group_id'] = ""
+                return data;
+            }
+        },
+        "columns": [
+            { "data": "document_id" },
+            { "data": "preview_url" },
+            { "data": "document_name" },
+            { "data": "type" },
+        ],
+        "createdRow": function(row, data, dataIndex) {
+            $(row).addClass('document_record_for_add');
+        },
+        "columnDefs": [{
+                "targets": 0,
+                "data": "document_id",
+                "render": function(data, type, row, meta) {
+                    return '<input type="checkbox" name=' + row['document_name'] + ' id=' + data + ' class="document_check_box_new">'
+                }
+            },
+            {
+                "targets": 1,
+                "data": "preview_url",
+                "render": function(data, type, row, meta) {
+                    return '<div class="item gallery_item" data-iframe="true"  data-src=' + data + '><a href="javscript:;"><i class="fas fa-eye"></i></a></div>';
+                }
+            }
+        ],
+        "fnDrawCallback": function() {
+            if ($("#history_tbody_head").data("lightGallery")) {
+                $("#history_tbody_head").data("lightGallery").destroy(true);
+            }
+            createLightGallery();
+            $('#dataTableFromHistory_filter input').unbind();
+            $('#dataTableFromHistory_filter input').bind('keyup', function(e) {
+                if (e.keyCode == 13) {
+                    fromHistoryModal.search(this.value).draw();
+                }
+            });
+        }
+    });
+}
+
+function createLightGallery() {
+    $('#history_tbody_head').lightGallery({
+        selector: '.gallery_item',
+        iframeMaxWidth: '80%',
+        thumbnail: false
+    });
+}
+
+function addToList(group_id, document_ids, successcb, errorcb) {
+    $.ajax({
+        type: "POST",
+        beforeSend: setCsrfToken, // implemented in
+        url: "/add_document_to_group",
+        data: { document_ids: document_ids, id: group_id },
+        success: function(data) {
+            if (successcb) successcb(data);
+        },
+        error: function(exception) {
+            if (successcb) successcb(exception);
+        }
+    });
+}
+// for multiple using checkboxes
+$("#add_to_list").on('click', function() {
+    jQuery('.loader_wrap_from_history').show();
+    jQuery('#add_to_list').hide();
+    var allPages = fromHistoryModal.cells().nodes();
+    var checked_checkboxes = $('.document_check_box_new:checked', allPages);
+    checked_checkboxes.map(function() {
+        $('<div>' + $(this).attr('name') + '</div>').attr({ class: 'history_document', id: $(this).attr('id') }).appendTo('#history_list');
+    });
+    $('#fromHistory').modal('hide');
+    jQuery('.loader_wrap_from_history').hide();
+});
+</script>

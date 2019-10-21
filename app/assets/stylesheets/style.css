@@ -85,7 +85,7 @@ embed {
 
 .main-container{
   position: relative;
-  background-color: yellow;
+  background-color: #edf5f3;
   margin: 95px 0px 0px 0px;
   padding-bottom: 2%;
 }
@@ -97,7 +97,7 @@ embed {
 .rightMenu{
   display: block;
   padding: 0px;
-  margin-top: 5px;
+  /*margin-top: 5px;*/
 }
 #show-sidebar{
     display: none;
@@ -109,7 +109,7 @@ embed {
 
 .left-section-div{
   position: relative;
-  margin: 10px 0px 0px 0px;
+  /*margin: 10px 0px 0px 0px;*/
 }
 
 #show-sidebar {
@@ -162,3 +162,37 @@ embed {
     display: none;
   }
 }
+
+.new_document_form{
+  display: flex;
+  margin-top: 19px;
+}
+
+.document_name_field{
+  padding-left: 0px;
+}
+
+.documentFileField{
+  padding-top: 0.5rem !important;
+  width: 14.5rem;
+}
+
+.history_document
+{
+  padding: 13px 39px;
+   border-radius: 10px; 
+  background-color: #edf5f3;
+  border: 1px solid #0c2e60;
+  color: #0c2e60;
+  font-size: 14px;
+  -o-transition: all .4s ease-in-out;
+  -webkit-transition: all .4s ease-in-out;
+  transition: all .4s ease-in-out;
+  text-transform: capitalize;
+  background-size: 200% auto;
+  margin-top: 10px;
+}
+#history_list{
+  margin-bottom: 2.5rem;
+}
+

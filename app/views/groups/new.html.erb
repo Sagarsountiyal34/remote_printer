@@ -2,53 +2,114 @@
     <div class="container-fluid">
         <div class="row">
             <%= render "common_views/right_side_bar" %>
-            <!-- Breadcrumbs-->
-            <!-- <ol class="breadcrumb">
-                <li class="breadcrumb-item active">In Progress Print</li>
-            </ol> -->
-            <div class="col col-10">
+            <div class="col col-6">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item">
                         <a href="#">Dashboard</a>
                     </li>
                     <li class="breadcrumb-item active">Upload Documents</li>
                 </ol>
-                <%= form_for @upload_document, url: save_group_path do |f| %>
-                <div class="form-group">
-                    <div class="form-label-group">
-                        <%= f.text_field :document_name, autofocus: true, :class => 'form-control', :placeholder => 'Document Name', :required => 'required' %>
-                        <%= f.label :document_name %>
+                <div id="documents_form">
+                    <%= form_for @upload_document, url: save_group_path, :html => {:class => "new_upload_document new_document_form"} do |f| %>
+                    <div class="form-group col-sm-6 document_name_field">
+                        <div class="form-label-group">
+                            <%= f.text_field :document_name, autofocus: true, :class => 'form-control', :placeholder => 'Document Name', :required => 'required' %>
+                            <%= f.label :document_name%>
+                        </div>
                     </div>
-                </div>
-                <div class="form-group">
-                    <div class="form-label-group">
-                        <%= f.hidden_field :document, value: f.object.cached_document_data %>
-                        <%= f.file_field :document , class: 'uploadDocument' %>
-                        <%= f.label :document %>
-                        <% if @upload_document.errors[:document] %>
-                        <ul class="errors">
-                            <%= @upload_document.errors.full_messages_for(:document).map { |msg| content_tag(:li, msg) }.uniq.join.html_safe %>
-                        </ul>
-                        <% end %>
+                    <div class="form-group col-sm-6">
+                        <div class="form-label-group">
+                            <%= f.hidden_field :document, value: f.object.cached_document_data %>
+                            <%= f.file_field :document , class: 'uploadDocument documentFileField' %>
+                            <% if @upload_document.errors[:document] %>
+                            <ul class="errors">
+                                <%= @upload_document.errors.full_messages_for(:document).map { |msg| content_tag(:li, msg) }.uniq.join.html_safe %>
+                            </ul>
+                            <% end %>
+                        </div>
                     </div>
-                    <%= f.submit "Upload", :class => 'btn_1', :id => 'upload_submit_button' %>
                     <% end %>
-                    <div id="loader_wrap">
-                        <%#= image_tag ("loader.gif"), :id=>'loader_img',:style => "width: 100;height:100" %>
-                        <img src="/images/loader.gif" id="loader_img" width="100" height="100">
+                    <div id="history_list">
                     </div>
                 </div>
+                <%= button_tag "Upload", :class => 'btn_1', :id => 'upload_submit_button' %>
+                <%= button_tag "Add More", :class => 'btn_1', :id => 'add_more_button' %>
+                <%= button_tag "Add From History", :class => 'btn btn-primary', :id => 'add_more_from_history_button', :data => {:toggle => 'modal', :target => '#fromHistory'} %>
+            </div>
+            <div id="loader_wrap">
+                <img src="/images/loader.gif" id="loader_img" width="100" height="100">
             </div>
         </div>
     </div>
+    <%= render "groups/partial/from_history_main" %>
 </section>
-
-
 <script>
-    $(document).ready(function() {
-        $("#new_upload_document").on("submit", function() {
-            $("#upload_submit_button").hide();
-            $('#loader_wrap').show();
-        });
+$(document).ready(function() {
+    $("#add_more_button").click(function() {
+        var new_doc_form = $(".new_upload_document").first().clone();
+        new_doc_form.get(0).reset();
+        var total_form = $('#documents_form').find('.new_upload_document').length
+        var label_name = $(new_doc_form).find('label').attr('for') + (total_form + 1).toString();
+        $(new_doc_form).find('label').attr(label_name);
+        var document_name_id = $(new_doc_form).find('#upload_document_document_name').attr('id') + (total_form + 1).toString();;
+        $(new_doc_form).find('input[type=text]').attr('id', document_name_id);
+        $('<input/>').attr({ type: 'hidden', id: 'have_to_create_group', name: 'have_to_create_group', val: true }).appendTo(new_doc_form);
+        $('<i>').attr({ class: 'fas fa-times remove_form fa-2x', style: "cursor:pointer;" }).appendTo(new_doc_form);
+        $(new_doc_form).find('label').attr('for', label_name);
+        $('#documents_form').append(new_doc_form);
     });
+
+
+    $('#upload_submit_button').on('click', function(e) {
+        var count = 1;
+        var check_if_valid = check_all_form_valid();
+        if (check_if_valid == true) {
+            var resp_group_id = "";
+            $('.new_upload_document').each(function(i, form) {
+                $('<input/>').attr({ type: 'hidden', name: 'counter', value: count}).appendTo(form);
+                resp_group_id = submitForm(form, resp_group_id);
+                debugger
+                count++;
+            });
+        } else {
+            notification("Please fill all entry.", "error")
+        }
+    });
+
+    function submitForm(form, group_id) {
+        $('<input/>').attr({ type: 'hidden', name: 'group_id', value: group_id}).appendTo(form);
+        var valuesToSubmit = new FormData(form);
+        var url_action = $(form).attr('action');
+        var valueToReturn = ""
+        $.ajax({
+            type: "POST",
+            url: url_action, //sumbits it to the given url of the form
+            data: valuesToSubmit,
+            processData: false,
+            contentType: false,
+            success: function(response) {
+                return response['group_id']
+            },
+            error: function(error) {
+                return "NA"
+            }
+        });
+        debugger
+        // retur
+    }
+});
+
+function check_all_form_valid() {
+    var status = true;
+    $('.new_upload_document').each(function(i, form) {
+        if ($(form).find('input[type]:file').val() == '' || $(form).find('input[type]:text').val() == '') {
+            status = false
+        }
+    });
+    return status;
+}
+
+$(document).on('click', '.remove_form', function() {
+    $(this).parent('form').remove();
+});
 </script>
