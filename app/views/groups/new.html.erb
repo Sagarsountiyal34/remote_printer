@@ -11,13 +11,13 @@
                 </ol>
                 <div id="documents_form">
                     <%= form_for @upload_document, url: save_group_path, :html => {:class => "new_upload_document new_document_form"} do |f| %>
-                    <div class="form-group col-sm-6 document_name_field">
+                    <div class="form-group col-sm-5 document_name_field">
                         <div class="form-label-group">
                             <%= f.text_field :document_name, autofocus: true, :class => 'form-control', :placeholder => 'Document Name', :required => 'required' %>
                             <%= f.label :document_name%>
                         </div>
                     </div>
-                    <div class="form-group col-sm-6">
+                    <div class="form-group col-sm-5" style="margin-bottom: 0px;">
                         <div class="form-label-group">
                             <%= f.hidden_field :document, value: f.object.cached_document_data %>
                             <%= f.file_field :document , class: 'uploadDocument documentFileField' %>
@@ -28,17 +28,21 @@
                             <% end %>
                         </div>
                     </div>
+                    <!-- <i class="fas fa-times remove_form fa-2x col-sm-2" style="cursor:pointer;color:red;"></i> -->
+                    <div class="error_message"></div>
                     <% end %>
                     <div id="history_list">
                     </div>
                 </div>
-                <%= button_tag "Upload", :class => 'btn_1', :id => 'upload_submit_button' %>
-                <%= button_tag "Add More", :class => 'btn_1', :id => 'add_more_button' %>
-                <%= button_tag "Add From History", :class => 'btn btn-primary', :id => 'add_more_from_history_button', :data => {:toggle => 'modal', :target => '#fromHistory'} %>
+                <div id="action_button" style="margin-top: 2rem;">
+                    <%= button_tag "Upload", :class => 'btn_1', :id => 'upload_submit_button' %>
+                    <%= button_tag "Add More", :class => 'btn_1', :id => 'add_more_button' %>
+                    <%= button_tag "Add From History", :class => 'btn btn-primary', :id => 'add_more_from_history_button', :data => {:toggle => 'modal', :target => '#fromHistory'} %>
+                </div>
             </div>
-            <div id="loader_wrap">
-                <img src="/images/loader.gif" id="loader_img" width="100" height="100">
-            </div>
+        </div>
+        <div id="loader_wrap">
+            <img src="/images/loader.gif" id="loader_img" width="100" height="100">
         </div>
     </div>
     <%= render "groups/partial/from_history_main" %>
@@ -50,52 +54,74 @@ $(document).ready(function() {
         new_doc_form.get(0).reset();
         var total_form = $('#documents_form').find('.new_upload_document').length
         var label_name = $(new_doc_form).find('label').attr('for') + (total_form + 1).toString();
-        $(new_doc_form).find('label').attr(label_name);
         var document_name_id = $(new_doc_form).find('#upload_document_document_name').attr('id') + (total_form + 1).toString();;
         $(new_doc_form).find('input[type=text]').attr('id', document_name_id);
-        $('<input/>').attr({ type: 'hidden', id: 'have_to_create_group', name: 'have_to_create_group', val: true }).appendTo(new_doc_form);
-        $('<i>').attr({ class: 'fas fa-times remove_form fa-2x', style: "cursor:pointer;" }).appendTo(new_doc_form);
+        $('<i>').attr({ class: 'fas fa-times remove_form fa-2x col-sm-2', style: "cursor:pointer;color:red;" }).insertBefore(new_doc_form.find('.error_message'));
         $(new_doc_form).find('label').attr('for', label_name);
         $('#documents_form').append(new_doc_form);
     });
 
-
     $('#upload_submit_button').on('click', function(e) {
+        $('#loader_wrap').show();
+        $(this).text('Please wait');
+        $(this).attr('disabled', 'true');
+        var total_count = $('.new_upload_document').length;
+        var success_count = 0;
         var count = 1;
         var check_if_valid = check_all_form_valid();
         if (check_if_valid == true) {
-            var resp_group_id = "";
+            var group_id = "";
             $('.new_upload_document').each(function(i, form) {
-                $('<input/>').attr({ type: 'hidden', name: 'counter', value: count}).appendTo(form);
-                resp_group_id = submitForm(form, resp_group_id);
-                debugger
-                count++;
+                $('<input/>').attr({ type: 'hidden', name: 'counter', value: count }).appendTo(form);
+                var response = submitForm(form, group_id);
+                if (response['status'] == false) {
+                    $(form).find('.error_message').text(response['message']);
+                    count++;
+                } else {
+                    group_id = response['group_id'];
+                    $(form).find('.error_message').attr('class', 'success_message').text(response['message']);
+                    success_count++;
+                    count++;
+                    if (success_count == total_count && success_count > 0) {
+                        window.location.href = response['redirect_url']
+                    }
+                }
             });
         } else {
             notification("Please fill all entry.", "error")
         }
+        $('#loader_wrap').css('display', 'none');
+        $(this).text('Upload');
+        $(this).removeAttr('disabled', 'true');
     });
 
     function submitForm(form, group_id) {
-        $('<input/>').attr({ type: 'hidden', name: 'group_id', value: group_id}).appendTo(form);
+        var res = ""
+        var history_data = ""
+        $('<input/>').attr({ type: 'hidden', name: 'group_id', value: group_id }).appendTo(form);
         var valuesToSubmit = new FormData(form);
-        var url_action = $(form).attr('action');
-        var valueToReturn = ""
+        valuesToSubmit.append('history_document_ids', "one");
+        if (group_id == "") {
+            var document_ids = $('#history_list').find('.history_document').map(function() {
+                return $(this).attr('id');
+            }).get().join();
+            valuesToSubmit.append('history_document_ids', document_ids);
+        }
         $.ajax({
             type: "POST",
-            url: url_action, //sumbits it to the given url of the form
+            url: $(form).attr('action'), //sumbits it to the given url of the form
             data: valuesToSubmit,
             processData: false,
             contentType: false,
+            async: false,
             success: function(response) {
-                return response['group_id']
+                res = response
             },
             error: function(error) {
-                return "NA"
+                res = error
             }
         });
-        debugger
-        // retur
+        return res;
     }
 });
 
@@ -111,5 +137,9 @@ function check_all_form_valid() {
 
 $(document).on('click', '.remove_form', function() {
     $(this).parent('form').remove();
+});
+
+$(document).on('click', '.remove_history_document', function() {
+    $(this).parent('.history_document_wrapper').remove();
 });
 </script>

@@ -122,7 +122,6 @@ $('#tbody_head').lightGallery({
 });
 
 $("#online_payment").click(function() {
-    debugger
     $.ajax({
         type: "POST",
         beforeSend: setCsrfToken, // implemented in application.html.erb

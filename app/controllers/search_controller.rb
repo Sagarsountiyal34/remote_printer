@@ -1,6 +1,5 @@
 class SearchController < ApplicationController
 	def show
-		# debugger
 		if params[:user_id].present?
 			@user = User.find(params[:user_id])
 		else
@@ -10,5 +9,4 @@ class SearchController < ApplicationController
              layout: false
 		end	
 	end
-
 end

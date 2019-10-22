@@ -26,7 +26,6 @@
             var class_name1 = "rightMenu"
             var class_name2 = "table-section"
             if ($("."+ class_name1 +":hidden").length){
-                debugger
                 $("." + class_name1).parent().removeClass("col-3")
                 // $("." + class_name1).parent().addClass("col-2")
                 $("." + class_name2).removeClass("col-9")
@@ -46,9 +45,7 @@
         });
 
         function set_div_classes(class_name1,class_name2){
-            debugger
             if ($("."+ class_name1 +":hidden").length){
-                debugger
                 $("." + class_name1).parent().removeClass("col-3")
                 // $("." + class_name1).parent().addClass("col-2")
                 $("." + class_name2).removeClass("col-9")

@@ -23,7 +23,7 @@ Rails.application.routes.draw do
   get 'upload_doc', to: 'groups#new'
   post 'save_group', to: 'groups#create'
   post 'update_group', to: 'groups#update'
-  get 'edit_group/:id', to: 'groups#edit'
+  get 'edit_group/:id', to: 'groups#edit', as: 'group_page'
   get 'list_documents', to: 'documents#list_documents'
   get 'get_documents', to: 'documents#get_documents'
   get 'get_documents_for_history', to: 'groups#get_documents_for_history'

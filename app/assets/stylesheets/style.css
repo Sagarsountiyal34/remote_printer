@@ -165,11 +165,13 @@ embed {
 
 .new_document_form{
   display: flex;
-  margin-top: 19px;
+  margin-top: 2.0rem;
+  flex-wrap: wrap;
 }
 
 .document_name_field{
   padding-left: 0px;
+  margin-bottom: 0px !important;
 }
 
 .documentFileField{
@@ -196,3 +198,12 @@ embed {
   margin-bottom: 2.5rem;
 }
 
+.error_message
+{
+  color:red;
+}
+
+.success_message
+{
+  color:green;
+}

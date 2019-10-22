@@ -13,7 +13,6 @@ class GroupsController < ApplicationController
 	end
 
 	def create
-		debugger
 		@upload_document = current_user.upload_documents.new(document_params)
 		if @upload_document.save
 			if params[:counter] == "1"
@@ -21,6 +20,10 @@ class GroupsController < ApplicationController
 				group.otp = group.generate_otp
 			else
 				group = current_user.groups.find(params[:group_id])
+			end
+			if params[:history_document_ids].present?
+				document_ids = params[:history_document_ids].split(',')
+				group.add_documents(document_ids)
 			end
 			@upload_document.generate_deep_copy_in_directory(group.otp)
 			if @upload_document.have_to_create_pdf_from_file?
@@ -30,12 +33,12 @@ class GroupsController < ApplicationController
 			@upload_document.generate_preview_file
 			@upload_document.add_documents(group) # addding into group
 			if group.save
-				render json: {status: true, message: 'Document Uploaded'.to_json, group_id: group.id.to_s}, status: 200
+				render json: {status: true, message: 'Document Uploaded', group_id: group.id.to_s, redirect_url: group_page_url(:id => group.id)}, status: 200
 			else
-				render json: {status: false, message: 'Try Again'.to_json}, status: 200
+				render json: {status: false, message: 'Try Again'}.to_json, status: 200
 			end
 		else
-			render json: {status: false, message: 'Try Again'.to_json}, status: 200
+			render json: {status: false, message: @upload_document.errors.full_messages.first}.to_json, status: 200
 		end
 	end
 
