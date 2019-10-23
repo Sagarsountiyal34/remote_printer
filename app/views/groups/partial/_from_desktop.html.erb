@@ -32,7 +32,7 @@
                     <% end %>
                 </div>
             </div>
-            <div id="loader_wrap">
+            <div id="loader_wrap_desktop" class="loader_wrap">
                 <img src="/images/loader.gif" id="loader_img" width="100" height="100">
             </div>
         </div>
@@ -40,7 +40,7 @@
 </div>
 <script>
 $('#new_upload_document').submit(function(e) {
-    jQuery('#loader_wrap').show();
+    jQuery('#loader_wrap_desktop').show();
     jQuery('#from_desktop_upload').hide()
     e.preventDefault();
     var valuesToSubmit = new FormData(this);
@@ -53,12 +53,12 @@ $('#new_upload_document').submit(function(e) {
         contentType: false,
         success: function(response) {
             jQuery('#from_desktop_upload').show();
-            jQuery('#loader_wrap').hide();
+            jQuery('#loader_wrap_desktop').hide();
         },
         error: function(response) {
             alert(JSON.parse(response.responseText)['document_error']);
             jQuery('#from_desktop_upload').show();
-            jQuery('#loader_wrap').hide();
+            jQuery('#loader_wrap_desktop').hide();
         }
     });
     return false; // prevents normal behaviour

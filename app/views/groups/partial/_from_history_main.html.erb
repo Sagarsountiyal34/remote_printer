@@ -32,7 +32,7 @@
                     <div class="card-footer small text-muted">
                         <%= button_tag "Add for printing", id: 'add_to_list', class: 'btn_1'%>
                     </div>
-                    <div id="loader_wrap" class="loader_wrap_from_history">
+                    <div id="loader_wrap_from_history_main" class="loader_wrap">
                         <img src="/images/loader.gif" id="loader_img" width="100" height="100">
                     </div>
                 </div>
@@ -129,7 +129,7 @@ function addToList(group_id, document_ids, successcb, errorcb) {
 }
 // for multiple using checkboxes
 $("#add_to_list").on('click', function() {
-    jQuery('.loader_wrap_from_history').show();
+    jQuery('#loader_wrap_from_history_main').show();
     jQuery('#add_to_list').hide();
     var allPages = fromHistoryModal.cells().nodes();
     var checked_checkboxes = $('.document_check_box_new:checked', allPages);
@@ -140,6 +140,6 @@ $("#add_to_list").on('click', function() {
         outer_div.appendTo('#history_list');
     });
     $('#fromHistory').modal('hide');
-    $('.loader_wrap_from_history').hide();
+    $('#loader_wrap_from_history_main').hide();
 });
 </script>

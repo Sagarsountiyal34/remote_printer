@@ -32,7 +32,7 @@
                     <div class="card-footer small text-muted">
                         <%= button_tag "Add for printing", id: 'add_to_group', class: 'btn_1', :data => {id: @group.id.to_s} %>
                     </div>
-                    <div id="loader_wrap" class="loader_wrap_from_history">
+                    <div id="loader_wrap_from_history" class="loader_wrap">
                         <img src="/images/loader.gif" id="loader_img" width="100" height="100">
                     </div>
                 </div>
@@ -129,7 +129,7 @@ function addToGroup(group_id, document_ids, successcb, errorcb) {
 }
 // for multiple using checkboxes
 $("#add_to_group").on('click', function() {
-    jQuery('.loader_wrap_from_history').show();
+    jQuery('#loader_wrap_from_history').show();
     jQuery('#add_to_group').hide();
     var allPages = fromHistoryModal.cells().nodes();
     var checked_checkboxes = $('.document_check_box:checked', allPages);

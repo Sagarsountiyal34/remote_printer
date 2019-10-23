@@ -17,7 +17,7 @@ body {
     transform: translate(-50%, 0);
 }
 
-#loader_wrap {
+.loader_wrap {
     display: block;
     margin: auto;
     display: none;

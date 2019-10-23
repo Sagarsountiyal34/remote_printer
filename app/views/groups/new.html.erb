@@ -41,7 +41,7 @@
                 </div>
             </div>
         </div>
-        <div id="loader_wrap">
+        <div id="loader_wrap_main" class="loader_wrap">
             <img src="/images/loader.gif" id="loader_img" width="100" height="100">
         </div>
     </div>
@@ -61,38 +61,43 @@ $(document).ready(function() {
         $('#documents_form').append(new_doc_form);
     });
 
-    $('#upload_submit_button').on('click', function(e) {
-        $('#loader_wrap').show();
-        $(this).text('Please wait');
-        $(this).attr('disabled', 'true');
+    $(document).on('click', '#upload_submit_button', function(e) {
         var total_count = $('.new_upload_document').length;
         var success_count = 0;
         var count = 1;
+        $('#loader_wrap_main').show();
+        $(this).text('Please wait');
+        $(this).attr('disabled', 'true');
         var check_if_valid = check_all_form_valid();
         if (check_if_valid == true) {
+
             var group_id = "";
             $('.new_upload_document').each(function(i, form) {
                 $('<input/>').attr({ type: 'hidden', name: 'counter', value: count }).appendTo(form);
                 var response = submitForm(form, group_id);
+                count = count + 1;
                 if (response['status'] == false) {
                     $(form).find('.error_message').text(response['message']);
-                    count++;
                 } else {
                     group_id = response['group_id'];
                     $(form).find('.error_message').attr('class', 'success_message').text(response['message']);
                     success_count++;
-                    count++;
                     if (success_count == total_count && success_count > 0) {
                         window.location.href = response['redirect_url']
                     }
                 }
+                if (count == total_count) {
+                    $('#loader_wrap_main').hide()
+                    $(this).text('Upload');
+                    $(this).removeAttr('disabled', 'true');
+                }
             });
         } else {
+            $('#loader_wrap_main').hide()
+            $(this).text('Upload');
+            $(this).removeAttr('disabled', 'true');
             notification("Please fill all entry.", "error")
         }
-        $('#loader_wrap').css('display', 'none');
-        $(this).text('Upload');
-        $(this).removeAttr('disabled', 'true');
     });
 
     function submitForm(form, group_id) {
