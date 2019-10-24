@@ -18,14 +18,10 @@ body {
 }
 
 .loader_wrap {
-    display: block;
     margin: auto;
     display: none;
     text-align: center;
 }
-
-
-
 
 table tr td,
 table tr th {
@@ -60,10 +56,10 @@ table tr th {
     font-size: 25px;
 }
 
-.fa-trash,
+/*.fa-trash,
 .fa-eye {
     font-size: 25px;
-}
+}*/
 
 embed {
     pointer-events: none;
@@ -206,4 +202,7 @@ embed {
 .success_message
 {
   color:green;
+}
+.btn_1{
+  background-image: linear-gradient(to left, #208090 0%, #699c41 55%, #9e5931 100%);  
 }

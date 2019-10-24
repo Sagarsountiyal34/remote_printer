@@ -5,6 +5,8 @@ class ApplicationController < ActionController::Base
 	def is_devise
 		if devise_controller?
 			"devise_layout"
+		elsif current_user.present?
+			"user_layout"
 		end
 	end
 

@@ -9,7 +9,7 @@
             <input type="text" id="otp" value="<%= @group.otp %>" data-value="<%= @group.otp %>" disabled>
             <%= button_tag "Show", id: 'toggle_otp', class: 'btn_1' %>
         </span>
-    </div>
+    </div><br>
     <div class="card-body">
         <div class="table-responsive">
             <table class="table table-bordered document_table" id="dataTableGroupDoc" width="100%" cellspacing="0">
@@ -109,10 +109,10 @@ function removeFromGroup(group_id, document_ids, successcb, errorcb) {
 }
 
 $(document).ready(function() {
+    asterisks_otp();
     $('#dataTableGroupDoc').DataTable({
         "ordering": false
     });
-    asterisks_otp();
 });
 
 $('#tbody_head').lightGallery({

@@ -1,7 +1,6 @@
 <section class="feature_part" style="padding-top: 85px;">
     <div class="container-fluid">
         <div class="row">
-            <%= render "common_views/right_side_bar" %>
             <div class="col col-6">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item">
@@ -14,7 +13,6 @@
                     <div class="form-group col-sm-5 document_name_field">
                         <div class="form-label-group">
                             <%= f.text_field :document_name, autofocus: true, :class => 'form-control', :placeholder => 'Document Name', :required => 'required' %>
-                            <%= f.label :document_name%>
                         </div>
                     </div>
                     <div class="form-group col-sm-5" style="margin-bottom: 0px;">
@@ -41,7 +39,7 @@
                 </div>
             </div>
         </div>
-        <div id="loader_wrap_main" class="loader_wrap">
+        <div id="loader_wrap_main" class="loader_wrap" style="display: none;">
             <img src="/images/loader.gif" id="loader_img" width="100" height="100">
         </div>
     </div>

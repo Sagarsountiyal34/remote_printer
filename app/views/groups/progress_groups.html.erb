@@ -1,10 +1,12 @@
-<div class="row">
-    <%= render "common_views/right_side_bar" %>
-    <section class="col-9 table-section">
-        <div class="card-header">
-            <i class="fas fa-table"></i>
-            In Progress Print</div>
-            <div class="card-body">
+<section class="">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col col-12">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item active">In Progress Print</li>
+                </ol>
+                <div class="card-header">
+                </div>
                 <div class="table-responsive">
                     <table class="table table-bordered document_table" id="dataTable" width="100%" cellspacing="0" data-turbolinks="false">
                         <thead>
@@ -17,38 +19,36 @@
                         </thead>
                         <tbody>
                             <% @progress_groups.each do |group| %>
-                                <tr data-id="<%= group.id%>" class="document_record">
-                                    <td>
-                                        <%= group.updated_at.strftime("%l:%M %p ,     %d %B %Y") %>
-                                    </td>
-                                    <td>
-                                        <%= group.status %>
-                                    </td>
-                                    <td>
-                                        <%= group.payment_type.capitalize %>
-                                    </td>
-                                    <td>
-                                        <%= link_to 'Details', { controller: :groups, action: :edit, id: group.id}  %>
-                                    </td>
-                                </tr>
+                            <tr data-id="<%= group.id%>" class="document_record">
+                                <td>
+                                    <%= group.updated_at.strftime("%l:%M %p ,     %d %B %Y") %>
+                                </td>
+                                <td>
+                                    <%= group.status %>
+                                </td>
+                                <td>
+                                    <%= group.payment_type.capitalize %>
+                                </td>
+                                <td>
+                                    <%= link_to 'Details', { controller: :groups, action: :edit, id: group.id}  %>
+                                </td>
+                            </tr>
                             <% end %>
                         </tbody>
                     </table>
                 </div>
             </div>
-        <% if @progress_groups.present?%>
+            <% if @progress_groups.present?%>
             <div class="card-footer small text-muted">Updated at
                 <%= @progress_groups.first.updated_at.strftime("%d %B %Y , %l:%M %p") %>
             </div>
-        <% end %>
-    </section>
-</div>
-
+            <% end %>
+</section>
 <script>
-    $(document).ready(function() {
-        $('#dataTable').DataTable({
-            "responsive": true,
-            "ordering": false
-        });
+$(document).ready(function() {
+    $('#dataTable').DataTable({
+        "responsive": true,
+        "ordering": false
     });
+});
 </script>
