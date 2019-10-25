@@ -52,12 +52,13 @@ $('#new_upload_document').submit(function(e) {
         processData: false,
         contentType: false,
         success: function(response) {
-            jQuery('#from_desktop_upload').show();
+            debugger
             jQuery('#loader_wrap_desktop').hide();
+            jQuery('#fromDesktop').modal('toggle')
         },
         error: function(response) {
             alert(JSON.parse(response.responseText)['document_error']);
-            jQuery('#from_desktop_upload').show();
+            // jQuery('#from_desktop_upload').show();
             jQuery('#loader_wrap_desktop').hide();
         }
     });

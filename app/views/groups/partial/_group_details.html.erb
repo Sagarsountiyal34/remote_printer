@@ -62,17 +62,17 @@
         </h5>
         <% else %>
         <div class="dropdown" style="margin-left:10px;">
-            <%= button_tag "Proceed To Pay", id: 'proceed_to_payment', data: {:toggle => 'dropdown' }, class: 'btn_1 dropdown-toggle' %>
+            <%= button_tag "Proceed To Pay", id: 'proceed_to_payment', data: {:toggle => 'dropdown', :display"static" }, class: ' dropdown-toggle' %>
             <div class="dropdown-menu">
-                <a class="dropdown-item btn_1" href="#" data-target="#cash_payment" id="cash_payment"><i class="fas fa-money-bill-alt" style="margin-right: 10px;"></i>Cash</a>
-                <a class="dropdown-item btn_1" href="#" data-target="#online_payment" id="online_payment"><i class="fas fa-cloud" style="margin-right: 10px;"></i>Online</a>
+                <a class="dropdown-item " href="#" data-target="#cash_payment" id="cash_payment"><i class="fas fa-money-bill-alt" style="margin-right: 10px;"></i>Cash</a>
+                <a class="dropdown-item " href="#" data-target="#online_payment" id="online_payment"><i class="fas fa-cloud" style="margin-right: 10px;"></i>Online</a>
             </div>
         </div>
         <div class="dropdown" style="margin-left:10px;">
-            <%= button_tag "Add More", data: {:toggle => 'dropdown' }, class: 'btn_1 dropdown-toggle' %>
+            <%= button_tag "Add More", data: {:toggle => 'dropdown' }, class: 'dropdown-toggle' %>
             <div class="dropdown-menu">
-                <a class="dropdown-item btn_1" href="#" data-toggle="modal" data-target="#fromDesktop"><i class="fas fa-desktop" style="margin-right: 10px;"></i>From Desktop</a>
-                <a class="dropdown-item btn_1" href="#" data-toggle="modal" data-target="#fromHistory"><i class="fas fa-history" style="margin-right: 10px;"></i>From History</a>
+                <a class="dropdown-item " href="#" data-toggle="modal" data-target="#fromDesktop"><i class="fas fa-desktop" style="margin-right: 10px;"></i>From Desktop</a>
+                <a class="dropdown-item " href="#" data-toggle="modal" data-target="#fromHistory"><i class="fas fa-history" style="margin-right: 10px;"></i>From History</a>
             </div>
         </div>
         <% end%>

@@ -55,8 +55,8 @@ class GroupsController < ApplicationController
 				upload_document.generate_preview_file
 				upload_document.add_documents(group) # addding into group
 				if group.save
-					# redirect_to action: 'edit', :id =>  group.id
-					render json: 'success'.to_json, status: 200
+					redirect_to action: 'edit', :id =>  group.id
+					# render json: 'success'.to_json, status: 200
 				else
 					render json: {  document_error: 'Internal Server Error.Please Try Again'}, status: :unprocessable_entity
 				end
