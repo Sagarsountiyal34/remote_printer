@@ -207,5 +207,7 @@ embed {
   background-image: linear-gradient(to left, #208090 0%, #699c41 55%, #9e5931 100%);  
 }
 
-
-44mehakpalbit44
+.error_message
+{
+  color: red;
+}

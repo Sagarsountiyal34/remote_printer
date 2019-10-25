@@ -13,32 +13,41 @@ class GroupsController < ApplicationController
 	end
 
 	def create
-		@upload_document = current_user.upload_documents.new(document_params)
-		if @upload_document.save
-			if params[:counter] == "1"
-				group = current_user.groups.new
-				group.otp = group.generate_otp
+		debugger
+		count = 1
+		response = {}
+		group = current_user.groups.new
+		group.otp = group.generate_otp
+		if params[:history_document_ids].present?
+			document_ids = params[:history_document_ids].split(',')
+			group.add_documents(document_ids)
+		end
+		loop do
+			begin
+				@upload_document = current_user.upload_documents.new(params.require('upload_document').require("1".to_s).permit(:document_name, :document))
+			rescue Exception => e
+				break
+			end
+			i++;
+			if @upload_document.save
+				@upload_document.generate_deep_copy_in_directory(group.otp)
+				if @upload_document.have_to_create_pdf_from_file?
+					@upload_document.create_pdf_from_file(group.otp)
+				end
+				@upload_document.insert_otp_into_document(group.otp)
+				@upload_document.generate_preview_file
+				@upload_document.add_documents(group)
+				response[i] = "Document Uploaded"
 			else
-				group = current_user.groups.find(params[:group_id])
+				debugger
+				response[i] = @upload_document.errors.full_messages.first
 			end
-			if params[:history_document_ids].present?
-				document_ids = params[:history_document_ids].split(',')
-				group.add_documents(document_ids)
-			end
-			@upload_document.generate_deep_copy_in_directory(group.otp)
-			if @upload_document.have_to_create_pdf_from_file?
-				@upload_document.create_pdf_from_file(group.otp)
-			end
-			@upload_document.insert_otp_into_document(group.otp)
-			@upload_document.generate_preview_file
-			@upload_document.add_documents(group) # addding into group
-			if group.save
-				render json: {status: true, message: 'Document Uploaded', group_id: group.id.to_s, redirect_url: group_page_url(:id => group.id)}, status: 200
-			else
-				render json: {status: false, message: 'Try Again'}.to_json, status: 200
-			end
+		end
+		debugger
+		if group.documents.length > 0 and group.save
+			render json: {status: true, message: 'Document Uploaded', group_id: group.id.to_s, redirect_url: group_page_url(:id => group.id)}, status: 200
 		else
-			render json: {status: false, message: @upload_document.errors.full_messages.first}.to_json, status: 200
+			render json: {status: false, message: response}.to_json, status: 200
 		end
 	end
 
