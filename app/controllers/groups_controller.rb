@@ -13,22 +13,22 @@ class GroupsController < ApplicationController
 	end
 
 	def create
-		debugger
 		count = 1
 		response = {}
 		group = current_user.groups.new
 		group.otp = group.generate_otp
+		redirect_status = true
 		if params[:history_document_ids].present?
 			document_ids = params[:history_document_ids].split(',')
 			group.add_documents(document_ids)
 		end
 		loop do
 			begin
-				@upload_document = current_user.upload_documents.new(params.require('upload_document').require("1".to_s).permit(:document_name, :document))
+				@upload_document = current_user.upload_documents.new(params.require('upload_document').require(count.to_s).permit(:document_name, :document))
 			rescue Exception => e
 				break
 			end
-			i++;
+			response[count-1] = []
 			if @upload_document.save
 				@upload_document.generate_deep_copy_in_directory(group.otp)
 				if @upload_document.have_to_create_pdf_from_file?
@@ -37,16 +37,23 @@ class GroupsController < ApplicationController
 				@upload_document.insert_otp_into_document(group.otp)
 				@upload_document.generate_preview_file
 				@upload_document.add_documents(group)
-				response[i] = "Document Uploaded"
+				response[count-1].push(true)
+				response[count-1].push("Document Uploaded")
 			else
-				debugger
-				response[i] = @upload_document.errors.full_messages.first
+				response[count-1].push(false)
+				response[count-1].push(@upload_document.errors.full_messages.first)
+				redirect_status = false
 			end
+			count = count + 1
 		end
-		debugger
 		if group.documents.length > 0 and group.save
-			render json: {status: true, message: 'Document Uploaded', group_id: group.id.to_s, redirect_url: group_page_url(:id => group.id)}, status: 200
+			if redirect_status == true
+				render :js => "window.location = '#{group_page_url(:id => group.id.to_s)}'"
+			else
+				render json: {status: true, message: response, group_id: group.id.to_s, redirect_url: group_page_url(:id => group.id)}, status: 200
+			end
 		else
+			group.destroy
 			render json: {status: false, message: response}.to_json, status: 200
 		end
 	end

@@ -133,13 +133,18 @@ $("#add_to_list").on('click', function() {
     jQuery('#add_to_list').hide();
     var allPages = fromHistoryModal.cells().nodes();
     var checked_checkboxes = $('.document_check_box_new:checked', allPages);
-    checked_checkboxes.map(function() {
+    document_ids = checked_checkboxes.map(function() {
         var outer_div = $('<div></div>').attr({ class: 'history_document_wrapper', style: 'display:flex'});
-        $('<div>' + $(this).attr('name') + '</div>').attr({ class: 'history_document col-sm-12', id: $(this).attr('id') }).appendTo(outer_div);
+        $('<div>' + $(this).attr('name') + '</div>').attr({ class: 'history_document col-sm-6', id: $(this).attr('id') }).appendTo(outer_div);
         var remove_document_button = $('<i>').attr({ class: 'fas fa-times remove_history_document fa-2x col-sm-2', style: "cursor:pointer;margin: 16px 3px 0px 3px;color:red;" }).appendTo(outer_div);
         outer_div.appendTo('#history_list');
-    });
+        $(this).closest('tr').remove();
+        return $(this).attr('id');
+    }).get().join(',');
+    
+    $('#history_document').val(document_ids)
     $('#fromHistory').modal('hide');
+    $('.modal-backdrop').remove();
     $('#loader_wrap_from_history_main').hide();
 });
 </script>
