@@ -20,38 +20,92 @@
     <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/lightgallery/1.3.2/js/lightgallery.js"></script>
     <style>
-        html,body,h1,h2,h3,h4,h5 {
+    html,
+    body,
+    h1,
+    h2,
+    h3,
+    h4,
+    h5 {
         font-family: "Raleway", sans-serif
+    }
+
+    .top_li {
+        display: inline-block;
+        padding: 0 81px 0px 0px;
+    }
+
+    .top_ul {
+        display: flex;
+    }
+
+    .top_ul:after {
+        content: "";
+        display: table;
+        clear: both;
+    }
+
+    .top_li {
+        float: left;
+    }
+
+    .top_ul {
+        display: table;
+    }
+
+    .top_li {
+        display: table-cell;
+    }
+
+    @media (max-width: 1026px) {
+        .top-navbar {
+            display: none;
+        }
+    }
+
+    .top_anchor {
+        text-decoration: none;
+    }
+
+    div.container-fluid {
+        margin-top: 1.5rem;
     }
     </style>
 </head>
 
 <body class="w3-light-grey">
     <!-- Top container -->
-    <div class="w3-bar w3-top w3-black w3-large" style="z-index:4;">
+    <div class="w3-bar w3-top w3-black w3-large" style="z-index:4">
         <button class="w3-bar-item w3-button w3-hide-large w3-hover-none w3-hover-text-light-grey" onclick="w3_open();"><i class="fa fa-bars"></i> &nbsp;Menu</button>
-        <nav class="navbar navbar-inverse" style="width: calc(100% - 87%);
-    float: right;">
-            <div class="container-fluid">
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                </div>
-                <div class="collapse navbar-collapse" id="myNavbar">
-                    <ul class="nav navbar-nav navbar-right">
-                        <li class="active"><a href="#">About</a></li>
-                        <li><a href="#">Portfolio</a></li>
-                        <li><a href="#">Contact</a></li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
+        <button class="w3-bar-item w3-button w3-hide-large w3-hover-none w3-hover-text-light-grey w3-right sm-none" onclick="w3_open_top_bar();"><i class="fa fa-bars"></i></button>
+        <div class="w3-hide-small">
+            <nav class="top-navbar" style="float: right;">
+                <ul class="top_ul" style="float: right;margin-bottom: 0px;">
+                    <li class="nav-item active top_anchor top_li">
+                        <%= link_to(root_path, :class => "nav-link top_anchor") do %>
+                        &nbsp; Home
+                        <% end %>
+                    </li>
+                    <li class="nav-item top_li">
+                        <%= link_to(upload_doc_path, :class => "nav-link top_anchor") do %>
+                        Documents
+                        <% end %>
+                    </li>
+                    <li class="nav-item top_li">
+                        <%= link_to(destroy_user_session_path,{ method: :delete, class: :'nav-link top_anchor' }) do %>
+                        Log Out
+                        <% end %>
+                        <%#= link_to(destroy_user_session_path,{ method: :delete, class: :'nav-link top_anchor', :data => {:toggle => 'modal', :target => '#logoutModal'} }) do  %>
+                        <!-- Log out -->
+                        <%# end %>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+        <!-- <span>ds</span> -->
     </div>
     <!-- Sidebar/menu -->
-    <nav class="w3-sidebar w3-collapse w3-white w3-animate-left" style="z-index: 3; width: 300px; display: none;margin-top:calc(100% - 101%);;" id="mySidebar"><br>
+    <nav class="w3-sidebar w3-collapse w3-white w3-animate-left w3-hide-large" style="z-index: 3; width: 300px; display: none;" id="mySidebar"><br>
         <div class="w3-container w3-row">
             <div class="w3-col s4">
                 <img src="/assets/logo/avatar2.png" class="w3-circle w3-margin-right" style="width:46px">
@@ -77,7 +131,7 @@
             <i class="fa fa-eye fa-fw"></i>&nbsp;Printed Documents
             <% end %>
             <%= link_to(progress_groups_path, :class => "w3-bar-item w3-button w3-padding") do %>
-            <i class="fa fa-users fa-fw"></i>&nbsp;Documents Under Process
+            <i class="fas fa-spinner fa-fw"></i>&nbsp;Documents Under Process
             <% end %>
             <%= link_to(recently_printed_groups_path, :class => "w3-bar-item w3-button w3-padding") do %>
             <i class="fa fa-bullseye fa-fw"></i>&nbsp;Recently Printed
@@ -88,10 +142,24 @@
             <br><br>
         </div>
     </nav>
+    <!-- Topbar/menu -->
+    <nav class="w3-sidebar w3-collapse w3-white w3-animate-left" style="z-index:3;width:300px;display: none !important;margin-left: 5.5rem;" id="myTopbar">
+        <div class="w3-bar-block">
+            <%= link_to(root_path, :class => "w3-bar-item w3-button w3-padding") do %>
+            <i class="fa fa-users fa-fw"></i>&nbsp; Home
+            <% end %>
+            <%= link_to(upload_doc_path, :class => "w3-bar-item w3-button w3-padding") do %>
+            <i class="fa fa-users fa-fw"></i>&nbsp; Documents
+            <% end %>
+            <%= link_to(destroy_user_session_path,{ method: :delete, class: :'w3-bar-item w3-button w3-padding' }) do %>
+            <i class="fa fa-users fa-fw"></i>&nbsp; Log out
+            <% end %>
+        </div>
+    </nav>
     <!-- Overlay effect when opening sidebar on small screens -->
     <div class="w3-overlay w3-hide-large w3-animate-opacity" onclick="w3_close()" style="cursor: pointer; display: none;" title="close side menu" id="myOverlay"></div>
     <!-- !PAGE CONTENT! -->
-    <div class="w3-main" style="margin-left:300px;margin-top:43px;margin-top:12.7rem;">
+    <div class="w3-main" style="margin-left:300px;margin-top:43px;">
         <!-- Header -->
         <header class="w3-container" style="padding-top:22px">
         </header>
@@ -132,9 +200,11 @@
         <!-- End page content -->
     </div>
     <script>
-    // Get the Sidebar
     var mySidebar = document.getElementById("mySidebar");
 
+    var myTopbar = document.getElementById("myTopbar");
+
+    var topoverlayBg = document.getElementById("topOverlay");
     // Get the DIV with overlay effect
     var overlayBg = document.getElementById("myOverlay");
 
@@ -144,11 +214,22 @@
             mySidebar.style.display = 'none';
             overlayBg.style.display = "none";
         } else {
+            myTopbar.style.display = 'none';
             mySidebar.style.display = 'block';
             overlayBg.style.display = "block";
         }
     }
 
+    function w3_open_top_bar() {
+        if (myTopbar.style.display === 'block') {
+            myTopbar.style.display = 'none';
+            overlayBg.style.display = "none";
+        } else {
+            mySidebar.style.display = 'none';
+            myTopbar.style.display = 'block';
+            overlayBg.style.display = "block";
+        }
+    }
     // Close the sidebar with the close button
     function w3_close() {
         mySidebar.style.display = "none";
@@ -202,6 +283,43 @@
         });
     }
     </script>
+    <script>
+    // Get the Sidebar
+    var mySidebar = document.getElementById("mySidebar");
+
+    var myTopbar = document.getElementById("myTopbar");
+
+    var topoverlayBg = document.getElementById("topOverlay");
+    // Get the DIV with overlay effect
+    var overlayBg = document.getElementById("myOverlay");
+
+    // Toggle between showing and hiding the sidebar, and add overlay effect
+    function w3_open() {
+        if (mySidebar.style.display === 'block') {
+            mySidebar.style.display = 'none';
+            overlayBg.style.display = "none";
+        } else {
+            myTopbar.style.display = 'none';
+            mySidebar.style.display = 'block';
+            overlayBg.style.display = "block";
+        }
+    }
+
+    function w3_open_top_bar() {
+        if (myTopbar.style.display === 'block') {
+            myTopbar.style.display = 'none';
+            overlayBg.style.display = "none";
+        } else {
+            mySidebar.style.display = 'none';
+            myTopbar.style.display = 'block';
+            overlayBg.style.display = "block";
+        }
+    }
+    // Close the sidebar with the close button
+    function w3_close() {
+        mySidebar.style.display = "none";
+        overlayBg.style.display = "none";
+    }
     </script>
 </body>
 
