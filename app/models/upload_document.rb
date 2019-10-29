@@ -8,8 +8,7 @@ class UploadDocument
   belongs_to :user
   field :document_name,           type: String, default: ""
   field :document_data,   		  type: Hash, default: {}
-  field :total_pages, type: Integer,default: 0
-  field :processed_pages, type: Integer,default: 0
+  field :total_pages, type: Integer,default: 1
 
   validates :document_data,       presence: true
 
@@ -31,6 +30,9 @@ class UploadDocument
     else
       File.join('/uploads/preview', file_name)
     end
+  end
+  def get_absolute_preview_url
+    Rails.root.to_s + '/public' +self.get_preview_url
   end
 
   def get_cloned_file_absolute_path(group_otp)
@@ -59,7 +61,7 @@ class UploadDocument
           cloned_document_data['metadata']['size'] = File.size(self.get_cloned_pdf_file_absolute_path(group.otp))
           cloned_document_data['id'] = File.basename(self.get_cloned_pdf_file_absolute_path(group.otp))
       end
-      group_document = GroupDocument.new(document_name: self.document_name, upload_document_id: self.id, document_data: cloned_document_data, status: 'pending')
+      group_document = GroupDocument.new(document_name: self.document_name, upload_document_id: self.id, document_data: cloned_document_data, status: 'pending', total_pages: self.total_pages)
       group.documents << group_document
   end
 

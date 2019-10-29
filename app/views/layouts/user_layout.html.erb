@@ -113,16 +113,16 @@
             <div class="w3-col s8 w3-bar">
                 <span>Welcome, <strong>
                         <%= current_user.email.split('@').first %></strong></span><br>
-                <a href="https://www.w3schools.com/w3css/tryw3css_templates_analytics.htm#" class="w3-bar-item w3-button"><i class="fa fa-envelope"></i></a>
-                <a href="https://www.w3schools.com/w3css/tryw3css_templates_analytics.htm#" class="w3-bar-item w3-button"><i class="fa fa-user"></i></a>
-                <a href="https://www.w3schools.com/w3css/tryw3css_templates_analytics.htm#" class="w3-bar-item w3-button"><i class="fa fa-cog"></i></a>
+                <a href="#" class="w3-bar-item w3-button"><i class="fa fa-envelope"></i></a>
+                <a href="#" class="w3-bar-item w3-button"><i class="fa fa-user"></i></a>
+                <a href="#" class="w3-bar-item w3-button"><i class="fa fa-cog"></i></a>
             </div>
         </div>
         <hr>
         <div class="w3-container">
             <h4>Dashboard</h4>
         </div>
-        <div class="w3-bar-block">
+        <div class="w3-bar-block" data-turbolinks="false">
             <a href="javscript:;" class="w3-bar-item w3-button w3-padding-16 w3-hide-large w3-dark-grey w3-hover-black" onclick="w3_close()" title="close menu"><i class="fa fa-remove fa-fw"></i>&nbsp; Close Menu</a>
             <%= link_to(upload_doc_path, :class => "w3-bar-item w3-button w3-padding") do %>
             <i class="fa fa-users fa-fw"></i>&nbsp;Upload Documents
@@ -143,16 +143,16 @@
         </div>
     </nav>
     <!-- Topbar/menu -->
-    <nav class="w3-sidebar w3-collapse w3-white w3-animate-left" style="z-index:3;width:300px;display: none !important;margin-left: 5.5rem;" id="myTopbar">
+    <nav class="w3-sidebar w3-collapse w3-white w3-animate-left pull-right" style="z-index:3;width:300px;display: none !important;right:0;" id="myTopbar">
         <div class="w3-bar-block">
             <%= link_to(root_path, :class => "w3-bar-item w3-button w3-padding") do %>
-            <i class="fa fa-users fa-fw"></i>&nbsp; Home
+           <i class="fas fa-home"></i>&nbsp; Home
             <% end %>
             <%= link_to(upload_doc_path, :class => "w3-bar-item w3-button w3-padding") do %>
-            <i class="fa fa-users fa-fw"></i>&nbsp; Documents
+            <i class="fas fa-book"></i>>&nbsp; Documents
             <% end %>
             <%= link_to(destroy_user_session_path,{ method: :delete, class: :'w3-bar-item w3-button w3-padding' }) do %>
-            <i class="fa fa-users fa-fw"></i>&nbsp; Log out
+            <i class="fas fa-sign-out-alt"></i>&nbsp; Log out
             <% end %>
         </div>
     </nav>

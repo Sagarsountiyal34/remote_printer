@@ -50,6 +50,7 @@ class DocumentsController < ApplicationController
 			document[:document_name] = doc.document_name
 			document[:type] = FileInfo.get_file_media_type(doc.document_url)
 			document[:preview_url] = doc.get_preview_url
+			document[:total_pages] = doc.total_pages
 			all_doc.push(document)
 		end
 		respond_to do |f|

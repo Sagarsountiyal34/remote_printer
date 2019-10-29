@@ -52,6 +52,8 @@ gem 'prawn'
 gem 'combine_pdf'
 gem 'libreconv'
 gem 'rmagick'
+gem 'pdf-reader' # count pages
+
 # gem 'active_merchant_ccavenue'
 # gem 'ccavenue'
 gem 'prawn-templates'

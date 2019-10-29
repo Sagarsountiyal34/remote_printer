@@ -36,6 +36,12 @@ class GroupsController < ApplicationController
 				end
 				@upload_document.insert_otp_into_document(group.otp)
 				@upload_document.generate_preview_file
+				file_type = FileInfo.get_file_media_type(@upload_document.document_url)
+				if file_type == 'office' or file_type == 'PDF'
+					reader = PDF::Reader.new(@upload_document.get_absolute_preview_url)
+					@upload_document.total_pages = reader.page_count
+				end
+				@upload_document.save
 				@upload_document.add_documents(group)
 				response[count-1].push(true)
 				response[count-1].push("Document Uploaded")
@@ -69,6 +75,12 @@ class GroupsController < ApplicationController
 				end
 				upload_document.insert_otp_into_document(group.otp)
 				upload_document.generate_preview_file
+				file_type = FileInfo.get_file_media_type(upload_document.document_url)
+				if file_type == 'office' or file_type == 'PDF'
+					reader = PDF::Reader.new(upload_document.get_absolute_preview_url)
+					upload_document.total_pages = reader.page_count
+				end
+				upload_document.save
 				upload_document.add_documents(group) # addding into group
 				if group.save
 					redirect_to action: 'edit', :id =>  group.id

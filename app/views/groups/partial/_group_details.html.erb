@@ -16,8 +16,9 @@
                 <thead>
                     <tr>
                         <th width="15%">Preview</th>
-                        <th width="35%">Name</th>
-                        <th width="35%">Type</th>
+                        <th width="30%">Name</th>
+                        <th width="25%">Type</th>
+                        <th width="">Total Pages</th>
                         <% if @group.is_group_sent_for_printing? or @group.status == 'ready_for_print' %>
                         <th width="15%">Status</th>
                         <% else %>
@@ -39,6 +40,7 @@
                         <td>
                             <%= FileInfo.get_file_media_type(a.document_url).capitalize %>
                         </td>
+                        <td><%= a.total_pages %></td>
                         <% if @group.is_group_sent_for_printing? or @group.status == 'ready_for_print'%>
                         <td>
                             <%= a.status %>
@@ -47,6 +49,7 @@
                         <td>
                             <a class="remove_group_document" alt="remove" href="javscript:;"><i class="fas fa-trash"></i></a>
                         </td>
+
                         <% end %>
                     </tr>
                     <% end %>

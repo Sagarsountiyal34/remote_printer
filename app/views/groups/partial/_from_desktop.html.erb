@@ -52,7 +52,6 @@ $('#new_upload_document').submit(function(e) {
         processData: false,
         contentType: false,
         success: function(response) {
-            debugger
             jQuery('#loader_wrap_desktop').hide();
             jQuery('#fromDesktop').modal('toggle')
         },

@@ -141,6 +141,7 @@ $("#add_to_group").on('click', function() {
     function onSuccess(response) {
         $('#fromHistory').modal('hide');
         $('#group_content').html(response);
+        $('.modal-backdrop').remove();
     }
     addToGroup(group_id, document_ids, onSuccess);
 });

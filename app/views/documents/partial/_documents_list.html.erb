@@ -12,8 +12,9 @@
                 <thead>
                     <tr>
                         <th width="20%">Preview</th>
-                        <th width="40%">Name</th>
-                        <th width="40%">Type</th>
+                        <th width="35%">Name</th>
+                        <th width="35%">Type</th>
+                        <th width="10%">Total Pages</th>
                     </tr>
                 </thead>
                 <tbody id="tbody_head">
@@ -49,6 +50,7 @@ function initDataTable() {
             { "data": "preview_url" },
             { "data": "document_name" },
             { "data": "type" },
+            { "data": "total_pages"}
         ],
         "createdRow": function(row, data, dataIndex) {
             $(row).addClass('document_record');
