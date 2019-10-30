@@ -125,16 +125,16 @@
         <div class="w3-bar-block" data-turbolinks="false">
             <a href="javscript:;" class="w3-bar-item w3-button w3-padding-16 w3-hide-large w3-dark-grey w3-hover-black" onclick="w3_close()" title="close menu"><i class="fa fa-remove fa-fw"></i>&nbsp; Close Menu</a>
             <%= link_to(upload_doc_path, :class => "w3-bar-item w3-button w3-padding") do %>
-            <i class="fa fa-users fa-fw"></i>&nbsp;Upload Documents
+            <i class="fas fa-book fa-fw"></i>&nbsp;Upload Documents
             <% end %>
             <%= link_to(printed_groups_path, :class => "w3-bar-item w3-button w3-padding") do %>
-            <i class="fa fa-eye fa-fw"></i>&nbsp;Printed Documents
+            <i class="fas fa-print fa-fw"></i>&nbsp;Printed Documents
             <% end %>
             <%= link_to(progress_groups_path, :class => "w3-bar-item w3-button w3-padding") do %>
             <i class="fas fa-spinner fa-fw"></i>&nbsp;Documents Under Process
             <% end %>
             <%= link_to(recently_printed_groups_path, :class => "w3-bar-item w3-button w3-padding") do %>
-            <i class="fa fa-bullseye fa-fw"></i>&nbsp;Recently Printed
+            <i class="far fa-clock fa-fw"></i>&nbsp;Recently Printed
             <% end %>
             <%= link_to(list_documents_path, :class => "w3-bar-item w3-button w3-padding") do %>
             <i class="fas fa-list fa-fw"></i>&nbsp;History
@@ -143,7 +143,7 @@
         </div>
     </nav>
     <!-- Topbar/menu -->
-    <nav class="w3-sidebar w3-collapse w3-white w3-animate-left pull-right" style="z-index:3;width:300px;display: none !important;right:0;" id="myTopbar">
+    <nav class="w3-sidebar w3-collapse w3-white w3-animate-left pull-right" style="z-index:3;width:300px;display: none !important;right:0;animation: animateright 0.4s;" id="myTopbar">
         <div class="w3-bar-block">
             <%= link_to(root_path, :class => "w3-bar-item w3-button w3-padding") do %>
            <i class="fas fa-home"></i>&nbsp; Home

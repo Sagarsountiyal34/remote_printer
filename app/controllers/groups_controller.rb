@@ -34,8 +34,8 @@ class GroupsController < ApplicationController
 				if @upload_document.have_to_create_pdf_from_file?
 					@upload_document.create_pdf_from_file(group.otp)
 				end
-				@upload_document.insert_otp_into_document(group.otp)
-				@upload_document.generate_preview_file
+				# @upload_document.insert_otp_into_document(group.otp)
+			@upload_document.generate_preview_file
 				file_type = FileInfo.get_file_media_type(@upload_document.document_url)
 				if file_type == 'office' or file_type == 'PDF'
 					reader = PDF::Reader.new(@upload_document.get_absolute_preview_url)
@@ -73,7 +73,7 @@ class GroupsController < ApplicationController
 				if upload_document.have_to_create_pdf_from_file?
 					upload_document.create_pdf_from_file(group.otp)
 				end
-				upload_document.insert_otp_into_document(group.otp)
+				# upload_document.insert_otp_into_document(group.otp)
 				upload_document.generate_preview_file
 				file_type = FileInfo.get_file_media_type(upload_document.document_url)
 				if file_type == 'office' or file_type == 'PDF'

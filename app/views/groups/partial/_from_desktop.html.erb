@@ -28,7 +28,7 @@
                         </ul>
                         <% end %>
                     </div>
-                    <%= f.submit "Upload", :class => 'btn btn-primary btn-block', :id => 'from_desktop_upload' %>
+                    <%= f.submit "Upload", :class => 'btn_1 btn-block', :id => 'from_desktop_upload' %>
                     <% end %>
                 </div>
             </div>
@@ -41,7 +41,7 @@
 <script>
 $('#new_upload_document').submit(function(e) {
     jQuery('#loader_wrap_desktop').show();
-    jQuery('#from_desktop_upload').hide()
+    jQuery('#from_desktop_upload').hide();
     e.preventDefault();
     var valuesToSubmit = new FormData(this);
     var url_action = $(this).attr('action');
@@ -56,9 +56,10 @@ $('#new_upload_document').submit(function(e) {
             jQuery('#fromDesktop').modal('toggle')
         },
         error: function(response) {
-            alert(JSON.parse(response.responseText)['document_error']);
+            notification(JSON.parse(response.responseText)['document_error']);
             // jQuery('#from_desktop_upload').show();
             jQuery('#loader_wrap_desktop').hide();
+            jQuery('#from_desktop_upload').show();
         }
     });
     return false; // prevents normal behaviour

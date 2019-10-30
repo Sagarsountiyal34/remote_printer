@@ -7,29 +7,27 @@
     <title>AP Computer</title>
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
-    <script src="http://cdn.datatables.net/1.10.18/js/jquery.dataTables.min.js" defer ></script>
+    <script src="http://cdn.datatables.net/1.10.18/js/jquery.dataTables.min.js" defer></script>
     <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
     <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/lightgallery/1.3.2/js/lightgallery.js"></script>
 </head>
 
 <body>
-<!--::header part start::-->
+    <!--::header part start::-->
     <section class="main-header">
         <header class="main_menu home_menu">
             <div class="container-fluid">
                 <div class="row align-items-center">
                     <div class="col-lg-12">
                         <nav class="navbar navbar-expand-lg navbar-light">
-                            <a class="navbar-brand" href="<%= root_path %>"><%= image_tag("logo.png")%> <!-- <img src="/assets/logo.png" alt="logo"> --> </a>
-                            <button class="navbar-toggler" type="button" data-toggle="collapse"
-                                data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-                                aria-expanded="false" aria-label="Toggle navigation">
+                            <a class="navbar-brand" href="<%= root_path %>">
+                                <%= image_tag("logo.png")%>
+                                <!-- <img src="/assets/logo.png" alt="logo"> --> </a>
+                            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                                 <span class="navbar-toggler-icon"></span>
                             </button>
-
-                            <div class="collapse navbar-collapse main-menu-item justify-content-end"
-                                id="navbarSupportedContent">
+                            <div class="collapse navbar-collapse main-menu-item justify-content-end" id="navbarSupportedContent">
                                 <ul class="navbar-nav align-items-center">
                                     <li class="nav-item active">
                                         <a class="nav-link" href="<%= root_path %>">Home</a>
@@ -55,22 +53,9 @@
                                     <!-- <li class="nav-item">
                                         <a class="nav-link" href="<%#= contact_path %>">Contact</a>
                                     </li> -->
-                                    <% if current_user.present? %>
-                                        <li class="nav-item hideSignIn">
-                                            <a class="nav-link" href="<%= progress_groups_path %>">Documents</a>
-                                        </li>
-                                    <% end %>
                                     <li class="nav-item hideSignIn">
-                                        <% if current_user.present? %>
-                                            <%= link_to 'Logout', destroy_user_session_path,{ method: :delete, class: :'nav-link', :data => {:toggle => 'modal', :target => '#logoutModal'} }  %>
-                                            <!-- <a class="nav-link" data-method="DELETE" rel="nofollow" href="<%#= destroy_user_session_path %>">LogOut</a> -->
-                                        <%else%>
-                                            <a class="nav-link" href="<%= new_user_session_path %>">SignIn</a>
-                                        <%end%>
+                                        <a class="nav-link" href="<%= new_user_session_path %>">SignIn</a>
                                     </li>
-                                    <!-- <li class="d-none d-lg-block">
-                                        <a class="btn_1" href="#">Get a Quote</a>
-                                    </li> -->
                                 </ul>
                             </div>
                         </nav>
@@ -80,7 +65,7 @@
         </header>
     </section>
     <section class="container-fluid col-lg-12 main-container">
-            <%= yield %>
+        <%= yield %>
     </section>
     <!-- Header part end-->
     <section>
@@ -89,7 +74,8 @@
                 <div class="row justify-content-between">
                     <div class="col-sm-6 col-md-4 col-xl-3">
                         <div class="single-footer-widget footer_1">
-                            <a href="<%= root_path %>"> <%= image_tag("logo.png")%> </a>
+                            <a href="<%= root_path %>">
+                                <%= image_tag("logo.png")%> </a>
                             <p>But when shot real her. Chamber her one visite removal six
                                 sending himself boys scot exquisite existend an </p>
                             <p>But when shot real her hamber her </p>
@@ -98,7 +84,7 @@
                     <div class="col-sm-6 col-md-4 col-xl-4">
                         <div class="single-footer-widget footer_2">
                             <h4>Suggestions:</h4>
-                            <p>In order to express your experience and suggestion. Please send an email at <a href = "mailto:info@codegaragetech.com">info@codegaragetech.com</a>.
+                            <p>In order to express your experience and suggestion. Please send an email at <a href="mailto:info@codegaragetech.com">info@codegaragetech.com</a>.
                             </p>
                             <%= image_tag('footer_pic.jpg')%>
                             <!-- <form action="#">
@@ -125,14 +111,13 @@
                         <div class="single-footer-widget footer_2">
                             <h4>Contact us</h4>
                             <div class="contact_info">
-                                <p><span> Address :</span> Main bazar Vikas Nagar,  Khandwala Chheharta Amritsar </p>
+                                <p><span> Address :</span> Main bazar Vikas Nagar, Khandwala Chheharta Amritsar </p>
                                 <p><span> Phone :</span> +91 7710706771</p>
                                 <p><span> Email : </span>apcom321@gmail.com</p>
                             </div>
                         </div>
                     </div>
                 </div>
-
             </div>
             <div class="container-fluid">
                 <div class="row">
@@ -150,59 +135,59 @@
         </footer>
     </section>
     <script>
-        <% if flash[:notice].present? %>
-            message = "<%= flash[:notice]%>"
-            type = 'success'
-            notification(message, type)
-        <%end%>
+    <% if flash[:notice].present? %>
+    message = "<%= flash[:notice]%>"
+    type = 'success'
+    notification(message, type)
+    <%end%>
 
-        <% if flash[:alert].present? %>
-            message = "<%= flash[:alert]%>"
-            type = 'warn'
-            notification(message, type)
-        <%end%>
+    <% if flash[:alert].present? %>
+    message = "<%= flash[:alert]%>"
+    type = 'warn'
+    notification(message, type)
+    <%end%>
 
-        <% if flash[:message].present?%>
-            message = "<%= flash[:message]%>"
-            type = 'info'
-            notification(message, type)
-        <%end%>
+    <% if flash[:message].present?%>
+    message = "<%= flash[:message]%>"
+    type = 'info'
+    notification(message, type)
+    <%end%>
 
-        <% if flash[:errors].present?%>
-            <% if flash[:errors].class == Array %>
-                <%flash[:errors].each do |err|%>
-                    message = "<%= err.html_safe %>"
-                    type = 'error'
-                    notification(message, type)
-                <%end%>
-            <% else %>
-                message = "<%= flash[:errors] %>"
-                type = 'error'
-                notification(message, type)
-            <% end %>
-        <% end %>
+    <% if flash[:errors].present?%>
+    <% if flash[:errors].class == Array %>
+    <%flash[:errors].each do |err|%>
+    message = "<%= err.html_safe %>"
+    type = 'error'
+    notification(message, type)
+    <%end%>
+    <% else %>
+    message = "<%= flash[:errors] %>"
+    type = 'error'
+    notification(message, type)
+    <% end %>
+    <% end %>
 
-        function notification(message, type) {
-            $.notify(message, {
-                className: type,
-                clickToHide: true,
-                globalPosition: 'top center',
-                autoHideDelay: 10000000,
-                width: 500,
-                height: 300
-            });
-        }
+    function notification(message, type) {
+        $.notify(message, {
+            className: type,
+            clickToHide: true,
+            globalPosition: 'top center',
+            autoHideDelay: 10000000,
+            width: 500,
+            height: 300
+        });
+    }
 
-        document.addEventListener('turbolinks:before-visit', function(e) {
-          if (e.data.url.split(window.location.href)[1].length > 0) {
+    document.addEventListener('turbolinks:before-visit', function(e) {
+        if (e.data.url.split(window.location.href)[1].length > 0) {
             e.preventDefault();
             window.location.href = e.data.url;
-          }
-        });
-
-        function setCsrfToken(xhr) {
-            xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))
         }
+    });
+
+    function setCsrfToken(xhr) {
+        xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))
+    }
     </script>
 </body>
 

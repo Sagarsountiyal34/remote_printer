@@ -276,6 +276,7 @@ DEPENDENCIES
   libreconv
   listen (>= 3.0.5, < 3.2)
   mongoid (~> 6.2.0)
+  pdf-reader
   prawn
   prawn-templates
   puma (~> 3.11)

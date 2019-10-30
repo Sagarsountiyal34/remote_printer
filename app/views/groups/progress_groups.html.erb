@@ -30,7 +30,7 @@
                                     <%= group.payment_type.capitalize %>
                                 </td>
                                 <td>
-                                    <%= link_to 'Details', { controller: :groups, action: :edit, id: group.id}  %>
+                                    <%= link_to 'Details', { controller: :groups, action: :edit, id: group.id}, :class => 'group_detail_anchor'  %>
                                 </td>
                             </tr>
                             <% end %>

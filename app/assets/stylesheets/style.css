@@ -150,7 +150,6 @@ embed {
 }
 
 @media (max-width: 576px) {
-  /* line 18, E:/172 Etrain Education/172_Etrain_Education_html/sass/_common.scss */
   .section_padding {
     padding: 70px 0px;
   }
@@ -212,3 +211,14 @@ embed {
   color: red;
 }
 
+#add_more_from_history_button{
+  background-color: green;
+  border: green;
+  padding: 10px;
+}
+
+.group_detail_anchor{
+  text-decoration: underline;
+  font-weight: bold;
+  color: green;
+}

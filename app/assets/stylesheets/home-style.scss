@@ -41,9 +41,7 @@ input:hover, input:focus {
 .section_padding {
   padding: 140px 0px;
 }
-.hideSignIn{
-    display: block;
-  }
+
 
 @media only screen and (min-width: 992px) and (max-width: 1200px) {
   /* line 18, E:/172 Etrain Education/172_Etrain_Education_html/sass/_common.scss */
@@ -57,9 +55,7 @@ input:hover, input:focus {
   .section_padding {
     padding: 70px 0px;
   }
-  .hideSignIn{
-    display: none;
-  }
+
 }
 
 @media (max-width: 576px) {
@@ -67,9 +63,7 @@ input:hover, input:focus {
   .section_padding {
     padding: 70px 0px;
   }
-  .hideSignIn{
-    display: none;
-  }
+
 }
 
 @media only screen and (min-width: 576px) and (max-width: 767px) {
@@ -77,9 +71,7 @@ input:hover, input:focus {
   .section_padding {
     padding: 70px 0px;
   }
-  .hideSignIn{
-    display: none;
-  }
+
 }
 
 /* line 33, E:/172 Etrain Education/172_Etrain_Education_html/sass/_common.scss */
