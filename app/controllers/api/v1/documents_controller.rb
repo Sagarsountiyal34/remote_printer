@@ -190,6 +190,7 @@ module Api
 				begin
 					group = Group.find(params["groupID"])
 					document = group.documents.find(params["documentID"])
+					# debugger
 					if document.present?
 						document.processed_pages = params[:pcount]
 							if (params[:pcount].to_i== document.total_pages )
@@ -219,6 +220,32 @@ module Api
 			        }
 				end
 
+			end
+
+			def mark_document_as_printed
+				begin
+					group = Group.find(params["groupID"])
+					document = group.documents.find(params["documentID"])
+
+					document.status = "completed"
+					document.processed_pages = document.total_pages
+
+					if document.save
+						render status: "200", json: {
+							document: document,
+							message: "document set to pending"
+						}
+					else
+						render status: "500", json: {
+										message: document.errors.full_messages
+									}
+					end
+
+				rescue Exception => e
+					render status: "500", json: {
+								message: e.message
+							}
+				end
 			end
 
 			def fetch_in_printing_doc_to_print

@@ -40,7 +40,7 @@ Rails.application.routes.draw do
 
   namespace 'api' do
 		namespace 'v1' do
-			post 'get_all_documents', to: 'documents#get_all_documents'
+      post 'get_all_documents', to: 'documents#get_all_documents'
 			post 'update_document_status', to: 'documents#update_document_status', as: 'update_document_status'
       post 'update_group_status', to: 'documents#update_group_status', as: 'update_group_status'
       post 'get_groups_with_status', to: 'documents#get_groups_with_status'
@@ -51,6 +51,11 @@ Rails.application.routes.draw do
       post 'print_document', to: 'documents#print_document'
       get 'print_document2', to: 'documents#print_document2'
       get 'fetch_in_printing_doc_to_print', to: 'documents#fetch_in_printing_doc_to_print'
+      post 'mark_document_as_printed',to: 'documents#mark_document_as_printed'
+      post 'suggestions_for_user_email', to: 'search#suggestions_for_user_email'
+      post 'suggestions_for_Document_names', to: 'search#suggestions_for_Document_names'
+      post 'suggestions_for_otps', to: 'search#suggestions_for_otps'
+      post 'search_by_category', to: 'search#search_by_category'
 		end
 	end
 end
