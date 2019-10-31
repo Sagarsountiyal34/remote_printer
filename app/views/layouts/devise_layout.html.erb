@@ -9,6 +9,12 @@
     <%= csp_meta_tag %>
     <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
     <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+    <style type="text/css">
+    .notifyjs-corner {
+        left: 50% !important;
+        transform: translate(-50%, 0);
+    }
+    </style>>
 </head>
 
 <body class="backGroundColor" style="display: flex;">
@@ -51,9 +57,9 @@
     function notification(message, type) {
         $.notify(message, {
             className: type,
-            clickToHide: false,
+            clickToHide: true,
             globalPosition: 'top center',
-            autoHideDelay: 10000000,
+            autoHideDelay: 5000,
             width: 500,
             height: 300
         });

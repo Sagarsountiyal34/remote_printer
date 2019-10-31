@@ -93,7 +93,7 @@ Rails.application.configure do
 
   ENV['EMAIL'] = 'ravikumar@codegaragetech.com'
   ENV['PASSWORD'] = 'prvkm@95#'
-
+  config.action_mailer.default_url_options = { host: 'codegaragetech', port: 40 }
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {
    :address => "smtp.gmail.com",
