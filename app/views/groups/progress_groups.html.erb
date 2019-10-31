@@ -13,7 +13,7 @@
                             <tr>
                                 <th width="40%">Updated On</th>
                                 <th width="20%">Status</th>
-                                <th width="20%">Payment Type </th>
+                                <!-- <th width="20%">Payment Type </th> -->
                                 <th width="20%">Show Details</th>
                             </tr>
                         </thead>
@@ -26,9 +26,9 @@
                                 <td>
                                     <%= group.status %>
                                 </td>
-                                <td>
-                                    <%= group.payment_type.capitalize %>
-                                </td>
+                                <!-- <td> -->
+                                    <%#= group.payment_type.capitalize %>
+                                <!-- </td> -->
                                 <td>
                                     <%= link_to 'Details', { controller: :groups, action: :edit, id: group.id}, :class => 'group_detail_anchor'  %>
                                 </td>
