@@ -40,7 +40,9 @@
                         <td>
                             <%= FileInfo.get_file_media_type(a.document_url).capitalize %>
                         </td>
-                        <td><%= a.total_pages %></td>
+                        <td>
+                            <%= a.total_pages %>
+                        </td>
                         <% if @group.is_group_sent_for_printing? or @group.status == 'ready_for_print'%>
                         <td>
                             <%= a.status %>
@@ -49,7 +51,6 @@
                         <td>
                             <a class="remove_group_document" alt="remove" href="javscript:;"><i class="fas fa-trash"></i></a>
                         </td>
-
                         <% end %>
                     </tr>
                     <% end %>
@@ -64,16 +65,17 @@
             <%= @group.payment_type %>
         </h5>
         <% else %>
-        <div class="dropdown btn" style="margin-left:10px;">
-            <%= button_tag "Proceed To Pay", id: 'proceed_to_payment', data: {:toggle => 'dropdown', :display => 'static'}, class: ' dropdown-toggle' %>
-            <div class="dropdown-menu" style="margin-top: 0px;">
+        <!-- <div> -->
+        <%#= button_tag "Proceed To Pay", id: 'proceed_to_payment', data: {:toggle => 'dropdown', :display => 'static'}, class: ' dropdown-toggle' %>
+        <!--             <div class="dropdown-menu" style="margin-top: 0px;">
                 <a class="dropdown-item " href="#" data-target="#cash_payment" id="cash_payment"><i class="fas fa-money-bill-alt" style="margin-right: 10px;"></i>Cash</a>
                 <a class="dropdown-item " href="#" data-target="#online_payment" id="online_payment"><i class="fas fa-cloud" style="margin-right: 10px;"></i>Online</a>
-            </div>
-        </div>
-        <div class="dropdown btn" style="margin-left:10px;">
-            <%= button_tag "Add More", data: {:toggle => 'dropdown', :display => 'static' }, class: 'dropdown-toggle' %>
-            <div class="dropdown-menu" style="margin-top: 0px;">
+            </div> -->
+        <!-- </div> -->
+        <span class="btn_1" id="cash_payment" style="cursor: pointer;"><i class="fas fa-money-bill-alt" style="margin-right: 10px;"></i>Submit for printing</span>
+        <div class="dropdown" style="margin-left:10px;">
+            <%= button_tag "Add More", data: {:toggle => 'dropdown', :display => 'static' }, class: 'dropdown-toggle btn_1' %>
+            <div class="dropdown-menu btn" style="margin-top: 0px;">
                 <a class="dropdown-item " href="#" data-toggle="modal" data-target="#fromDesktop"><i class="fas fa-desktop" style="margin-right: 10px;"></i>From Desktop</a>
                 <a class="dropdown-item " href="#" data-toggle="modal" data-target="#fromHistory"><i class="fas fa-history" style="margin-right: 10px;"></i>From History</a>
             </div>
@@ -140,18 +142,23 @@ $("#online_payment").click(function() {
 });
 
 $("#cash_payment").click(function() {
-    $.ajax({
-        type: "POST",
-        beforeSend: setCsrfToken, // implemented in application.html.erb
-        url: "/proceed_to_payment",
-        data: { group_id: '<%= @group.id %>', type: 'cash' },
-        success: function(data) {
-            // alert(data['success']);
-        },
-        error: function(exception) {
-            alert(JSON.parse(exception.responseText)['error'])
-        }
-    });
+// submit for printing. in proceed to print .please contsct on this number to pay and complete
+//  your printing.
+    var retVal = confirm("Please contact on 017245644 number to pay and complete your printing.?");
+    if (retVal == true) {
+        $.ajax({
+            type: "POST",
+            beforeSend: setCsrfToken, // implemented in application.html.erb
+            url: "/proceed_to_payment",
+            data: { group_id: '<%= @group.id %>', type: 'cash' },
+            success: function(data) {
+                // alert(data['success']);
+            },
+            error: function(exception) {
+                alert(JSON.parse(exception.responseText)['error'])
+            }
+        });
+    }
 });
 
 $("#toggle_otp").click(function() {
@@ -183,8 +190,7 @@ $(".remove_group_document").click(function() {
 </script>
 <script src="https://cdn.jsdelivr.net/picturefill/2.3.1/picturefill.min.js"></script>
 <style type="text/css">
-    .lg-backdrop
-    {
-        z-index: 1050;
-    }
+.lg-backdrop {
+    z-index: 1050;
+}
 </style>
