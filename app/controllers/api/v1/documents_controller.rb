@@ -190,7 +190,6 @@ module Api
 				begin
 					group = Group.find(params["groupID"])
 					document = group.documents.find(params["documentID"])
-					# debugger
 					if document.present?
 						document.processed_pages = params[:pcount]
 							if (params[:pcount].to_i== document.total_pages )
