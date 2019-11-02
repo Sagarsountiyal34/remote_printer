@@ -1,7 +1,7 @@
-set :environment, "development"
+# set :environment, "development"
 set :output, "log/cron.log"
 
-every 1.minute do
+every 2.days do
   # command "/usr/bin/some_great_command"
   # runner "MyModel.some_method"
   # rake "some:great:rake:task"
