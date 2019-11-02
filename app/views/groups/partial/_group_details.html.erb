@@ -30,9 +30,13 @@
                     <% @documents.each do |a| %>
                     <tr data-id="<%= a.id%>" class="document_record">
                         <td>
+                            <% if a.is_document_deleted? %>
+                            Deleted
+                            <% else %>
                             <div class="item group_item" data-iframe="<%= have_to_show_iframe(a) %>" data-src="<%= a.get_preview_url %>">
                                 <a href="javscript:;"><i class="fas fa-eye"></i></a>
                             </div>
+                            <% end %>
                         </td>
                         <td>
                             <%= a.document_name %>
@@ -142,8 +146,8 @@ $("#online_payment").click(function() {
 });
 
 $("#cash_payment").click(function() {
-// submit for printing. in proceed to print .please contsct on this number to pay and complete
-//  your printing.
+    // submit for printing. in proceed to print .please contsct on this number to pay and complete
+    //  your printing.
     var retVal = confirm("Please contact on 017245644 number to pay and complete your printing.?");
     if (retVal == true) {
         $.ajax({

@@ -49,7 +49,11 @@ class DocumentsController < ApplicationController
 			document = {}
 			document[:document_name] = doc.document_name
 			document[:type] = FileInfo.get_file_media_type(doc.document_url)
-			document[:preview_url] = doc.get_preview_url
+			if doc.is_document_deleted?
+				document[:preview_url] = false
+			else
+				document[:preview_url] = doc.get_preview_url
+			end
 			document[:total_pages] = doc.total_pages
 			all_doc.push(document)
 		end

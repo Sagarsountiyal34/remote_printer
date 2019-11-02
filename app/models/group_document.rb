@@ -20,4 +20,12 @@ class GroupDocument
     self.document_url
   end
 
+  def get_absolute_preview_path
+    Rails.root.to_s + '/public' + self.get_preview_url
+  end
+
+  def is_document_deleted?
+    !File.exist?(self.get_absolute_preview_path)
+  end
+
 end

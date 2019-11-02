@@ -53,6 +53,7 @@ gem 'combine_pdf'
 gem 'libreconv'
 gem 'rmagick'
 gem 'pdf-reader' # count pages
+gem 'whenever', require: false
 
 # gem 'active_merchant_ccavenue'
 # gem 'ccavenue'

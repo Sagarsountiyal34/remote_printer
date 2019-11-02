@@ -136,4 +136,8 @@ class UploadDocument
       FileUtils.cp(src_path, dest_src)
     end
   end
+
+  def is_document_deleted?
+    !File.exist?(self.get_absolute_preview_url)
+  end
 end

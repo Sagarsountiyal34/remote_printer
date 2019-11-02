@@ -48,7 +48,6 @@
                         </div>
                         <% if @recently_printed.present? %>
                         <div class="card-footer small text-muted">Updated at
-                            <% debugger %>
                             <%= @recently_printed[0]['updated_at'].strftime("%d %B %Y , %l:%M %p") %>
                         </div>
                         <% end %>

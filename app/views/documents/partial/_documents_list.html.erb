@@ -50,7 +50,7 @@ function initDataTable() {
             { "data": "preview_url" },
             { "data": "document_name" },
             { "data": "type" },
-            { "data": "total_pages"}
+            { "data": "total_pages" }
         ],
         "createdRow": function(row, data, dataIndex) {
             $(row).addClass('document_record');
@@ -59,7 +59,12 @@ function initDataTable() {
             "targets": 0,
             "data": "preview_url",
             "render": function(data, type, row, meta) {
-                return '<div class="item gallery_item" data-iframe="true"  data-src=' + data + '><a href="javscript:;"><i class="fas fa-eye"></i></a></div>';
+                if (data != false) {
+                    data = '<div class="item gallery_item" data-iframe="true"  data-src=' + data + '><a href="javscript:;"><i class="fas fa-eye"></i></a></div>';
+                } else {
+                    data = "Deleted"
+                }
+                return data;
             }
         }],
         "fnDrawCallback": function() {
