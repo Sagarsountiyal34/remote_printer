@@ -1,22 +1,25 @@
 <div class="card card-login mx-auto mt-5">
-  <div class="card-header">Reset Password</div>
-  <div class="card-body">
-    <div class="text-center mb-4">
-      <h4>Forgot your password?</h4>
-      <p>Enter your email address and we will send you instructions on how to reset your password.</p>
+    <div class="card-header">Reset Password
+        <%= link_to "Back to Home", root_path, :class => 'top_right_button'%>
     </div>
-	<%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post }) do |f| %>
-	<%= render "devise/shared/error_messages", resource: resource %>
-	  	<div class="form-group">
-		    <div class="form-label-group">
-				<%= f.email_field :email, autofocus: true, autocomplete: "email", :class => 'form-control', :placeholder => 'Enter Email Address', :required => 'required' %>
-		      	<%= f.label :email %><br />
-		    </div>
-	  	</div>
-      <%= f.submit "Send me reset password instructions" , :class => 'btn_1'%>
-    <% end %>
-    <div class="text-center">
-      <%= render "devise/shared/links" %>
+    <div class="card-body">
+        <div class="text-center mb-4">
+            <h4>Forgot your password?</h4>
+            <p>Enter your email address and we will send you instructions on how to reset your password.</p>
+        </div>
+        <%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post }) do |f| %>
+        <%= render "devise/shared/error_messages", resource: resource %>
+        <div class="form-group">
+            <div class="form-label-group">
+                <%= f.email_field :email, autofocus: true, autocomplete: "email", :class => 'form-control', :placeholder => 'Enter Email Address', :required => 'required' %>
+                <%= f.label :email %><br />
+            </div>
+        </div>
+        <%= f.submit "Send link" , :class => 'btn_1'%>
+        <% end %>
+        <br>
+        <div class="text-center">
+            <%= render "devise/shared/links" %>
+        </div>
     </div>
-  </div>
 </div>

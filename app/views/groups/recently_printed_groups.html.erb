@@ -28,18 +28,18 @@
                                 </thead>
                                 <tbody>
                                     <% @recently_printed.each do |group| %>
-                                    <tr data-id="<%= group.id%>" class="document_record">
+                                    <tr data-id="<%= group['_id'].to_s %>" class="document_record">
                                         <td>
-                                            <%= group.updated_at.strftime("%l:%M %p ,     %d %B %Y") %>
+                                            <%= group['updated_at'].strftime("%l:%M %p ,     %d %B %Y") %>
                                         </td>
                                         <td>
-                                            <%= group.status %>
+                                            <%= group['status'] %>
                                         </td>
-                                        <td>
+                                        <!-- <td> -->
                                             <%#= group.payment_type.capitalize %>
-                                        </td>
+                                        <!-- </td> -->
                                         <td>
-                                            <%= link_to 'Details', { controller: :groups, action: :edit, id: group.id}  %>
+                                            <%= link_to 'Details', { controller: :groups, action: :edit, id: group['_id'].to_s}, :class => 'group_detail_anchor'  %>
                                         </td>
                                     </tr>
                                     <% end %>
@@ -48,7 +48,8 @@
                         </div>
                         <% if @recently_printed.present? %>
                         <div class="card-footer small text-muted">Updated at
-                            <%= @recently_printed.first.updated_at.strftime("%d %B %Y , %l:%M %p") %>
+                            <% debugger %>
+                            <%= @recently_printed[0]['updated_at'].strftime("%d %B %Y , %l:%M %p") %>
                         </div>
                         <% end %>
                     </div>

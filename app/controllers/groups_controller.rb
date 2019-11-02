@@ -108,7 +108,8 @@ class GroupsController < ApplicationController
 	end
 
 	def recently_printed_groups
-		@recently_printed = current_user.groups.where(status: 'completed').where(updated_at: (Time.now - 24.hours)..Time.now).order_by(updated_at: :desc)
+		# @recently_printed = current_user.groups.where(status: 'completed').where(updated_at: (Time.now - 24.hours)..Time.now).order_by(updated_at: :desc)
+		@recently_printed = Group.order_by(updated_at: :desc).all_of({:'documents.status' => 'completed'}).map{|grp| grp.attributes.merge(documents: grp.documents.where(status: 'completed'),user_email: grp.user.email)}
 	end
 
 	def progress_groups
@@ -146,7 +147,7 @@ class GroupsController < ApplicationController
 	def proceed_to_payment
 		group = current_user.groups.find(params[:group_id])
 		if params[:type] == 'cash' or params[:type] == 'online'
-			if group.update_attributes(:status => 'ready_for_print', :payment_type => params[:type])
+			if group.update_attributes(:status => 'ready_for_print', :payment_type => params[:type], :submitted_time => Time.now)
 				redirect_to action: 'edit', :id =>  group.id
 			else
 				render json: {  error: 'Please try again later.'}, status: :unprocessable_entity

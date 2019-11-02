@@ -7,10 +7,11 @@
     <%= f.label :email %><br />
     <%= f.email_field :email, autofocus: true, autocomplete: "email", value: (resource.pending_reconfirmation? ? resource.unconfirmed_email : resource.email) %>
   </div>
-
+  <br>
   <div class="actions">
-    <%= f.submit "Resend confirmation instructions" %>
-  </div>
+    <%= f.submit "Resend confirmation instructions" , :class => 'btn_1'%>
+    <%= link_to "Back to Home", root_path, :class => 'btn_1'%>
+  </div><br>
 <% end %>
 
 <%= render "devise/shared/links" %>
