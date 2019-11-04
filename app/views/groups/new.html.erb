@@ -123,7 +123,7 @@ $(document).ready(function() {
     function fillResponse(res) {
         response = res;
         Object.keys(res['message']).forEach(function(key, value) {
-            var doc = $('#documents_form').find('.document').get(parseInt( key));
+            var doc = $('#documents_form').find('.document').get(parseInt(key));
             var class_name = ''
             if (response['message'][key][0] == true) {
                 class_name = 'success_message';
@@ -138,8 +138,8 @@ $(document).ready(function() {
 
 function check_all_form_valid() {
     var status = true;
-    $('.new_upload_document').each(function(i, form) {
-        if ($(form).find('input[type]:file').val() == '' || $(form).find('input[type]:text').val() == '') {
+    $('#new_upload_document').find('.document').each(function(i, doc) {
+        if ($(doc).find('input[type]:file').val() == '' || $(doc).find('input[type]:text').val() == '') {
             status = false
         }
     });
