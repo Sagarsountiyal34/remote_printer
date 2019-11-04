@@ -16,7 +16,7 @@ class Group
   after_save :remove_group_if_needed
 
   def remove_group_if_needed
-    self.destroy if self.documents.present? == false
+    self.destroy if !self.documents.present?
   end
 
   def get_total_group_item
