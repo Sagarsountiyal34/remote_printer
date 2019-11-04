@@ -1,4 +1,4 @@
-# set :environment, "development"
+#set :environment, "development"
 set :output, "log/cron.log"
 
 every 2.days do

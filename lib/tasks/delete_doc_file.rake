@@ -30,7 +30,7 @@ namespace :document do
 	desc "Delete documents"
 	task :delete_documents => [:environment] do
 		UploadDocument.all.each do |doc|
-			if doc.created_at == Time.now.to_date
+			if doc.created_at.to_date == Time.now.to_date
 				File.delete(doc.get_absolute_path) if File.exist?(doc.get_absolute_path)
 				File.delete(doc.get_absolute_preview_url) if File.exist?(doc.get_absolute_preview_url)
 				doc.destroy
@@ -43,7 +43,7 @@ namespace :document do
 		groups = Group.all
 	    groups.each do |group|
 		    group.documents.each do |doc|
-		    	if doc.created_at == Time.now.to_date
+		    	if doc.created_at.to_date == Time.now.to_date
 		        	File.delete(doc.get_absolute_preview_path) if File.exist?(doc.get_absolute_preview_path)
 		        	doc.destroy
 		        end
