@@ -223,3 +223,18 @@ embed {
   font-weight: bold;
   color: green;
 }
+.login_helper{
+  color:green;text-decoration: underline;margin-right:1rem;font-size:1.5rem;  
+}
+
+.digital_india_logo{
+  width:50%;height:50%;
+}
+
+.digital_india_header{
+  color:red;font-weight:900;
+}
+
+.digital_india_right_header{
+  font-weight: 1000;font-size: 3.5rem;overflow: initial;
+}

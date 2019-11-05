@@ -1,4 +1,3 @@
-<!-- banner part start-->
 <section class="banner_part_2">
     <div class="container">
         <div class="row align-items-center">
@@ -9,69 +8,102 @@
                         <h1>AP Computer: Your Assistant for Web and Computer Work</h1>
                         <p>We are here to provide you services that help you in various occasions weather academic or professional. Visit our place for once, we assure you that you will prefer our service every time in future. Our prices are genuine and mostly lower than the average prices in market.</p>
                         <% if !current_user.present? %>
-                        <div class="row">
-                            <div class="col-6">
-                                <h3 style="color:green;text-decoration: underline;">To use remote printing </h3>
-                            </div>
-                            <div class="col-6">
-                                <%= link_to(list_documents_path, :class => "btn_1") do %>
-                                Login Here
-                                <% end %>
-                            </div>
-                            <% end %>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-6 col-xl-6 pt-4">
-                    <%#= image_tag ('banner_img.jpg')%>
-                </div>
-            </div>
-        </div>
-</section>
-<!-- banner part start-->
-<!-- feature_part start-->
-<section class="feature_part">
-    <div class="container">
-        <div class="row">
-            <div class="col-sm-6 col-xl-3 align-self-center">
-                <div class="single_feature_text ">
-                    <h2>Guidance &amp; Assistance</h2>
-                    <p>We are here to help with your professional work and documentations. We keep ourself upto date with offical protocols, just to keep your work up to the mark. </p>
-                    <a href="#" class="btn_1">Read More</a>
-                </div>
-            </div>
-            <div class="col-sm-6 col-xl-3">
-                <div class="single_feature">
-                    <div class="single_feature_part">
-                        <span class="single_feature_icon"><i class="ti-layers"></i></span>
-                        <h4>Remote Printing</h4>
-                        <p>You can upload your document here and collect printed copies directly from our center. Sign-Up to upload your documents here. We will get it print for you in no time.Our automatic machine will update you and you can collect it from our Service Center.</p>
+                        <span class="login_helper">To use remote printing </span>
+                        <%= link_to(list_documents_path, :class => "btn_1") do %>
+                        Login Here
+                        <% end %>
+                        <% end %>
                     </div>
                 </div>
             </div>
-            <div class="col-sm-6 col-xl-3">
-                <div class="single_feature">
-                    <div class="single_feature_part">
-                        <span class="single_feature_icon"><i class="ti-new-window"></i></span>
-                        <h4>Online form filling</h4>
-                        <p>Heared a new job vancancy and not sure how to apply for it? Just visit us and we will try our best knowledge to achieve it, We have filled thousands of various jobs/examination/scholarship forms.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-6 col-xl-3">
-                <div class="single_feature">
-                    <div class="single_feature_part single_feature_part_2">
-                        <span class="single_service_icon style_icon"><i class="ti-light-bulb"></i></span>
-                        <h4>Documentation</h4>
-                        <p>Weather it is a CV/Office Work/Project Documentation or PPT, We have good command on it, we just need your details and corresponding data, In return we will polish your work to be attractive.</p>
-                    </div>
-                </div>
+            <div class="col-lg-6 col-xl-6 pt-4">
+                <%= image_tag('banner_img.jpg')%>
             </div>
         </div>
     </div>
 </section>
-<!-- upcoming_event part start-->
-<!-- learning part start-->
+<div class="container-fluid">
+    <div class="row digital_row">
+        <div class="col-12 col-sm-3 text-center">
+            <%= image_tag("digital_india.png", :class => "mt-3 digital_india_logo") %>
+        </div>
+        <div class="col-12 col-sm-6 text-center">
+            <h1 class="p-2 digital_india_header">Digital Service</h1>
+        </div>
+        <div class="col-12 col-sm-3 text-center">
+            <h1 class="digital_india_right_header">C|<span class="" style="color: grey;">S</span>|C</h1>
+        </div>
+    </div>
+    <div class="row digital_row p-3">
+        <div class="col-2 col-sm-2 text-center" style="background-color: orange;">
+            <i class="fas fa-sun fa-4x pt-3" style="font-size: 2vw;"></i>
+            <div><span style="font-size:1.5vw;display: block;">Aadhar Registration</span></div>
+        </div>
+        <div class="col-2 col-sm-2 text-center" style="background-color: #0095ff;">
+            <i class="fas fa-id-card fa-4x pt-3" style="font-size: 2vw;"></i>
+            <div><span style="font-size:1.5vw;display: block;">Pan Card<br>Election Card<br>Passport</span></div>
+        </div>
+        <div class="col-2 col-sm-2 text-center" style="background-color: #570992;">
+            <i class="far fa-lightbulb fa-4x pt-3" style="font-size: 2vw;"></i>
+            <div><span style="font-size:1.5vw;display: block;">Electricity Bill</span></div>
+        </div>
+        <div class="col-2 col-sm-2 text-center" style="background-color: #af9412;">
+            <i class="fas fa-mobile-alt fa-4x pt-3" style="font-size: 2vw;"></i>
+            <div><span style="font-size:1.5vw;display: block;">Mobile Recharge</span></div>
+        </div>
+        <div class="col-2 col-sm-2 text-center" style="background-color: #0a4f73;">
+            <i class="fas fa-piggy-bank fa-4x pt-3" style="font-size: 2vw;"></i>
+            <div><span style="font-size:1.5vw;display: block;">Finance Insurance</span></div>
+        </div>
+        <div class="col-2 col-sm-2 text-center" style="background-color: green;">
+            <i class="fas fa-plane-departure fa-4x pt-3" style="font-size: 2vw;"></i>
+            <div><span style="font-size:1.5vw;display: block;">Air, Train, Bus Ticket</span></div>
+        </div>
+    </div>
+    <div class="row" id="digital_row">
+        <div class="col-12 col-sm-12 text-center p-4">
+            <h4 style="font-weight:bold;">AP Computer &nbsp;&nbsp; <span style="color:red;">+917710706771</h4>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="row">
+        <div class="col-sm-6 col-xl-3 align-self-center">
+            <div class="single_feature_text ">
+                <h2>Guidance &amp; Assistance</h2>
+                <p>We are here to help with your professional work and documentations. We keep ourself upto date with offical protocols, just to keep your work up to the mark. </p>
+                <a href="#" class="btn_1">Read More</a>
+            </div>
+        </div>
+        <div class="col-sm-6 col-xl-3">
+            <div class="single_feature">
+                <div class="single_feature_part">
+                    <span class="single_feature_icon"><i class="ti-layers"></i></span>
+                    <h4>Remote Printing</h4>
+                    <p>You can upload your document here and collect printed copies directly from our center. Sign-Up to upload your documents here. We will get it print for you in no time.Our automatic machine will update you and you can collect it from our Service Center.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-xl-3">
+            <div class="single_feature">
+                <div class="single_feature_part">
+                    <span class="single_feature_icon"><i class="ti-new-window"></i></span>
+                    <h4>Online form filling</h4>
+                    <p>Heared a new job vancancy and not sure how to apply for it? Just visit us and we will try our best knowledge to achieve it, We have filled thousands of various jobs/examination/scholarship forms.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-xl-3">
+            <div class="single_feature">
+                <div class="single_feature_part single_feature_part_2">
+                    <span class="single_service_icon style_icon"><i class="ti-light-bulb"></i></span>
+                    <h4>Documentation</h4>
+                    <p>Weather it is a CV/Office Work/Project Documentation or PPT, We have good command on it, we just need your details and corresponding data, In return we will polish your work to be attractive.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 <section class="">
     <div class="container">
         <div class="row align-items-sm-center align-items-lg-stretch">
