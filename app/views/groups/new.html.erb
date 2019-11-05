@@ -133,7 +133,7 @@ $(document).ready(function() {
                 class_name = 'error_message';
             }
             $(doc).find('.message').text(response['message'][key][1])
-            $(doc).addClass(class_name)
+            $(doc).find('.message').addClass(class_name)
         })
     }
 });

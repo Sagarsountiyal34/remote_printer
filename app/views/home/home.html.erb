@@ -8,16 +8,25 @@
                         <h5>Printing | Scanning | Scholarship Appliance | Spiral Binding | Passport | Pan-Card | Driving License | Govt Job Forms | Project Work and Miscellaneous</h5>
                         <h1>AP Computer: Your Assistant for Web and Computer Work</h1>
                         <p>We are here to provide you services that help you in various occasions weather academic or professional. Visit our place for once, we assure you that you will prefer our service every time in future. Our prices are genuine and mostly lower than the average prices in market.</p>
-                        <a href="#" class="btn_1">View Course </a>
-                        <a href="#" class="btn_2">Get Started </a>
+                        <% if !current_user.present? %>
+                        <div class="row">
+                            <div class="col-6">
+                                <h3 style="color:green;text-decoration: underline;">To use remote printing </h3>
+                            </div>
+                            <div class="col-6">
+                                <%= link_to(list_documents_path, :class => "btn_1") do %>
+                                Login Here
+                                <% end %>
+                            </div>
+                            <% end %>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-lg-6 col-xl-6 pt-4">
-                <%= image_tag ('banner_img.jpg')%>
+                <div class="col-lg-6 col-xl-6 pt-4">
+                    <%#= image_tag ('banner_img.jpg')%>
+                </div>
             </div>
         </div>
-    </div>
 </section>
 <!-- banner part start-->
 <!-- feature_part start-->
