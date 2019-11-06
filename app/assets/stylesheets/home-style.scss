@@ -545,8 +545,12 @@ ul {
 @media (max-width: 576px) {
   /* line 24, E:/172 Etrain Education/172_Etrain_Education_html/sass/_button.scss */
   .btn_1 {
+    display: inline;
     padding: 10px 30px;
     margin-top: 25px;
+  }
+  .login_helper{
+    font-size: 4.5vw !important;
   }
 }
 
