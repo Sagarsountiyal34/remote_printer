@@ -8,10 +8,12 @@
                         <h1>AP Computer: Your Assistant for Web and Computer Work</h1>
                         <p>We are here to provide you services that help you in various occasions weather academic or professional. Visit our place for once, we assure you that you will prefer our service every time in future. Our prices are genuine and mostly lower than the average prices in market.</p>
                         <% if !current_user.present? %>
-                        <span class="login_helper">To use remote printing </span>
-                        <%= link_to(list_documents_path, :class => "btn_1") do %>
-                        Login Here
-                        <% end %>
+                        <div>
+                            <span class="login_helper">To use remote printing </span>
+                            <%= link_to(list_documents_path, :class => "btn_1") do %>
+                            Login Here
+                            <% end %>
+                        </div>
                         <% end %>
                     </div>
                 </div>
@@ -35,33 +37,35 @@
         </div>
     </div>
     <div class="row digital_row p-3">
-        <div class="col-2 col-sm-2 text-center" style="background-color: orange;">
-            <i class="fas fa-sun fa-4x pt-3" style="font-size: 2vw;"></i>
-            <div><span style="font-size:1.5vw;display: block;">Aadhar Registration</span></div>
+        <div class="col-2 col-sm-2 text-center feature" style="background-color: orange;">
+            <div>
+                <i class="fas fa-sun fa-4x pt-3" style="font-size: 2vw;"></i>
+                <div><span class="text_wrap" style="font-size:1.5vw;display: block;">Aadhar Registration</span></div>
+            </div>
         </div>
-        <div class="col-2 col-sm-2 text-center" style="background-color: #0095ff;">
+        <div class="col-2 col-sm-2 text-center feature" style="background-color: #0095ff;">
             <i class="fas fa-id-card fa-4x pt-3" style="font-size: 2vw;"></i>
-            <div><span style="font-size:1.5vw;display: block;">Pan Card<br>Election Card<br>Passport</span></div>
+            <div><span class="text_wrap" style="font-size:1.5vw;display: block;">Pan Card<br>Election Card<br>Passport</span></div>
         </div>
-        <div class="col-2 col-sm-2 text-center" style="background-color: #570992;">
+        <div class="col-2 col-sm-2 text-center feature" style="background-color: #7534a7;">
             <i class="far fa-lightbulb fa-4x pt-3" style="font-size: 2vw;"></i>
-            <div><span style="font-size:1.5vw;display: block;">Electricity Bill</span></div>
+            <div><span class="text_wrap" style="font-size:1.5vw;display: block;">Electricity Bill</span></div>
         </div>
-        <div class="col-2 col-sm-2 text-center" style="background-color: #af9412;">
+        <div class="col-2 col-sm-2 text-center feature" style="background-color: #af9412;">
             <i class="fas fa-mobile-alt fa-4x pt-3" style="font-size: 2vw;"></i>
-            <div><span style="font-size:1.5vw;display: block;">Mobile Recharge</span></div>
+            <div><span class="text_wrap" style="font-size:1.5vw;display: block;">Mobile Recharge</span></div>
         </div>
-        <div class="col-2 col-sm-2 text-center" style="background-color: #0a4f73;">
+        <div class="col-2 col-sm-2 text-center feature" style="background-color: #2378a5;">
             <i class="fas fa-piggy-bank fa-4x pt-3" style="font-size: 2vw;"></i>
-            <div><span style="font-size:1.5vw;display: block;">Finance Insurance</span></div>
+            <div><span class="text_wrap" style="font-size:1.5vw;display: block;">Finance Insurance</span></div>
         </div>
-        <div class="col-2 col-sm-2 text-center" style="background-color: green;">
+        <div class="col-2 col-sm-2 text-center feature" style="background-color: green;">
             <i class="fas fa-plane-departure fa-4x pt-3" style="font-size: 2vw;"></i>
-            <div><span style="font-size:1.5vw;display: block;">Air, Train, Bus Ticket</span></div>
+            <div><span class="text_wrap" style="font-size:1.5vw;display: block;">Air, Train, Bus Ticket</span></div>
         </div>
     </div>
     <div class="row" id="digital_row">
-        <div class="col-12 col-sm-12 text-center p-4">
+        <div class="col-12 col-sm-12 text-center">
             <h4 style="font-weight:bold;">AP Computer &nbsp;&nbsp; <span style="color:red;">+917710706771</h4>
         </div>
     </div>

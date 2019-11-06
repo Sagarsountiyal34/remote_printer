@@ -1,8 +1,9 @@
 html {
-  height: 100%;
+    height: 100%;
 }
+
 body {
-  min-height: 100%;
+    min-height: 100%;
 }
 
 .preview {
@@ -30,12 +31,12 @@ table tr th {
     vertical-align: middle !important
 }
 
-.backGroundColor{
+.backGroundColor {
     background-size: 200% auto !important;
-    background-image: linear-gradient(to left, #ee390f 0%, #f9b700 51%, #ee390f 100%) !important; 
+    background-image: linear-gradient(to left, #ee390f 0%, #f9b700 51%, #ee390f 100%) !important;
 }
 
-.backGroundColor:hover{
+.backGroundColor:hover {
     background-position: right center !important;
     box-shadow: 0px 10px 30px 0px rgba(193, 34, 10, 0.2) !important;
 }
@@ -47,12 +48,14 @@ table tr th {
     -webkit-box-shadow: 0 0 10px 5px rgba(45, 125, 193, 0.6);
     -o-box-shadow: 0 0 10px 5px rgba(45, 125, 193, 0.6);
 }
-#digital_india{
+
+#digital_india {
     /*border: 1px solid #4C3C1B;*/
     /*background-color: #cad6d4;*/
     background-image: linear-gradient(120deg, #5686d6 0%, #c2e9fb 100%);
     border-radius: .5rem;
 }
+
 /*for increasing font awesome icon */
 #user {
     font-size: 20px;
@@ -85,161 +88,191 @@ embed {
     margin: 0px 20px;
 }
 
-.main-container{
-  position: relative;
-  background-color: #edf5f3;
-  margin: 95px 0px 0px 0px;
-  padding-bottom: 2%;
+.main-container {
+    position: relative;
+    background-color: #edf5f3;
+    margin: 95px 0px 0px 0px;
+    padding-bottom: 2%;
 }
 
-.main-header{
-  z-index: 10;
+.main-header {
+    z-index: 10;
 }
 
-.rightMenu{
-  display: block;
-  padding: 0px;
-  /*margin-top: 5px;*/
-}
-#show-sidebar{
-    display: none;
-}
-
-#show-sidebar:hover .rightMenu{
-  display: block;
-}
-
-.left-section-div{
-  position: relative;
-  /*margin: 10px 0px 0px 0px;*/
+.rightMenu {
+    display: block;
+    padding: 0px;
+    /*margin-top: 5px;*/
 }
 
 #show-sidebar {
-  left: 0;
-  top: 85px;
-  border-radius: 0 4px 4px 0px;
-  width: auto;
-  transition-delay: 0.3s;
-  z-index: 10;
-}
-.page-wrapper.toggled #show-sidebar {
-  left: -40px;
+    display: none;
 }
 
-.table-section{
+#show-sidebar:hover .rightMenu {
+    display: block;
 }
+
+.left-section-div {
+    position: relative;
+    /*margin: 10px 0px 0px 0px;*/
+}
+
+#show-sidebar {
+    left: 0;
+    top: 85px;
+    border-radius: 0 4px 4px 0px;
+    width: auto;
+    transition-delay: 0.3s;
+    z-index: 10;
+}
+
+.page-wrapper.toggled #show-sidebar {
+    left: -40px;
+}
+
+.table-section {}
+
 @media only screen and (min-width: 992px) and (max-width: 1200px) {
-  /* line 18, E:/172 Etrain Education/172_Etrain_Education_html/sass/_common.scss */
-  .section_padding {
-    padding: 80px 0px;
-  }
+
+    /* line 18, E:/172 Etrain Education/172_Etrain_Education_html/sass/_common.scss */
+    .section_padding {
+        padding: 80px 0px;
+    }
 }
 
 @media only screen and (min-width: 768px) and (max-width: 991px) {
-  /* line 18, E:/172 Etrain Education/172_Etrain_Education_html/sass/_common.scss */
-  .section_padding {
-    padding: 70px 0px;
-  }
-  .rightMenu{
-    display: none;
-  }
-  #show-sidebar{
-      display: block;
-  }
+
+    /* line 18, E:/172 Etrain Education/172_Etrain_Education_html/sass/_common.scss */
+    .section_padding {
+        padding: 70px 0px;
+    }
+
+    .rightMenu {
+        display: none;
+    }
+
+    #show-sidebar {
+        display: block;
+    }
 }
 
 @media only screen and (min-width: 576px) and (max-width: 767px) {
-  /* line 18, E:/172 Etrain Education/172_Etrain_Education_html/sass/_common.scss */
-  .section_padding {
-    padding: 70px 0px;
-  }
+
+    /* line 18, E:/172 Etrain Education/172_Etrain_Education_html/sass/_common.scss */
+    .section_padding {
+        padding: 70px 0px;
+    }
 }
 
 @media (max-width: 576px) {
-  .section_padding {
-    padding: 70px 0px;
-  }
-  .rightMenu{
-    display: none;
-  }
+    .section_padding {
+        padding: 70px 0px;
+    }
+
+    .rightMenu {
+        display: none;
+    }
 }
 
-.new_document_form{
-  display: flex;
-  margin-top: 2.0rem;
-  flex-wrap: wrap;
+.new_document_form {
+    display: flex;
+    margin-top: 2.0rem;
+    flex-wrap: wrap;
 }
 
-.document_name_field{
-  padding-left: 0px;
-  margin-bottom: 0px !important;
+.document_name_field {
+    padding-left: 0px;
+    margin-bottom: 0px !important;
 }
 
-.documentFileField{
-/*  padding-top: 0.5rem !important;
+.documentFileField {
+    /*  padding-top: 0.5rem !important;
   width: 14.5rem;*/
 }
 
-.history_document
-{
-  padding: 13px 39px;
-   border-radius: 10px; 
-  background-color: #edf5f3;
-  border: 1px solid #0c2e60;
-  color: #0c2e60;
-  font-size: 14px;
-  -o-transition: all .4s ease-in-out;
-  -webkit-transition: all .4s ease-in-out;
-  transition: all .4s ease-in-out;
-  text-transform: capitalize;
-  background-size: 200% auto;
-  margin-top: 10px;
-}
-#history_list{
-  margin-bottom: 2.5rem;
+.history_document {
+    padding: 13px 39px;
+    border-radius: 10px;
+    background-color: #edf5f3;
+    border: 1px solid #0c2e60;
+    color: #0c2e60;
+    font-size: 14px;
+    -o-transition: all .4s ease-in-out;
+    -webkit-transition: all .4s ease-in-out;
+    transition: all .4s ease-in-out;
+    text-transform: capitalize;
+    background-size: 200% auto;
+    margin-top: 10px;
 }
 
-.sss
-{
-  color:red;
+#history_list {
+    margin-bottom: 2.5rem;
 }
 
-.success_message
-{
-  color:green;
-}
-.btn_1{
-  background-image: linear-gradient(to left, #208090 0%, #699c41 55%, #9e5931 100%);  
+.sss {
+    color: red;
 }
 
-.error_message
-{
-  color: red;
+.success_message {
+    color: green;
 }
 
-#add_more_from_history_button{
-  background-color: green;
-  border: green;
-  padding: 10px;
+.btn_1 {
+    background-image: linear-gradient(to left, #208090 0%, #699c41 55%, #9e5931 100%);
 }
 
-.group_detail_anchor{
-  text-decoration: underline;
-  font-weight: bold;
-  color: green;
-}
-.login_helper{
-  color:green;text-decoration: underline;margin-right:1rem;font-size:1.5rem;  
+.error_message {
+    color: red;
 }
 
-.digital_india_logo{
-  width:50%;height:50%;
+#add_more_from_history_button {
+    background-color: green;
+    border: green;
+    padding: 10px;
 }
 
-.digital_india_header{
-  color:red;font-weight:900;
+.group_detail_anchor {
+    text-decoration: underline;
+    font-weight: bold;
+    color: green;
 }
 
-.digital_india_right_header{
-  font-weight: 1000;font-size: 3.5rem;overflow: initial;
+.login_helper {
+    color: green;
+    text-decoration: underline;
+    margin-right: 1rem;
+    font-size: 1.5rem;
+}
+
+.digital_india_logo {
+    width: 50%;
+    height: 50%;
+}
+
+.digital_india_header {
+    color: red;
+    font-weight: 900;
+}
+
+.digital_india_right_header {
+    font-weight: 1000;
+    font-size: 3.5rem;
+    overflow: initial;
+}
+
+@media screen and (max-width: 767px) {
+    .text_wrap {
+        font-size: 0.7rem !important;
+    }
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+    .text_wrap {
+        font-size: 2.7rem;
+    }
+}
+
+.feature {
+    padding: 0;
 }
