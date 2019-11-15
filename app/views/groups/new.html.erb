@@ -5,7 +5,7 @@
                 <li class="breadcrumb-item">
                     <a href="#">Dashboard</a>
                 </li>
-                <li class="breadcrumb-item active">Upload Documents</li>
+                <li class="breadcrumb-item active">Select Documents</li>
             </ol>
             <div id="documents_form">
                 <form class="new_upload_document new_document_form" id="new_upload_document" enctype="multipart/form-data" action="/save_group" accept-charset="UTF-8" method="post">
@@ -19,8 +19,13 @@
                             </div>
                             <div class="input-group col-5 col-sm-5">
                                 <div class="custom-file">
-                                    <input type="file" class="custom-file-input uploadDocument documentFileField" id="inputGroupFile01" aria-describedby="inputGroupFileAddon01" name="upload_document[1][document]" id="upload_document_document">
+                                    <input type="file" class="custom-file-input uploadDocument documentFileField" id="inputGroupFile01" aria-describedby="inputGroupFileAddon01" name="upload_document[1][document]" id="upload_document_document" data-buttonText="Your label here." aria-describedby="fileHelp">
                                     <label class="custom-file-label" for="inputGroupFile01">File</label>
+                                    <style>
+                                        .custom-file-label:after{
+                                            content: "Browse...";
+                                        }
+                                    </style>
                                 </div>
                             </div>
                             <!-- <i class="fas fa-times remove_form fa-2x col-1" style="cursor:pointer;color:red;"></i> -->
@@ -29,13 +34,15 @@
                     </div>
                     <input type="hidden" name="history_document" id="history_document" value="">
                 </form>
-                <div id="history_list">
+                <div id="history_list" style="display:none;">
                 </div>
             </div>
-            <div id="action_button" style="margin-top: 2rem;">
-                <%= button_tag "Upload", :class => 'btn_1', :id => 'upload_submit_button' %>
-                <%= button_tag "Add More", :class => 'btn_1', :id => 'add_more_button' %>
-                <%= button_tag "Add From History", :class => 'btn btn-primary', :id => 'add_more_from_history_button', :data => {:toggle => 'modal', :target => '#fromHistory'} %>
+            <div id="action_button_2" style="float:right;">
+                <%= button_tag "Add New", :class => 'btn btn-primary main_button', :id => 'add_more_button' %>
+                <%= button_tag "Add Older", :class => 'btn btn-warn main_button', :id => 'add_more_from_history_button', :data => {:toggle => 'modal', :target => '#fromHistory'} %>
+            </div><br>
+            <div id="action_button">
+                <%= button_tag "Submit Selected", :class => 'btn_1', :id => 'upload_submit_button' %>
             </div>
         </div>
     </div>
@@ -82,20 +89,23 @@ $(document).ready(function() {
             submitForm($('form'), onSuccess, onError);
         } else {
             $('#loader_wrap_main').hide()
-            $(this).text('Upload');
+            $(this).text('Submit Selected');
             $(this).removeAttr('disabled');
             notification("Please fill all entries.", "error")
         }
 
         function onSuccess(response) {
             $('#loader_wrap_main').hide()
-            $(this).text('Upload');
-            $(this).removeAttr('disabled');
-            fillResponse(response);
+            $(self).text('Submit Selected');
+            $(self).removeAttr('disabled');
+            fillResponse(response);    
         }
 
         function onError(error) {
-            // body...
+            debugger
+            $('#loader_wrap_main').hide()
+            $(this).text('Submit Selected');
+            $(this).removeAttr('disabled');
         }
     });
 
