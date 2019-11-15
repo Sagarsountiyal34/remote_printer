@@ -11,10 +11,10 @@
             <table class="table table-bordered document_table" id="dataTable" width="100%" cellspacing="0" data-next-page="1">
                 <thead>
                     <tr>
-                        <th width="20%">Preview</th>
+                        <th width="2%"></th>
                         <th width="35%">Name</th>
                         <th width="35%">Type</th>
-                        <th width="10%">Total Pages</th>
+                        <th width="10%">Pgs</th>
                     </tr>
                 </thead>
                 <tbody id="tbody_head">
@@ -33,6 +33,8 @@ function initDataTable() {
     var document_table = $('#dataTable').DataTable({
         "serverSide": true,
         "processing": true,
+        "searching": false,
+        "bLengthChange": false,
         // "searching": false,
         "lengthMenu": [10],
         "ajax": {
@@ -66,8 +68,21 @@ function initDataTable() {
                 }
                 return data;
             }
+            },
+            {
+            "targets": 1,
+            "data": "document_name",
+            "className": "table_entry_name",
+            "title": "document_name",
+            'createdCell':  function (td, cellData, rowData, row, col) {
+                $(td).attr('data-original-title', cellData); 
+            },
+            "render": function(data, type, row, meta) {
+                return data;
+            }
         }],
         "fnDrawCallback": function() {
+            $(".table_entry_name").tooltip({container: 'body'});
             if ($("#tbody_head").data("lightGallery")) {
                 $("#tbody_head").data("lightGallery").destroy(true);
             }

@@ -289,3 +289,12 @@ embed {
     margin: 0rem 0.3rem;
 }
 }
+
+.table_entry_name{
+    max-width: 50px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+
