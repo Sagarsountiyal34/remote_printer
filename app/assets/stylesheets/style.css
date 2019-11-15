@@ -280,6 +280,7 @@ embed {
 }
 .main_button {
     margin: 0rem 0.3rem;
+    padding: 0.150rem 0.50rem;
 }
 
 @media (max-width: 576px)
@@ -287,12 +288,4 @@ embed {
 .main_button {
     margin: 0rem 0.3rem;
 }
-.add_more_from_history_button{
-    padding
-}
-}
-
-.main_button
-{
-    padding: 0.150rem 0.50rem;
 }
