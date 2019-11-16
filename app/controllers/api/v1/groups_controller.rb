@@ -21,6 +21,26 @@ module Api
 				end
       end
 
+		    def get_groups_with_document_status
+		        begin
+		          	doc_status= params["doc_status"]
+		          	debugger
+		          	if !doc_status.present?
+		            	groups = Group.all
+		          	else
+		            	groups= get_groups_with_doc_status(doc_status)
+		          	end
+					render status: "200", json: {
+						groups: groups,
+						message: "Success"
+					}
+				rescue Exception => e
+					forbidden_error(e)
+				end
+		    end
+
+
+
 			def mark_all_as_printed
 				begin
 					group = Group.find(params["groupID"])
@@ -67,6 +87,9 @@ module Api
       def get_groups(groups_status)
         return  Group.where(status: "ready_for_print").all_of({:'documents.status' => groups_status }).map{|grp| grp.attributes.merge(documents: grp.documents.where(status: groups_status),user_email: grp.user.email)}
       end
+        def get_groups_with_doc_status(doc_status)
+        	return  Group.all_of({:'documents.status' => doc_status })
+      	end
     end
   end
 end

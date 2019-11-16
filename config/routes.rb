@@ -57,6 +57,9 @@ Rails.application.routes.draw do
       post 'suggestions_for_Document_names', to: 'search#suggestions_for_Document_names'
       post 'suggestions_for_otps', to: 'search#suggestions_for_otps'
       post 'search_by_category', to: 'search#search_by_category'
+      post 'users/list', to: 'users#list'
+      post 'groups/get_groups_with_document_status', to: 'groups#get_groups_with_document_status'
+      post 'notes/save_notes', to: 'notes#save_notes'
 		end
 	end
 end
