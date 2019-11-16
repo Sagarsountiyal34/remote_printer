@@ -60,7 +60,7 @@ Rails.application.routes.draw do
       post 'users/list', to: 'users#list'
       post 'groups/get_groups_with_document_status', to: 'groups#get_groups_with_document_status'
       post 'notes/save_note', to: 'notes#save_note'
-      post 'notes/get_note', to: 'notes#get_note'
+      get 'notes/get_note', to: 'notes#get_note'
 		end
 	end
 end
