@@ -19,7 +19,7 @@
                                 <thead>
                                     <tr>
                                         <th width="15%">Select</th>
-                                        <th width="15%">Preview</th>
+                                        <th width="15%"></th>
                                         <th width="35%">Name</th>
                                         <th width="35%">Type</th>
                                     </tr>
@@ -51,7 +51,8 @@ function initNewGroupDataTable() {
     fromHistoryModal = $('#dataTableForNewDocumentHistory').DataTable({
         "serverSide": true,
         "processing": true,
-        // "searching": false,
+        "searching": false,
+        "bLengthChange": false,
         "stateSave": true,
         "lengthMenu": [10],
         "ajax": {
@@ -74,6 +75,7 @@ function initNewGroupDataTable() {
         ],
         "createdRow": function(row, data, dataIndex) {
             $(row).addClass('document_record_for_add');
+            $(row).data('id', data['document_id']);
         },
         "columnDefs": [{
                 "targets": 0,
@@ -88,9 +90,21 @@ function initNewGroupDataTable() {
                 "render": function(data, type, row, meta) {
                     return '<div class="item gallery_item" data-iframe="true"  data-src=' + data + '><a href="javscript:;"><i class="fas fa-eye"></i></a></div>';
                 }
+            },
+            {
+            "targets": 2,
+            "data": "document_name",
+            "className": "table_entry_name",
+            "title": "document_name",
+            'createdCell':  function (td, cellData, rowData, row, col) {
+                $(td).attr('data-original-title', cellData); 
+            },
+            "render": function(data, type, row, meta) {
+                return data;
             }
-        ],
+        }],
         "fnDrawCallback": function() {
+            $(".table_entry_name").tooltip({container: 'body'});
             if ($("#history_tbody_head").data("lightGallery")) {
                 $("#history_tbody_head").data("lightGallery").destroy(true);
             }
@@ -133,19 +147,19 @@ $("#add_to_list").on('click', function() {
     jQuery('#add_to_list').hide();
     var allPages = fromHistoryModal.cells().nodes();
     var checked_checkboxes = $('.document_check_box_new:checked', allPages);
-    document_ids = checked_checkboxes.map(function() {
+    $('#history_list').empty();
+    var document_ids = checked_checkboxes.map(function() {
         var outer_div = $('<div></div>').attr({ class: 'history_document_wrapper', style: 'display:flex'});
         $('<div>' + $(this).attr('name') + '</div>').attr({ class: 'history_document col-sm-6', id: $(this).attr('id') }).appendTo(outer_div);
         var remove_document_button = $('<i>').attr({ class: 'fas fa-times remove_history_document fa-2x col-sm-2', style: "cursor:pointer;margin: 16px 3px 0px 3px;color:red;" }).appendTo(outer_div);
         outer_div.appendTo('#history_list');
-        $(this).closest('tr').remove();
         return $(this).attr('id');
     }).get().join(',');
-    
     $('#history_document').val(document_ids)
     $('#fromHistory').modal('hide');
     $('.modal-backdrop').remove();
     $('#loader_wrap_from_history_main').hide();
     $('#history_list').show();
+    jQuery('#add_to_list').show();
 });
 </script>

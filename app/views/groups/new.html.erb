@@ -85,6 +85,10 @@ $(document).ready(function() {
         $(this).text('Please wait');
         $(this).attr('disabled', 'true');
         var check_if_valid = check_all_form_valid();
+        if ($('#history_document').val() != '' && $('#new_upload_document').find('.document').length == 1)
+        {
+            check_if_valid = true
+        }
         if (check_if_valid == true) {
             submitForm($('form'), onSuccess, onError);
         } else {
@@ -102,7 +106,6 @@ $(document).ready(function() {
         }
 
         function onError(error) {
-            debugger
             $('#loader_wrap_main').hide()
             $(this).text('Submit Selected');
             $(this).removeAttr('disabled');

@@ -204,6 +204,9 @@ embed {
     text-transform: capitalize;
     background-size: 200% auto;
     margin-top: 10px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 
 #history_list {
@@ -296,5 +299,4 @@ embed {
     white-space: nowrap;
     overflow: hidden;
 }
-
 

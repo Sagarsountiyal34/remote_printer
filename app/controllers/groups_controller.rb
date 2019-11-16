@@ -35,7 +35,7 @@ class GroupsController < ApplicationController
 					@upload_document.create_pdf_from_file(group.otp)
 				end
 				# @upload_document.insert_otp_into_document(group.otp)
-			@upload_document.generate_preview_file
+				@upload_document.generate_preview_file
 				file_type = FileInfo.get_file_media_type(@upload_document.document_url)
 				if file_type == 'office' or file_type == 'PDF'
 					reader = PDF::Reader.new(@upload_document.get_absolute_preview_url)
@@ -53,7 +53,7 @@ class GroupsController < ApplicationController
 			count = count + 1
 		end
 		if group.documents.length > 0 and group.save
-			if redirect_status == true
+			if redirect_status == true or count == 2
 				render :js => "window.location = '#{group_page_url(:id => group.id.to_s)}'"
 			else
 				render json: {status: true, message: response, group_id: group.id.to_s, redirect_url: group_page_url(:id => group.id)}, status: 200

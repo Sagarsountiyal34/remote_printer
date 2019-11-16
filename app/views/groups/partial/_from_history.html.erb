@@ -51,7 +51,8 @@ function initDataTable() {
     fromHistoryModal = $('#dataTableFromHistory').DataTable({
         "serverSide": true,
         "processing": true,
-        // "searching": false,
+        "searching": false,
+        "bLengthChange": false,
         "stateSave": true,
         "lengthMenu": [10],
         "ajax": {
@@ -88,9 +89,21 @@ function initDataTable() {
                 "render": function(data, type, row, meta) {
                     return '<div class="item gallery_item" data-iframe="true"  data-src=' + data + '><a href="javscript:;"><i class="fas fa-eye"></i></a></div>';
                 }
+            },
+            {
+            "targets": 2,
+            "data": "document_name",
+            "className": "table_entry_name",
+            "title": "document_name",
+            'createdCell':  function (td, cellData, rowData, row, col) {
+                $(td).attr('data-original-title', cellData); 
+            },
+            "render": function(data, type, row, meta) {
+                return data;
             }
-        ],
+        }],
         "fnDrawCallback": function() {
+            $(".table_entry_name").tooltip({container: 'body'});
             if ($("#history_tbody_head").data("lightGallery")) {
                 $("#history_tbody_head").data("lightGallery").destroy(true);
             }
