@@ -18,7 +18,8 @@ module Api
 		          				message = "Note creates Successfully."
 		          				status = true
 	          				else
-	          					message = "User already have a note."
+	          					user.note.update_attribute('note_text', note_text)
+	          					message = "Note Updated Successfully."
 	          				end
 		          		else
 		          			message = "Invalid user Id"
