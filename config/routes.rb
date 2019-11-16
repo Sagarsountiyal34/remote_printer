@@ -59,7 +59,8 @@ Rails.application.routes.draw do
       post 'search_by_category', to: 'search#search_by_category'
       post 'users/list', to: 'users#list'
       post 'groups/get_groups_with_document_status', to: 'groups#get_groups_with_document_status'
-      post 'notes/save_notes', to: 'notes#save_notes'
+      post 'notes/save_note', to: 'notes#save_note'
+      post 'notes/get_note', to: 'notes#get_note'
 		end
 	end
 end

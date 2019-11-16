@@ -20,7 +20,7 @@ class User
 
   has_many :upload_documents, dependent: :destroy
   has_many :groups, dependent: :destroy
-  has_many :notes, dependent: :destroy
+  has_one :note, dependent: :destroy
 
   ## Trackable
   field :sign_in_count,      type: Integer, default: 0
