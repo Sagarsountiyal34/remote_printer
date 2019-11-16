@@ -35,7 +35,7 @@ class Group
       if document.have_to_create_pdf_from_file?
           document.create_pdf_from_file(self.otp)
       end
-      document.insert_otp_into_document(self.otp)
+      # document.insert_otp_into_document(self.otp)
       document.add_documents(self) # addding into group
     end
   end
