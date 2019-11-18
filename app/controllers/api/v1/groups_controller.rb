@@ -8,7 +8,7 @@ module Api
         begin
           groups_status= params["GStatus"]
           if groups_status=="all"
-            groups = Group.where(status: "ready_for_print").map{|g| g.attributes.merge(user_email: g.user.email)}
+            groups = Group.where(status: "ready_for_print").map{|g| g.attributes.merge(user_email: g.user.email,note_text_present: g.user.note.try(:note_text).present?)}
           else
             groups= get_groups(groups_status)
           end
@@ -85,7 +85,7 @@ module Api
 			end
 
       def get_groups(groups_status)
-        return  Group.where(status: "ready_for_print").all_of({:'documents.status' => groups_status }).map{|grp| grp.attributes.merge(documents: grp.documents.where(status: groups_status),user_email: grp.user.email)}
+        return  Group.where(status: "ready_for_print").all_of({:'documents.status' => groups_status }).map{|grp| grp.attributes.merge(documents: grp.documents.where(status: groups_status),user_email: grp.user.email,note_text_present: grp.user.note.try(:note_text).present?)}
       end
         def get_groups_with_doc_status(doc_status)
         	return  Group.all_of({:'documents.status' => doc_status })

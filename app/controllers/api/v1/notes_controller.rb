@@ -6,13 +6,13 @@ module Api
 
 		    def save_note
 		        begin
-		          	user_id = params["user_id"]
+		          	user_email = params["user_email"]
 		          	note_text = params["note_text"]
 		          	message = ""
 		          	status = false
-		          	if user_id.present? and note_text.present?
-		          		user = User.find(user_id)
-		          		if user.present? 
+		          	if user_email.present?
+		          		user = User.find_by(email: user_email)
+		          		if user.present?
 		          			if !user.note.present?
 			          			note = user.create_note(:note_text => note_text)
 		          				message = "Note creates Successfully."
@@ -38,12 +38,11 @@ module Api
 
 		    def get_note
 		    	begin
-		          	user_id = params["user_id"]
 		          	note_text = ""
 		          	message = ""
 		          	status = false
-		          	user = User.find(user_id) rescue nil
-		          	if user_id.present? and user.present?
+		          	user = User.find_by(email: params["user_email"]) rescue nil
+		          	if user.present?
 	          			if user.note.present?
 		          			note_text = user.note.note_text
 		          			status = true
