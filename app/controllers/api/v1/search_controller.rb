@@ -11,7 +11,7 @@ module Api
 					if params[:condition] == "avoid_blank_grps"
 						all_users_ids = Group.where(status:  "ready_for_print").pluck(:user_id)
 					elsif params[:condition] == "all"
-						all_users_ids = Group.pluck(:user_id)
+						all_users_ids =  Group.all.map(&:user_id)
 					end
           users =User.in("id": all_users_ids,"email": /.*#{searchterm}.*/i) if all_users_ids.present?
           users_emails = users.map(&:email) if users.present?
