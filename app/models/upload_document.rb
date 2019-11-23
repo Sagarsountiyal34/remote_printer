@@ -39,12 +39,27 @@ class UploadDocument
     file_src = self.get_absolute_path
     ext = File.extname(file_src)
     file_src.sub(ext, '_' + group_otp + ext)
+
+    file_name = File.basename(file_src)
+    ext = File.extname(file_src)
+
+    file_name_without_ext = File.basename(file_name,ext)
+    new_file_name_without_ext = file_name_without_ext+ '_' + group_otp
+    new_file_name = new_file_name_without_ext + ext
+    file_src.sub(file_name, new_file_name)
+
   end
 
   def get_cloned_pdf_file_absolute_path(group_otp)
     file_src = self.get_absolute_path
+
+    file_name = File.basename(file_src)
     ext = File.extname(file_src)
-    file_src.sub(ext, '_' + group_otp + '.pdf')
+
+    file_name_without_ext = File.basename(file_name,ext)
+    new_file_name_without_ext = file_name_without_ext+ '_' + group_otp
+    new_file_name = new_file_name_without_ext + ext
+    file_src.sub(file_name, new_file_name)
   end
 
   def add_documents(group)
@@ -118,8 +133,14 @@ class UploadDocument
 
   def generate_deep_copy_in_directory(group_otp)
     src_path = self.get_absolute_path
+    file_name = File.basename(src_path)
     ext = File.extname(src_path)
-    dest_src = src_path.sub(ext, '_' + group_otp + ext)
+
+    file_name_without_ext = File.basename(file_name,ext)
+    new_file_name_without_ext = file_name_without_ext+ '_' + group_otp
+    new_file_name = new_file_name_without_ext + ext
+    dest_src = src_path.sub(file_name, new_file_name)
+
     FileUtils.cp(src_path, dest_src)
   end
 
