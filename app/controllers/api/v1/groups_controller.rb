@@ -24,7 +24,6 @@ module Api
 		    def get_groups_with_document_status
 		        begin
 		          	doc_status= params["doc_status"]
-		          	debugger
 		          	if !doc_status.present?
 		            	groups = Group.all
 		          	else
@@ -44,10 +43,25 @@ module Api
 			def mark_all_as_printed
 				begin
 					group = Group.find(params["groupID"])
+					old_check_for_pending_payments = group.user.note.try(:pending_payments).present?
+
 					if group.present?
-						group.documents.update_all(status: "completed")
+						group.documents.find_all { |m| m.update_attributes(status: params[:completedPU]) }
+						if params[:completedPU]=="completed_&_unpaid"
+								new_check_for_pending_payments = true
+						else
+								new_check_for_pending_payments = group.user.note.try(:pending_payments).present?
+						end
+
+						if old_check_for_pending_payments == new_check_for_pending_payments
+								pending_payment_status = "DontSet"
+						else
+								pending_payment_status = new_check_for_pending_payments
+						end
+
 						render status: "200", json: {
 							group: group,
+							any_payment_pending: pending_payment_status,
 							message: "Success"
 						}
 					else
@@ -87,9 +101,9 @@ module Api
       def get_groups(groups_status)
         return  Group.where(status: "ready_for_print").all_of({:'documents.status' => groups_status }).map{|grp| grp.attributes.merge(documents: grp.documents.where(status: groups_status),user_email: grp.user.email,note_text_present: grp.user.note.try(:note_text).present?)}
       end
-        def get_groups_with_doc_status(doc_status)
-        	return  Group.all_of({:'documents.status' => doc_status })
-      	end
+      def get_groups_with_doc_status(doc_status)
+      	return  Group.all_of({:'documents.status' => doc_status })
+    	end
     end
   end
 end

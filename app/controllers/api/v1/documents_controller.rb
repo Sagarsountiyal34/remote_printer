@@ -225,12 +225,29 @@ module Api
 				begin
 					group = Group.find(params["groupID"])
 					document = group.documents.find(params["documentID"])
+					old_check_for_pending_payments = document.group.user.note.try(:pending_payments).present?
 
-					document.status = "completed"
+					# document.status = "completed"
+					document.status = params[:completedPU]
+
 					document.processed_pages = document.total_pages
 
 					if document.save
+						if params[:completedPU]=="completed_&_unpaid"
+								any_payment_pending = true
+						else
+								any_payment_pending = document.group.user.note.try(:pending_payments).present?
+						end
+
+						if old_check_for_pending_payments == any_payment_pending
+								pending_payment_status = "DontSet"
+						else
+							  pending_payment_status = any_payment_pending
+						end
+						# groups = document.group.user.groups.where(status: "ready_for_print").map{|g| g.attributes.merge(user_email: g.user.email,note_text_present: g.user.note.try(:note_text).present?)}
 						render status: "200", json: {
+							any_payment_pending: pending_payment_status,
+							# groups: groups,
 							document: document,
 							message: "document set to pending"
 						}

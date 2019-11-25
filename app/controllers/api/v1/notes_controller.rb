@@ -18,6 +18,7 @@ module Api
 		          				message = "Note creates Successfully."
 		          				status = true
 	          				else
+											# debugger
 	          					user.note.update_attribute('note_text', note_text)
 	          					message = "Note Updated Successfully."
 	          				end
@@ -39,12 +40,14 @@ module Api
 		    def get_note
 		    	begin
 		          	note_text = ""
+								pending_payment_docs=[]
 		          	message = ""
 		          	status = false
 		          	user = User.find_by(email: params["user_email"]) rescue nil
 		          	if user.present?
 	          			if user.note.present?
-		          			note_text = user.note.note_text
+		          			note_text = user.note.note_text,
+										pending_payment_docs = user.note.pending_payments.map{|n| [n.document_name,n.printed_time]}.to_h
 		          			status = true
 		          			message = "success"
 		          		else
@@ -55,6 +58,7 @@ module Api
 		          	end
 					render status: "200", json: {
 						note_text: note_text,
+						pending_payment_docs: pending_payment_docs,
 						message: message,
 						status: status
 					}

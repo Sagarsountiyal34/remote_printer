@@ -7,10 +7,26 @@ module Api
 			def users_list
         begin
           users_emails_with_groupCount = []
-          users_emails_with_groupCount =  User.all.map{|u| [u.email,u.groups.where(status: "ready_for_print").count,u.note.try(:note_text).present?]} if (User.count>0)
+          users_emails_with_groupCount =  User.all.map{|u| [u.email,u.groups.where(status: "ready_for_print").count,u.note.try(:pending_payments).present?]} if (User.count>0)
 
           render status: "200", json: {
             users_emails: users_emails_with_groupCount,
+            message: "Success"
+          }
+        rescue Exception => e
+          generate_error_response("500",e)
+
+        end
+
+      end
+
+			def pending_payments
+        begin
+					pending_payments =  false
+					user = User.find_by(email: params[:email])
+					pending_payments = true if user.note.try(:pending_payments).present?
+          render status: "200", json: {
+            pending_payments: pending_payments,
             message: "Success"
           }
         rescue Exception => e
