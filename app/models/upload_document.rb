@@ -80,6 +80,15 @@ class UploadDocument
       group.documents << group_document
   end
 
+  def add_pdf_extension_if_not_present
+    if FileInfo.get_mime_type(self.get_absolute_path) == 'pdf' and !FileInfo.get_extension(self.document_url).present?
+      FileUtils.mv(self.get_absolute_path, self.get_absolute_path + '.pdf')
+      self['document_data']['id'] = File.basename(self.document_url + '.pdf')
+      self['document_data']['metadata']['mime_type'] = "application/pdf"
+      self['document_data']['metadata']['filename'] = self['document_data']['metadata']['filename'] + '.pdf'
+    end
+  end
+
   def insert_otp_into_document(otp)
     media_type = FileInfo.get_file_media_type(self.document_url)
     if media_type == 'image'

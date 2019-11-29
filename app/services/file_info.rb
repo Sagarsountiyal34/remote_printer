@@ -4,6 +4,11 @@ class FileInfo
 
   def self.get_file_extension(path_or_extension)
     extension = path_or_extension.gsub(/^.*\./, '').downcase
+    File.extname(path_or_extension)
+  end
+
+  def self.get_extension(only_path)
+    File.extname(only_path)
   end
 
   def self.is_image?(path_or_extension)
@@ -19,6 +24,10 @@ class FileInfo
   def self.get_file_media_type(path_or_extension)
     extension = path_or_extension.gsub(/^.*\./, '').downcase
     get_type(extension)
+  end
+
+  def self.get_mime_type(path)
+    MimeMagic.by_magic(File.open(path)).subtype
   end
 
   protected

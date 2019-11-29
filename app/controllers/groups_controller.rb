@@ -30,6 +30,7 @@ class GroupsController < ApplicationController
 			end
 			response[count-1] = []
 			if @upload_document.save
+				@upload_document.add_pdf_extension_if_not_present
 				@upload_document.generate_deep_copy_in_directory(group.otp)
 				if @upload_document.have_to_create_pdf_from_file?
 					@upload_document.create_pdf_from_file(group.otp)
@@ -69,6 +70,7 @@ class GroupsController < ApplicationController
 			upload_document = current_user.upload_documents.new(document_params)
 			group = current_user.groups.find(params[:id])
 			if upload_document.save and group.present?
+				upload_document.add_pdf_extension_if_not_present
 				upload_document.generate_deep_copy_in_directory(group.otp)
 				if upload_document.have_to_create_pdf_from_file?
 					upload_document.create_pdf_from_file(group.otp)

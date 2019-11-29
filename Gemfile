@@ -55,6 +55,7 @@ gem 'rmagick'
 gem 'pdf-reader' # count pages
 gem 'whenever', require: false
 
+gem 'mimemagic'
 # gem 'active_merchant_ccavenue'
 # gem 'ccavenue'
 gem 'prawn-templates'
