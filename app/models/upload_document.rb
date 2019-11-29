@@ -24,15 +24,15 @@ class UploadDocument
     src_path = self.get_absolute_path
     file_name = File.basename(src_path)
     media_type = FileInfo.get_file_media_type(src_path)
-    ext = FileInfo.get_file_extension(src_path)
+    ext = FileInfo.get_extension(src_path)
     if media_type == 'office'
-      File.join('/uploads/preview', file_name).sub(ext, 'pdf')
+      File.join('/uploads/preview', file_name).sub(ext, '.pdf')
     else
       File.join('/uploads/preview', file_name)
     end
   end
   def get_absolute_preview_url
-    Rails.root.to_s + '/public' +self.get_preview_url
+    Rails.root.to_s + '/public' + self.get_preview_url
   end
 
   def get_cloned_file_absolute_path(group_otp)
@@ -58,7 +58,7 @@ class UploadDocument
 
     file_name_without_ext = File.basename(file_name,ext)
     new_file_name_without_ext = file_name_without_ext+ '_' + group_otp
-    new_file_name = new_file_name_without_ext + ext
+    new_file_name = new_file_name_without_ext + '.pdf'
     file_src.sub(file_name, new_file_name)
   end
 

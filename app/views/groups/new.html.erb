@@ -14,7 +14,7 @@
                         <div class="document row form-group" style="margin-left: 0px;">
                             <div class="col-5 col-sm-5 document_name_field">
                                 <div>
-                                    <input autofocus="autofocus" class="form-control" placeholder="Document Name" required="required" type="text" value="" name="upload_document[1][document_name]" id="upload_document_document_name">
+                                    <input autofocus="autofocus" class="form-control document_name" placeholder="Document Name" required="required" type="text" value="" name="upload_document[1][document_name]" id="upload_document_document_name">
                                 </div>
                             </div>
                             <div class="input-group col-5 col-sm-5">
@@ -58,6 +58,8 @@ $(document).ready(function() {
     $(document).on('change', '.documentFileField', function(e) {
         var fileName = $(this).val().split('fakepath')[1].slice(1);
         //replace the "Choose a file" label
+        var doc_name = fileName.split('.')[0];
+        $(this).parents('.row').find('.document_name').val(doc_name);
         $(this).next('.custom-file-label').html(fileName);
     })
     $("#add_more_button").click(function() {

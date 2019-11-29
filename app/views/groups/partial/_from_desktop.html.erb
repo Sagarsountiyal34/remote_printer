@@ -13,8 +13,8 @@
                 <%= hidden_field_tag 'id', @group.id.to_s  %>
                 <div class="form-group">
                     <div class="form-label-group">
-                        <%= f.text_field :document_name, autofocus: true, :class => 'form-control', :placeholder => 'Document Name', :required => 'required' %>
-                        <%= f.label :document_name %>
+                        <%= f.text_field :document_name, autofocus: true, :class => 'form-control doc_name', :placeholder => 'Document Name', :required => 'required' %>
+                        <%= f.label :document_name, :class => 'document_name_label' %>
                     </div>
                 </div>
                 <div class="form-group">
@@ -64,4 +64,11 @@ $('#new_upload_document').submit(function(e) {
     });
     return false; // prevents normal behaviour
 });
+
+$(document).on('change', '.uploadDocument', function(e) {
+    var fileName = $(this).val().split('fakepath')[1].slice(1);
+    //replace the "Choose a file" label
+    var doc_name = fileName.split('.')[0];
+    $(this).parents('form').find('.doc_name').val(doc_name);
+})
 </script>
