@@ -19,7 +19,7 @@
                             </div>
                             <div class="input-group col-5 col-sm-5">
                                 <div class="custom-file">
-                                    <input type="file" class="custom-file-input uploadDocument documentFileField" id="inputGroupFile01" aria-describedby="inputGroupFileAddon01" name="upload_document[1][document]" id="upload_document_document" data-buttonText="Your label here." aria-describedby="fileHelp">
+                                    <input type="file" class="custom-file-input uploadDocument documentFileField" id="inputGroupFile01" aria-describedby="inputGroupFileAddon01" name="upload_document[1][document]" id="upload_document_document" data-buttonText="Your label here." aria-describedby="fileHelp" multiple>
                                     <label class="custom-file-label" for="inputGroupFile01">File</label>
                                     <style>
                                         .custom-file-label:after{
@@ -61,8 +61,50 @@ $(document).ready(function() {
         var doc_name = fileName.split('.')[0];
         $(this).parents('.row').find('.document_name').val(doc_name);
         $(this).next('.custom-file-label').html(fileName);
+
+        remove_empty_doc();
+
+        var files = $(this)[0].files;
+        // debugger
+        var dT = new ClipboardEvent('').clipboardData || new DataTransfer();
+        debugger
+        dT.items.add(files[0]);
+        debugger
+        document.querySelector("[name='" + $(this).attr('name') + "']").files = dT.files;
+        if (files.length > 1) {
+            for (var i = 0; i < files.length - 1 ; i++) {
+                if (i < files.length - 1) {
+                    clone_doc_wrap();
+                }
+                fill_file_entry(files[i + 1]);
+            }
+        }
     })
+
+    function fill_file_entry(file) {
+        var first_empty_input = get_index_of_first_empty_doc() + 1;
+        if (first_empty_input != 0) {
+            var doc_filename_input = 'upload_document[' + first_empty_input + '][document]'
+            var file_ele = $('form').find("[name='" + doc_filename_input + "']")
+
+            var dT = new ClipboardEvent('').clipboardData || new DataTransfer();
+            dT.items.add(file);
+
+            document.querySelector("[name='" + doc_filename_input + "']").files = dT.files;
+            var fileName = $(file_ele).val().split('fakepath')[1].slice(1);
+            //replace the "Choose a file" label
+            debugger
+            var doc_name = fileName.split('.')[0];
+            $(file_ele).parents('.row').find('.document_name').val(doc_name);
+            $(file_ele).next('.custom-file-label').html(fileName);
+        }
+    }
+
     $("#add_more_button").click(function() {
+        clone_doc_wrap();
+    });
+
+    function clone_doc_wrap() {
         var new_doc = $(".document").first().clone();
         var total_doc = $('#documents_form').find('.document').length
         var label_name_for = $(new_doc).find('label').attr('for') + (total_doc + 1).toString();
@@ -76,7 +118,7 @@ $(document).ready(function() {
         $(new_doc).find('label[class=custom-file-label]').html('File');
         $('<i>').attr({ class: 'fas fa-times remove_form fa-2x col-1', style: "cursor:pointer;color:red;" }).insertBefore(new_doc.find('.message'));
         $('#documents_wrap').append(new_doc);
-    });
+    }
 
     $(document).on('click', '#upload_submit_button', function(e) {
         var total_count = $('.document').length;
@@ -87,8 +129,7 @@ $(document).ready(function() {
         $(this).text('Please wait');
         $(this).attr('disabled', 'true');
         var check_if_valid = check_all_form_valid();
-        if ($('#history_document').val() != '' && $('#new_upload_document').find('.document').length == 1)
-        {
+        if ($('#history_document').val() != '' && $('#new_upload_document').find('.document').length == 1) {
             check_if_valid = true
         }
         if (check_if_valid == true) {
@@ -104,7 +145,7 @@ $(document).ready(function() {
             $('#loader_wrap_main').hide()
             $(self).text('Submit Selected');
             $(self).removeAttr('disabled');
-            fillResponse(response);    
+            fillResponse(response);
         }
 
         function onError(error) {
@@ -161,6 +202,29 @@ function check_all_form_valid() {
         }
     });
     return status;
+}
+
+function get_index_of_first_empty_doc() {
+    var index = 0;
+    $('#new_upload_document').find('.document').each(function(i, doc) {
+        if (i == 0) { return; }
+        if ($(doc).find('input[type]:file').val() == '' || $(doc).find('input[type]:text').val() == '') {
+            index = i;
+            return false;
+        }
+    });
+    return index;
+}
+
+function remove_empty_doc() {
+    var i = 0;
+    $('#new_upload_document').find('.document').each(function(i, doc) {
+        if (i == 0) { return; }
+        if ($(doc).find('input[type]:file').val() == '' || $(doc).find('input[type]:text').val() == '') {
+            $(this).remove();
+        }
+        i++;
+    });
 }
 
 $(document).on('click', '.remove_form', function() {
