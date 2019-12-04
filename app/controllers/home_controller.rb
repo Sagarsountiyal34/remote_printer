@@ -1,12 +1,37 @@
 class HomeController < ApplicationController
 	# layout 'home_layout'
 	protect_from_forgery prepend: true
-	skip_before_action :verify_authenticity_token, :only => :contact
+	skip_before_action :verify_authenticity_token, :only => [:contact,:save_confirmable_otp]
+	skip_before_action :is_confirmed?, :except => [:home]
+
 
 	def home
 	end
 
 	def about_us
+	end
+
+	def confirm_otp
+		 #render :layout => false
+	end
+
+	def save_confirmable_otp
+		if  params[:confirmable_otp] === current_user.confirmable_otp
+			current_user.otp_confirmed = true
+			if current_user.save
+				redirect_to root_path
+			else
+				flash[:notice]= current_user.errors.full_messages
+				redirect_back(fallback_location: root_path)
+
+			end
+		else
+			# debugger
+			flash[:notice] = "OTP does not match. Please type again"
+			redirect_to action: 'confirm_otp'
+			# redirect_back(fallback_location: root_path)
+
+		end
 	end
 
 	def contact

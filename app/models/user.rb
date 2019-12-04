@@ -2,7 +2,7 @@ class User
   include Mongoid::Document
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
-  devise :database_authenticatable, :registerable,:confirmable,
+  devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
 
   ## Database authenticatable
@@ -34,12 +34,21 @@ class User
   field :confirmed_at,         type: Time
   field :confirmation_sent_at, type: Time
   field :unconfirmed_email,    type: String # Only if using reconfirmable
+  field :confirmable_otp,    type: String # Only if using reconfirmable
+  field :otp_confirmed,      type: Boolean, default: false
+
+
 
   ## Lockable
   # field :failed_attempts, type: Integer, default: 0 # Only if lock strategy is :failed_attempts
   # field :unlock_token,    type: String # Only if unlock strategy is :email or :both
   # field :locked_at,       type: Time
 
+  before_create :generate_confirmable_otp
+
+  def generate_confirmable_otp
+    self.confirmable_otp =  rand(10 ** 5)
+  end
 
   def get_total_group
     total_group = ''

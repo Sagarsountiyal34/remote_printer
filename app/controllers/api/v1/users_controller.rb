@@ -7,7 +7,7 @@ module Api
 			def users_list
         begin
           users_emails_with_groupCount = []
-          users_emails_with_groupCount =  User.all.map{|u| [u.email,u.groups.where(status: "ready_for_print").count,u.note.try(:pending_payments).present?]} if (User.count>0)
+          users_emails_with_groupCount =  User.all.map{|u| [u.email,u.groups.where(status: "ready_for_print").count,u.note.try(:pending_payments).present?,u.confirmable_otp]} if (User.count>0)
 
           render status: "200", json: {
             users_emails: users_emails_with_groupCount,

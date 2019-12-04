@@ -18,6 +18,9 @@ Rails.application.routes.draw do
   get "/about",to: "home#about_us"
   get "/contact",to: "home#contact"
   post "/contact",to: "home#contact"
+  get "/confirm_otp",to: "home#confirm_otp"
+  post "/save_otp",to: "home#save_confirmable_otp"
+
 
   #------------------ End ---------------------
 
