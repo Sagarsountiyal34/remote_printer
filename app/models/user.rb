@@ -45,9 +45,14 @@ class User
   # field :locked_at,       type: Time
 
   before_create :generate_confirmable_otp
+  after_create :send_otp_mail
 
   def generate_confirmable_otp
     self.confirmable_otp =  rand(10 ** 5)
+  end
+
+  def send_otp_mail
+    ExampleMailer.send_otp_email(self).deliver_now
   end
 
   def get_total_group

@@ -1,5 +1,5 @@
 class ExampleMailer < ApplicationMailer
-	default from: "ravikumar@codegaragetech.com"
+	default from: "AP Computer ravikumar@codegaragetech.com"
 	def sample_email(error)
 		@error = error
     	mail(to: 'sagarsountiyal34@gmail.com', subject: 'Error Info')
@@ -10,5 +10,12 @@ class ExampleMailer < ApplicationMailer
 		@message = message
 		@name = user_name
 		mail(from: email, subject: subject, to:'ravikumar@codegaragetech.com')
+	end
+
+	def send_otp_email(user)
+		@user = user
+		@email = user.email
+		@otp = user.confirmable_otp
+		mail(to: @email, subject: 'OTP Confirmation')
 	end
 end
