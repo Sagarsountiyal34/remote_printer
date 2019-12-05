@@ -50,6 +50,25 @@ module Api
 					end
      end
 
+		 def check_user_confirmed
+				 begin
+
+  			 user = User.find_by(email: params[:user_email])
+ 				 is_confirmed = user.otp_confirmed
+ 				 otp = user.confirmable_otp if !is_confirmed
+
+				 render status: "200", json: {
+					 is_confirmed: is_confirmed,
+					 otp: otp||"",
+					 message: "Success"
+				 }
+				 rescue Exception => e
+						 forbidden_error(e)
+				 end
+
+
+		 end
+
 
 
       private
