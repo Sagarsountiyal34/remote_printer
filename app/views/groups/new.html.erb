@@ -12,11 +12,6 @@
                     <input name="utf8" type="hidden" value="✓"><input type="hidden" name="authenticity_token" value="/lBy4wW+drsehD1P5YX+g9/EQJAkOSWWhh+jyLtzD6W3JdkjX7hB1jHh7MJBzV7nmEPqIA4Ltc6XOsnkh5oZjg==">
                     <div id="documents_wrap">
                         <div class="document row form-group" style="margin-left: 0px;">
-                            <div class="col-5 col-sm-5 document_name_field">
-                                <div>
-                                    <input autofocus="autofocus" class="form-control document_name" placeholder="Document Name" required="required" type="text" value="" name="upload_document[1][document_name]" id="upload_document_document_name">
-                                </div>
-                            </div>
                             <div class="input-group col-5 col-sm-5">
                                 <div class="custom-file">
                                     <input type="file" class="custom-file-input uploadDocument documentFileField" id="inputGroupFile01" aria-describedby="inputGroupFileAddon01" name="upload_document[1][document]" id="upload_document_document" data-buttonText="Your label here." aria-describedby="fileHelp" multiple>
@@ -26,6 +21,11 @@
                                             content: "Browse...";
                                         }
                                     </style>
+                                </div>
+                            </div>
+                            <div class="col-5 col-sm-5 document_name_field">
+                                <div>
+                                    <input autofocus="autofocus" class="form-control document_name" placeholder="Document Name" required="required" type="text" value="" name="upload_document[1][document_name]" id="upload_document_document_name">
                                 </div>
                             </div>
                             <!-- <i class="fas fa-times remove_form fa-2x col-1" style="cursor:pointer;color:red;"></i> -->
@@ -65,14 +65,11 @@ $(document).ready(function() {
         remove_empty_doc();
 
         var files = $(this)[0].files;
-        // debugger
         var dT = new ClipboardEvent('').clipboardData || new DataTransfer();
-        debugger
         dT.items.add(files[0]);
-        debugger
         document.querySelector("[name='" + $(this).attr('name') + "']").files = dT.files;
         if (files.length > 1) {
-            for (var i = 0; i < files.length - 1 ; i++) {
+            for (var i = 0; i < files.length - 1; i++) {
                 if (i < files.length - 1) {
                     clone_doc_wrap();
                 }
@@ -93,7 +90,6 @@ $(document).ready(function() {
             document.querySelector("[name='" + doc_filename_input + "']").files = dT.files;
             var fileName = $(file_ele).val().split('fakepath')[1].slice(1);
             //replace the "Choose a file" label
-            debugger
             var doc_name = fileName.split('.')[0];
             $(file_ele).parents('.row').find('.document_name').val(doc_name);
             $(file_ele).next('.custom-file-label').html(fileName);

@@ -27,7 +27,7 @@ class ApplicationController < ActionController::Base
 	private
 
 	def is_confirmed?
-			if user_signed_in? && (!current_user.otp_confirmed)
+			if user_signed_in? && !current_user.otp_confirmed && !devise_controller?
 				redirect_to confirm_otp_path
 			end
 		# if current_user.present? && !current_user.otp_confirmed &&  request.original_fullpath!="/confirm_otp"
