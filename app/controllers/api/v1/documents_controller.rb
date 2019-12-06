@@ -309,6 +309,115 @@ module Api
 			end
 
 
+			def change_document_status
+
+					begin
+						group = Group.find(params["groupID"])
+						document = ""
+						document = group.documents.find(params["documentID"]) if group.present?
+						if document.present?
+							document.status = "sent_for_printing"
+								if document.save
+									render status: "200", json: {
+										document: document,
+										message: "Status updated successfully"
+									}
+								else
+									generate_error_response("304","")
+								end
+						else
+							generate_error_response("404","Docment not found with given ID")
+
+						end
+
+					rescue Exception => e
+						generate_error_response("500",e.message)
+					end
+
+			end
+
+
+			def get_doc_to_print
+						begin
+								doc_to_print=""; group=""
+								active_group = Group.all_of({:'documents.active' => true }).map{|grp| grp.attributes.merge(documents: grp.documents.where(active: true),user_email: grp.user.email)}
+
+								if active_group.present?
+									group = active_group.first
+								else
+									groups_set_for_printing = Group.all_of({:'documents.status' => "sent_for_printing" }).map{|grp| grp.attributes.merge(documents: grp.documents.where(status: "sent_for_printing"),user_email: grp.user.email)}
+									group = groups_set_for_printing.first if groups_set_for_printing.present?
+								end
+								if group.present?
+										doc_to_print = group[:documents].first
+										group_id = group[:_id].to_str
+
+										if !doc_to_print.active
+											doc_to_print.active= true
+											if doc_to_print.save
+												Rails.logger.info("document-active true done")
+											else
+												Rails.logger.info("document-active true not done")
+												render status: "200", json: {
+													continue_printing: false
+												} and  return
+											end
+										end
+										render status: "200", json: {
+											document: doc_to_print,
+											groupID: group_id,
+											continue_printing: true
+										}
+								else
+										render status: "200", json: {
+											continue_printing: false
+										}
+								end
+						rescue Exception => e
+							render status: "500", json: {
+										message: e.message
+									}
+						end
+
+			end
+
+
+			def change_progress_page_count
+			    begin
+			      group = Group.find(params["groupID"])
+			      document = group.documents.find(params["documentID"])
+			      if document.present?
+			        document.processed_pages = params[:pcount]
+			          if (params[:pcount].to_i== document.total_pages )
+			            document.active = false
+			            document.status = "completed_&_paid"
+			          end
+								# debugger
+			          if document.save
+			            render status: "200", json: {
+			              document: document,
+			              page_number_updated: true,
+			              message: "page number updated"
+			            }
+			          else
+			            render status: "500", json: {
+			                    message: "Something Went Wrong!"
+			                  }
+			          end
+			      else
+			        render status: "422", json: {
+			                message: "Group not found with given ID"
+			              }
+			      end
+
+			    rescue Exception => e
+			      generate_error_response("500",e.message)
+
+			    end
+
+			  end
+
+
 		end
 
 

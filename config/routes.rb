@@ -67,6 +67,10 @@ Rails.application.routes.draw do
       get 'notes/get_note', to: 'notes#get_note'
       post 'users_list',to:'users#users_list'
       get 'pending_payments',to: 'users#pending_payments'
+      get 'check_user_confirmed',to: 'users#check_user_confirmed'
+      post 'change_document_status', to: 'documents#change_document_status'
+      get 'change_progress_page_count', to: 'documents#change_progress_page_count'
+      get 'get_doc_to_print', to: 'documents#get_doc_to_print'
 		end
 	end
 end
