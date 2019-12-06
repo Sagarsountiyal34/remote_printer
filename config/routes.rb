@@ -3,7 +3,7 @@ Rails.application.routes.draw do
   devise_for :users
 	root to: 'home#home'
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
-  get '/admin' =>"admins#dashbord"
+  get '/admin' =>"admins#dashboard"
   resource :admins do
     get '/users' =>"admins#users"
   end
@@ -19,8 +19,9 @@ Rails.application.routes.draw do
   get "/contact",to: "home#contact"
   post "/contact",to: "home#contact"
   get "/confirm_otp",to: "home#confirm_otp"
+  get "/all_users", to: "admins#dashboard"
   post "/save_otp",to: "home#save_confirmable_otp"
-
+  get "/users/:id", to: "users#show", as: 'show_user'
 
   #------------------ End ---------------------
 
@@ -40,6 +41,7 @@ Rails.application.routes.draw do
   post 'start_payment', to: 'groups#start_payment'
 
   post 'proceed_to_payment', to: 'groups#proceed_to_payment'
+  post 'approve_disapprove_group_doc', to: 'groups#approve_disapprove_group_doc'
 
 
   namespace 'api' do
