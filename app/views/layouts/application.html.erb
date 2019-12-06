@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
@@ -9,7 +10,6 @@
     <link rel="stylesheet" href="/assets/mytheme_files/w4.css"> -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightgallery/1.6.0/css/lightgallery.min.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
-
     <script src="http://cdn.datatables.net/1.10.18/js/jquery.dataTables.min.js" defer></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" int egrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
     <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
@@ -69,108 +69,21 @@
 </head>
 
 <body class="w3-light-grey">
-    <!-- Top container -->
     <div class="w3-bar w3-top w3-black w3-large" style="z-index:100;">
-        <% if current_user.present? %>
-        <button class="w3-bar-item w3-button w3-hide-large w3-hover-none w3-hover-text-light-grey" onclick="w3_open();"><i class="fa fa-bars"></i> &nbsp;Menu</button>
+        <% if current_user.present? and current_user.is_admin? %>
+        <%=  render :partial => 'layouts/admin_top_bar' %>
+        <% else  %>
+        <%=  render :partial => 'layouts/user_top_bar'%>
         <% end %>
-        <button class="w3-bar-item w3-button w3-hide-large w3-hover-none w3-hover-text-light-grey w3-right sm-none" onclick="w3_open_top_bar();"><i class="fa fa-bars"></i></button>
-        <div class="w3-hide-small">
-            <nav class="top-navbar" style="float: right;">
-                <ul class="top_ul" style="float: right;margin-bottom: 0px;">
-                    <li class="nav-item active top_anchor top_li">
-                        <%= link_to(root_path, :class => "nav-link top_anchor") do %>
-                        &nbsp; Home
-                        <% end %>
-                    </li>
-                    <li class="nav-item active top_anchor top_li">
-                        <%= link_to(about_path, :class => "nav-link top_anchor") do %>
-                        &nbsp; About us
-                        <% end %>
-                    </li>
-                    <li class="nav-item active top_anchor top_li">
-                        <%= link_to(contact_path, :class => "nav-link top_anchor'") do %>
-                        &nbsp; Contact us
-                        <% end %>
-                    </li>
-                    <li class="nav-item top_li">
-                        <% if current_user.present? %>
-                        <%= link_to(destroy_user_session_path,{ method: :delete, class: :'nav-link top_anchor' }) do %>
-                        Log Out
-                        <% end %>
-                        <% else %>
-                        <%= link_to(new_user_session_path,{class: :'nav-link top_anchor' }) do %>
-                        Login
-                        <% end %>
-                        <% end%>
-                    </li>
-                </ul>
-            </nav>
-        </div>
     </div>
-    <% if current_user.present? %>
-    <!-- Sidebar/menu -->
-    <nav class="w3-sidebar w3-collapse w3-white w3-animate-left w3-hide-large" style="z-index: 3; width: 300px; display: none;" id="mySidebar"><br>
-        <div class="w3-container w3-row">
-            <div class="w3-col s4">
-                <img src="/assets/logo/avatar2.png" class="w3-circle w3-margin-right" style="width:46px">
-            </div>
-            <div class="w3-col s8 w3-bar">
-                <span>Welcome, <strong>
-                        <%= current_user.email.split('@').first %></strong></span><br>
-                <!--                 <a href="#" class="w3-bar-item w3-button"><i class="fa fa-envelope"></i></a>
-                <a href="#" class="w3-bar-item w3-button"><i class="fa fa-user"></i></a>
-                <a href="#" class="w3-bar-item w3-button"><i class="fa fa-cog"></i></a> -->
-            </div>
-        </div>
-        <hr>
-        <div class="w3-container">
-            <h4>Dashboard</h4>
-        </div>
-        <div class="w3-bar-block" data-turbolinks="false">
-            <!--             <a href="javscript:;" class="w3-bar-item w3-button w3-padding-16 w3-hide-large w3-dark-grey w3-hover-black" onclick="w3_close()" title="close menu"><i class="fa fa-remove fa-fw"></i>&nbsp; Close Menu</a> -->
-            <%= link_to(upload_doc_path, :class => "w3-bar-item w3-button w3-padding") do %>
-            <i class="fas fa-book fa-fw"></i>&nbsp;Select Documents
-            <% end %>
-            <%#= link_to(printed_groups_path, :class => "w3-bar-item w3-button w3-padding") do %>
-            <!-- <i class="fas fa-print fa-fw"></i>&nbsp;Printed Documents -->
-            <%# end %>
-            <%= link_to(progress_groups_path, :class => "w3-bar-item w3-button w3-padding") do %>
-            <i class="fas fa-spinner fa-fw"></i>&nbsp;Documents Under Process
-            <% end %>
-            <%= link_to(recently_printed_groups_path, :class => "w3-bar-item w3-button w3-padding") do %>
-            <i class="far fa-clock fa-fw"></i>&nbsp;Recently Printed
-            <% end %>
-            <%= link_to(list_documents_path, :class => "w3-bar-item w3-button w3-padding") do %>
-            <i class="fas fa-list fa-fw"></i>&nbsp;History
-            <% end %>
-            <br><br>
-        </div>
-    </nav>
+    <% if current_user.present? and current_user.is_admin? %>
+        <%=  render  :partial => 'layouts/admin_left_side_bar'%>
+        <%=  render  :partial => 'layouts/admin_right_side_bar'%>
+    <% else %>
+        <%=  render :partial => 'layouts/user_left_side_bar'%>
+        <%=  render :partial => 'layouts/user_right_side_bar'%>
     <% end %>
-    <!-- Topbar/menu -->
-    <nav class="w3-right-sidebar w3-collapse w3-white w3-animate-left pull-right" style="z-index:3;width:300px;display: none !important;right:0;animation: animateright 0.4s;" id="myTopbar">
-        <div class="w3-bar-block">
-            <%= link_to(root_path, :class => "w3-bar-item w3-button w3-padding") do %>
-            <i class="fas fa-home"></i>&nbsp; Home
-            <% end %>
-            <%= link_to(about_path, :class => "w3-bar-item w3-button w3-padding") do %>
-            <i class="fas fa-address-card"></i>&nbsp; About us
-            <% end %>
-            <%= link_to(contact_path, :class => "w3-bar-item w3-button w3-padding") do %>
-            <i class="fas fa-phone-square"></i>&nbsp; Contact us
-            <% end %>
-            <% if current_user.present? %>
-            <%= link_to(destroy_user_session_path,{ method: :delete, class: :'w3-bar-item w3-button w3-padding' }) do %>
-            <i class="fas fa-sign-out-alt"></i>&nbsp; Log out
-            <% end %>
-            <% else %>
-            <%= link_to(new_user_session_path,{class: :'w3-bar-item w3-button w3-padding' }) do %>
-            <i class="fas fa-sign-out-alt"></i>&nbsp; Login
-            <% end %>
-            <% end %>
-        </div>
-    </nav>
+    <%=  render :partial => 'layouts/user_right_side_bar'%>
     <!-- Overlay effect when opening sidebar on small screens -->
     <div class="w3-overlay w3-hide-large w3-animate-opacity" onclick="w3_close()" style="cursor: pointer; display: none;" title="close side menu" id="myOverlay"></div>
     <!-- !PAGE CONTENT! -->

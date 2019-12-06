@@ -26,7 +26,6 @@ class HomeController < ApplicationController
 
 			end
 		else
-			# debugger
 			flash[:notice] = "OTP does not match. Please type again"
 			redirect_to action: 'confirm_otp'
 			# redirect_back(fallback_location: root_path)

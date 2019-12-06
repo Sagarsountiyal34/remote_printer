@@ -1,0 +1,126 @@
+<div class="card mb-3">
+    <div class="card-header">
+        <i class="fas fa-table"></i>
+        Email: <span id="email">
+            <%= @user.email %></span>
+        <span style="float:right;">
+            <i class="fas fa-table"></i>
+            OTP:
+            <%= @user.confirmable_otp %>
+        </span>
+    </div><br>
+    <div class="card-body">
+        <% @user.groups.each do |group| %>
+        <div class="table-responsive group" data-id="<%= group.id %>">
+            <table class="table table-bordered document_table" id="userTable" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th width="40%">Submitted On</th>
+                        <th width="25%">OTP</th>
+                        <th width="25%">Status</th>
+                        <!-- <th width="10%">Details</th> -->
+                    </tr>
+                </thead>
+                <tbody id="tbody_head">
+                    <a href="">
+                        <tr data-id="<%= group.id %>" class="group_record">
+                            <th class="email">
+                                <%= group.submitted_time.strftime("%d %B %Y , %l:%M %p") %>
+                            </th>
+                            <th class="otp">
+                                <%= group.otp %>
+                            </th>
+                            <th>
+                                <%= group.status %>
+                            </th>
+                            <!--  <td>
+                                    <%#= link_to 'Details', { controller: :groups, action: :edit, id: group.id}, :class => 'group_detail_anchor'  %>
+                                </td> -->
+                        </tr>
+                    </a>
+                </tbody>
+                <% group.documents.each do |doc| %>
+                <table class="table table-bordered group_table" id="userTable" width="100%" cellspacing="0">
+                    <tr data-id="<%= doc.id %>" class="doc_record">
+                        <td width="10%">
+                            <% if doc.is_document_deleted? %>
+                            Deleted
+                            <% else %>
+                            <div class="item group_item" data-iframe="<%= have_to_show_iframe(doc) %>" data-src="<%= doc.get_preview_url %>">
+                                <a href="javscript:;"><i class="fas fa-eye"></i></a>
+                            </div>
+                            <% end %>
+                        </td>
+                        <td class="doc_name" width="40%">
+                            <%= doc.document_name %>
+                        </td>
+                        <td width="10%">
+                            <%= FileInfo.get_file_media_type(doc.document_url).capitalize %>
+                        </td>
+                        <td width="10%">
+                            <%= doc.total_pages %>
+                        </td>
+                        <td width="10%">
+                            <%= doc.status %>
+                        </td>
+                        <td width="20%">
+                            <button name="button" type="submit" class="btn btn-primary approve_disapprove_doc <%= doc.is_approved ? 'red_background' : 'green_background'%>" data-is-active="<%= doc.is_approved %>" data-id="<%= doc.id %>">
+                                <%= doc.is_approved ? 'Disapprove' : 'Approve'%> </button>
+                        </td>
+                    </tr>
+                </table>
+                <% end %>
+            </table>
+        </div>
+        <% end %>
+    </div>
+</div>
+<script type="text/javascript">
+$(document).ready(function() {
+    $('.group_table').each(function(i, table) {
+        $(table).lightGallery({
+            selector: '.group_item',
+            iframeMaxWidth: '80%',
+            thumbnail: false,
+        });
+    });
+
+
+
+    $(".approve_disapprove_doc").click(function() {
+        var group_id = $(this).parents('.group').data('id')
+        var group_doc_id = $(this).data('id');
+        var is_active = $(this).data('isActive');
+        $(this).text('Please Wait');
+        $(this).attr('disabled', true);
+        var self = this;
+
+        function successcb(res) {
+            if (res != null) {
+                $('#users').html(res);
+                if ($(self).data('isActive') == true) {
+                    $.notify('Document Disapproved', 'info');
+                } else {
+                    $.notify('Document Approved', 'info')
+                }
+
+            } else {
+                $.notify('Try agin', 'error')
+            }
+        }
+        approve_disapprove(group_id, group_doc_id, is_active, successcb);
+    });
+});
+
+function approve_disapprove(group_id, group_doc_id, is_active, sb) {
+    $.ajax({
+        type: "POST",
+        beforeSend: setCsrfToken, // implemented in
+        url: "/approve_disapprove_group_doc",
+        data: { group_id: group_id, group_doc_id: group_doc_id, is_active: is_active },
+        success: function(data) {
+            if (sb) sb(data)
+        }
+    });
+}
+</script>

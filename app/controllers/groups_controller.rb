@@ -236,9 +236,27 @@ class GroupsController < ApplicationController
 		end
 
 	end
+	def approve_disapprove_group_doc
+		begin
+			group = Group.find(params[:group_id])
+			group_doc = group.documents.find(params[:group_doc_id])
+			if group_doc.update_attribute('is_approved', !to_boolean(params[:is_active]))
+				@user = User.includes(:groups).find(group.user_id)
+				render partial: 'users/group_list'
+			else
+				render json: { message: false }.to_json, status: 200
+			end	
+		rescue Exception => e
+			render json: { message: false }.to_json, status: 200
+		end
+	end
 
 	private
 
+	def to_boolean(str)
+  		str == 'true'
+	end
+	
 	def document_params
 		params.require("upload_document").permit(:document_name, :document)
 	end

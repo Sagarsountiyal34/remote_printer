@@ -18,7 +18,6 @@ module Api
 		          				message = "Note creates Successfully."
 		          				status = true
 	          				else
-											# debugger
 	          					user.note.update_attribute('note_text', note_text)
 	          					message = "Note Updated Successfully."
 	          				end

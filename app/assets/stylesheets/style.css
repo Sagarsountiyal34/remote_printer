@@ -300,3 +300,12 @@ embed {
     overflow: hidden;
 }
 
+.green_background{
+    background-color: green;
+    border-color: green;
+}
+
+.red_background{
+    background-color: red;
+    border-color: red;
+}

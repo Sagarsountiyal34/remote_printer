@@ -1,0 +1,26 @@
+<% if current_user.present? %>
+<button class="w3-bar-item w3-button w3-hide-large w3-hover-none w3-hover-text-light-grey" onclick="w3_open();"><i class="fa fa-bars"></i> &nbsp;Menu</button>
+<% end %>
+<button class="w3-bar-item w3-button w3-hide-large w3-hover-none w3-hover-text-light-grey w3-right sm-none" onclick="w3_open_top_bar();"><i class="fa fa-bars"></i></button>
+<div class="w3-hide-small">
+    <nav class="top-navbar" style="float: right;">
+        <ul class="top_ul" style="float: right;margin-bottom: 0px;">
+            <li class="nav-item active top_anchor top_li">
+                <%= link_to(admin_path, :class => "nav-link top_anchor") do %>
+                &nbsp; Home
+                <% end %>
+            </li>
+            <li class="nav-item top_li">
+                <% if current_user.present? %>
+                <%= link_to(destroy_user_session_path,{ method: :delete, class: :'nav-link top_anchor' }) do %>
+                Log Out
+                <% end %>
+                <% else %>
+                <%= link_to(new_user_session_path,{class: :'nav-link top_anchor' }) do %>
+                Login
+                <% end %>
+                <% end%>
+            </li>
+        </ul>
+    </nav>
+</div>

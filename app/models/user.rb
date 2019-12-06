@@ -1,5 +1,6 @@
 class User
   include Mongoid::Document
+  include Mongoid::Timestamps
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
@@ -70,6 +71,14 @@ class User
 
   def check_if_any_group_ready_for_payment
     self.groups.find_by(:status => 'ready_for_payment')
+  end
+
+  def is_user?
+    self.role == 'user'
+  end
+
+  def is_admin?
+    self.role == 'admin'
   end
 
 end

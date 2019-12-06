@@ -1,0 +1,16 @@
+<nav class="w3-right-sidebar w3-collapse w3-white w3-animate-left pull-right" style="z-index:3;width:300px;display: none !important;right:0;animation: animateright 0.4s;" id="myTopbar">
+    <div class="w3-bar-block">
+        <%= link_to(admin_path, :class => "w3-bar-item w3-button w3-padding") do %>
+        <i class="fas fa-home"></i>&nbsp; Home
+        <% end %>
+        <% if current_user.present? %>
+        <%= link_to(destroy_user_session_path,{ method: :delete, class: :'w3-bar-item w3-button w3-padding' }) do %>
+        <i class="fas fa-sign-out-alt"></i>&nbsp; Log out
+        <% end %>
+        <% else %>
+        <%= link_to(new_user_session_path,{class: :'w3-bar-item w3-button w3-padding' }) do %>
+        <i class="fas fa-sign-out-alt"></i>&nbsp; Login
+        <% end %>
+        <% end %>
+    </div>
+</nav>
