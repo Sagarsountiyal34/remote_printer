@@ -10,7 +10,8 @@
         </span>
     </div><br>
     <div class="card-body">
-        <% @user.groups.each do |group| %>
+        <% if @groups.present? %>
+        <% @groups.each do |group| %>
         <div class="table-responsive group" data-id="<%= group.id %>">
             <table class="table table-bordered document_table" id="userTable" width="100%" cellspacing="0">
                 <thead>
@@ -25,7 +26,9 @@
                     <a href="">
                         <tr data-id="<%= group.id %>" class="group_record">
                             <th class="email">
+                            	<% if group.submitted_time.present? %>
                                 <%= group.submitted_time.strftime("%d %B %Y , %l:%M %p") %>
+                                <% end %>
                             </th>
                             <th class="otp">
                                 <%= group.otp %>
@@ -72,6 +75,9 @@
                 <% end %>
             </table>
         </div>
+        <% end %>
+        <% else %>
+        <b style="color: red;"><%= @user.email %> did not sent any group for printing</b>
         <% end %>
     </div>
 </div>

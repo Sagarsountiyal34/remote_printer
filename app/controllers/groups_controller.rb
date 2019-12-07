@@ -240,8 +240,9 @@ class GroupsController < ApplicationController
 		begin
 			group = Group.find(params[:group_id])
 			group_doc = group.documents.find(params[:group_doc_id])
-			if group_doc.update_attribute('is_approved', !to_boolean(params[:is_active]))
+			if group_doc.update_attributes(:is_approved =>  !to_boolean(params[:is_active]), :status => 'sent_for_printing')
 				@user = User.includes(:groups).find(group.user_id)
+				@groups = @user.groups.order_by(submitted_time: :desc).select{|g| g.status == 'ready_for_print'}
 				render partial: 'users/group_list'
 			else
 				render json: { message: false }.to_json, status: 200

@@ -8,14 +8,10 @@
             <i class="fas fa-table"></i>
             Total Users: <span id="total_group_item">
                 <%= @users.count %></span>
-            <!-- <span style="float:right;">
-                <i class="fas fa-table"></i>
-                Temp: 1
-            </span> -->
         </div><br>
         <div class="card-body">
             <div class="table-responsive">
-                <table class="table table-bordered document_table" id="userTable" width="100%" cellspacing="0">
+                <table class="table table-bordered document_table" id="dataTable" width="100%" cellspacing="0">
                     <thead>
                         <tr>
                             <th width="40%">Email</th>
@@ -25,35 +21,94 @@
                         </tr>
                     </thead>
                     <tbody id="tbody_head">
-                        <% @users.each do |user| %>
-                        <a href="">
-                            <tr data-id="<%= user.id %>" class="user_record">
+                        <%# @users.each do |user| %>
+                        <!-- <a href=""> -->
+                        <!-- <tr data-id="<%#= user.id %>" class="user_record">
                                 <td class="email">
-                                    <%= user.email %>
+                                    <%#= user.email %>
                                 </td>
                                 <td class="otp">
-                                    <%= user.confirmable_otp %>
+                                    <%#= user.confirmable_otp %>
                                 </td>
                                 <td>
-                                    <%= user.otp_confirmed ? 'yes' : 'no' %>
+                                    <%#= user.otp_confirmed ? 'yes' : 'no' %>
                                 </td>
                                 <td>
-                                    <%= link_to 'Details', show_user_url(:id => user.id.to_s), :class => 'group_detail_anchor'  %>
+                                    <%#= link_to 'Details', show_user_url(:id => user.id.to_s), :class => 'group_detail_anchor'  %>
                                 </td>
                             </tr>
-                        </a>
-                        <% end %>
+                        </a> -->
+                        <%# end %>
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
 </div>
-<script type="text/javascript">
-$(document).ready(function() {
-    $('#userTable').DataTable({
-        "ordering": false,
+<script>
+function initDataTable() {
+    var document_table = $('#dataTable').DataTable({
+        "serverSide": true,
+        "processing": true,
+        // "searching": false,
         "bLengthChange": false,
+        "lengthMenu": [10],
+        "ajax": {
+            "url": "/admins/user_list",
+            "dataSrc": function(json) {
+                return json.users;
+            },
+            "data": function(data) {
+                var page_number = $('#dataTable').DataTable().page.info().page;
+                data['page_number'] = page_number
+                return data;
+            }
+        },
+        "columns": [
+            { "data": "email" },
+            { "data": "otp" },
+            { "data": "is_confirmed" },
+            { "data": "detail" }
+        ],
+
+        "columnDefs": [{
+                "targets": 3,
+                "data": "detail",
+                "render": function(data, type, row, meta) {
+                    if (data != false) {
+                        data = '<a href="/users/' + data['$oid'] + '" ' + 'class="group_detail_anchor">Details</a>'
+                    }
+                    return data;
+                }
+            },
+            {
+                "targets": 1,
+                "data": "document_name",
+                "className": "table_entry_name",
+                'createdCell': function(td, cellData, rowData, row, col) {
+                    $(td).attr('data-original-title', cellData);
+                },
+                "render": function(data, type, row, meta) {
+                    return data;
+                }
+            }
+        ],
+        "createdRow": function(row, data, dataIndex) {
+            $(row).addClass('user_record');
+        },
+
+        "fnDrawCallback": function() {
+            // $('.dataTables_filter input').unbind();
+            // $('.dataTables_filter input').bind('keyup', function(e) {
+            //     if (e.keyCode == 13) {
+            //         document_table.search(this.value).draw();
+            //     }
+            // });
+        }
     });
+}
+
+$(document).ready(function() {
+    initDataTable();
 });
 </script>

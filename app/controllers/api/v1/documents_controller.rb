@@ -392,7 +392,6 @@ module Api
 			            document.active = false
 			            document.status = "completed_&_paid"
 			          end
-								# debugger
 			          if document.save
 			            render status: "200", json: {
 			              document: document,

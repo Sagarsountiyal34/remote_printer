@@ -6,6 +6,7 @@ Rails.application.routes.draw do
   get '/admin' =>"admins#dashboard"
   resource :admins do
     get '/users' =>"admins#users"
+    get "/user_list", to: "admins#user_list"
   end
   #------------------ Search ------------------
   get "/search",to: "search#show"
