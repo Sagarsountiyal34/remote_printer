@@ -31,6 +31,13 @@
                 <% end %>
                 <% end%>
             </li>
+            <% if !current_user.present? %>
+            <li class="nav-item top_li">
+                <%= link_to(new_user_registration_path,{ class: :'nav-link top_anchor' }) do %>
+                Sign Up
+                <% end %>
+            </li>
+            <% end%>
         </ul>
     </nav>
 </div>

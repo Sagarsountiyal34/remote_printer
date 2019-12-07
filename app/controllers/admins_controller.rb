@@ -1,8 +1,8 @@
 class AdminsController < ApplicationController
 	# layout "admin_layout"
 
-	# before_action :authenticate_user!,:admin?
-	# protect_from_forgery prepend: true
+	before_action :authenticate_user!
+	protect_from_forgery prepend: true
 
 	def dashboard
 		@users = User.not.where(role: 'admin').order_by(created_at: :desc)
@@ -29,7 +29,7 @@ class AdminsController < ApplicationController
 		filter_users.each do |u|
 			user = {}
 			user[:email] = u.email
-			user[:otp] = u.confirmable_otp
+			user[:otp] = u.confirmable_otp.present? ? u.confirmable_otp : ''
 			user[:is_confirmed] = u.otp_confirmed ? 'yes' : 'no'
 			user[:detail] = u.id
 			user_arr.push(user)

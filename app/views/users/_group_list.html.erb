@@ -3,11 +3,13 @@
         <i class="fas fa-table"></i>
         Email: <span id="email">
             <%= @user.email %></span>
-        <span style="float:right;">
-            <i class="fas fa-table"></i>
-            OTP:
-            <%= @user.confirmable_otp %>
-        </span>
+        <% if @user.confirmable_otp.present? %>
+            <span style="float:right;">
+                <i class="fas fa-table"></i>
+                OTP:
+                <%= @user.confirmable_otp %>
+            </span>
+        <% end %>
     </div><br>
     <div class="card-body">
         <% if @groups.present? %>

@@ -18,5 +18,10 @@
         <i class="fas fa-sign-out-alt"></i>&nbsp; Login
         <% end %>
         <% end %>
+        <% if !current_user.present? %>
+            <%= link_to(new_user_registration_path, :class => "w3-bar-item w3-button w3-padding") do %>
+            <i class="fas fa-user-plus"></i>&nbsp; Sign up
+            <% end %>
+        <% end %>
     </div>
 </nav>
