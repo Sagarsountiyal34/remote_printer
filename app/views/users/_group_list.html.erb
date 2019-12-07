@@ -104,14 +104,13 @@ $(document).ready(function() {
         var self = this;
 
         function successcb(res) {
-            if (res != null) {
+            if (res['message'] != false) {
                 $('#users').html(res);
                 if ($(self).data('isActive') == true) {
                     $.notify('Document Disapproved', 'info');
                 } else {
                     $.notify('Document Approved', 'info')
                 }
-
             } else {
                 $.notify('Try agin', 'error')
             }
