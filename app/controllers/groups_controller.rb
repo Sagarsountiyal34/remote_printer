@@ -245,10 +245,10 @@ class GroupsController < ApplicationController
 				@groups = @user.groups.order_by(submitted_time: :desc).select{|g| g.status == 'ready_for_print'}
 				render partial: 'users/group_list'
 			else
-				render json: { message: false }.to_json, status: 200
+				render json: { message: false }.to_json, status: 422
 			end	
 		rescue Exception => e
-			render json: { message: false }.to_json, status: 200
+			render json: { message: false }.to_json, status: 500
 		end
 	end
 

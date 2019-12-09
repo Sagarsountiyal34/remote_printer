@@ -99,7 +99,6 @@ $(document).ready(function() {
         var group_id = $(this).parents('.group').data('id')
         var group_doc_id = $(this).data('id');
         var is_active = $(this).data('isActive');
-        $(this).text('Please Wait');
         $(this).attr('disabled', true);
         var self = this;
 
@@ -112,14 +111,19 @@ $(document).ready(function() {
                     $.notify('Document Approved', 'info')
                 }
             } else {
-                $.notify('Try agin', 'error')
+                $(self).attr('disabled', false);
+                $.notify('Something wrong', 'error')
             }
         }
-        approve_disapprove(group_id, group_doc_id, is_active, successcb);
+        function errorcb(res){
+            $(self).attr('disabled', false);
+            $.notify('Something wrong', 'error')
+        }
+        approve_disapprove(group_id, group_doc_id, is_active, successcb, errorcb);
     });
 });
 
-function approve_disapprove(group_id, group_doc_id, is_active, sb) {
+function approve_disapprove(group_id, group_doc_id, is_active, sb, eb) {
     $.ajax({
         type: "POST",
         beforeSend: setCsrfToken, // implemented in
@@ -127,6 +131,10 @@ function approve_disapprove(group_id, group_doc_id, is_active, sb) {
         data: { group_id: group_id, group_doc_id: group_doc_id, is_active: is_active },
         success: function(data) {
             if (sb) sb(data)
+        },
+        error: function(data)
+        {
+            if (eb) eb(data)
         }
     });
 }
