@@ -15,9 +15,18 @@ class GroupDocument
   field :active, type: Boolean, default: false
   field :is_approved, type: Boolean, default: false
 
+  before_update :active_next_document
 
   validates :status, inclusion: { in: ['pending','sent_for_printing', 'processing', 'failed', 'completed_&_paid','completed_&_unpaid'] }
   after_save :create_note_entry
+
+
+  def active_next_document
+    if (status_changed? && status_was =="sent_for_printing" && (status =="completed_&_paid"||status =="completed_&_unpaid"||status=="interrupted") )
+      next_doc_to_print = group.documents.where(status: "sent_for_printing").where(id!= self.id).first
+      next_doc_to_print.update(active:true) if next_doc_to_print.present?
+    end
+  end
 
   def create_note_entry
     doc_user =  self.group.user
