@@ -194,6 +194,7 @@ module Api
 						document.processed_pages = params[:pcount]
 							if (params[:pcount].to_i== document.total_pages )
 								document.active = false
+								document.is_approved =  false
 								document.status = "completed"
 							end
 							if document.save
@@ -316,8 +317,7 @@ module Api
 						document = ""
 						document = group.documents.find(params["documentID"]) if group.present?
 						if document.present?
-							document.status = "sent_for_printing"
-								if document.save
+								if document.update_attribute('status', 'sent_for_printing')
 									render status: "200", json: {
 										document: document,
 										message: "Status updated successfully"
@@ -376,7 +376,7 @@ module Api
 						rescue Exception => e
 							render status: "500", json: {
 										message: e.message
-									}
+							}
 						end
 
 			end
@@ -414,7 +414,14 @@ module Api
 
 			    end
 
-			  end
+			end
+
+			private
+			def generate_error_response(code,message)
+				render status: code, json: {
+					message: message
+				}
+			end
 
 
 		end
