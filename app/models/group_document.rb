@@ -5,12 +5,13 @@ class GroupDocument
   # Shrine.plugin :keep_files, destroyed: true
   embedded_in :group
 
-  belongs_to :upload_document
+  # belongs_to :upload_document
 
   field :document_name,           type: String, default: ""
   field :document_data,   		  type: Hash, default: {}
   field :status, 				  type: String, default: "pending"
   field :total_pages, type: Integer,default: 0
+  field :upload_document_id, type: String 
   field :processed_pages, type: Integer,default: 0
   field :active, type: Boolean, default: false
   field :is_approved, type: Boolean, default: false
