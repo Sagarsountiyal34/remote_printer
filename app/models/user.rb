@@ -3,12 +3,15 @@ class User
   include Mongoid::Timestamps
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
+  attr_writer :login
   devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :validatable
+         :recoverable, :rememberable, :validatable, :authentication_keys => {login: true, login: false}
 
   ## Database authenticatable
   field :email,              type: String, default: ""
+  field :phone_number, type: String, default: ""
   field :role,              type: String, default: "user"
+  field :phone_otp, type: String, default: ""
   field :encrypted_password, type: String, default: ""
 
   ## Recoverable
@@ -53,8 +56,28 @@ class User
   end
 
   def send_otp_mail
-    ExampleMailer.send_otp_email(self).deliver_now
+    ExampleMailer.send_otp_email(self).deliver_now if self.email.present?
   end
+
+  def self.find_first_by_auth_conditions(warden_conditions)
+    debugger
+    conditions = warden_conditions.dup
+    if login = conditions.delete(:login)
+      self.any_of({ :phone_number =>  /^#{::Regexp.escape(login)}$/i }, { :email =>  /^#{::Regexp.escape(login)}$/i }).first
+    else
+      super
+    end
+  end
+    # function to handle user's login via email or username
+  def self.find_for_database_authentication(warden_conditions)
+    debugger
+    conditions = warden_conditions.dup
+    if login = conditions.delete(:login).downcase
+      where(conditions).where('$or' => [ {:phone_number => /^#{::Regexp.escape(login)}$/i}, {:email => /^#{::Regexp.escape(login)}$/i} ]).first
+    else
+      where(conditions).first
+    end
+  end 
 
   def get_total_group
     total_group = ''
@@ -80,5 +103,14 @@ class User
   def is_admin?
     self.role == 'admin'
   end
+  def email_required?
+    false
+  end
+
+
+  def login
+    @login || self.phone_number || self.email
+  end
+
 
 end

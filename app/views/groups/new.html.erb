@@ -8,7 +8,7 @@
                 <li class="breadcrumb-item active">Select Documents</li>
             </ol>
             <div id="documents_form">
-                <form class="new_upload_document new_document_form" id="new_upload_document" enctype="multipart/form-data" action="/save_group" accept-charset="UTF-8" method="post">
+                <form class="new_upload_document new_document_form" id="new_upload_document" enctype="multipart/form-data" action="<%= current_user.present? ? '/save_group' : '/save_docs'%>" accept-charset="UTF-8" method="post" group_id="">
                     <input name="utf8" type="hidden" value="✓"><input type="hidden" name="authenticity_token" value="/lBy4wW+drsehD1P5YX+g9/EQJAkOSWWhh+jyLtzD6W3JdkjX7hB1jHh7MJBzV7nmEPqIA4Ltc6XOsnkh5oZjg==">
                     <div id="documents_wrap">
                         <div class="document row form-group" style="margin-left: 0px;">
@@ -39,10 +39,16 @@
             </div>
             <div id="action_button_2" style="float:right;">
                 <%= button_tag "Add New", :class => 'btn btn-primary main_button', :id => 'add_more_button' %>
+                <% if current_user.present? %>
                 <%= button_tag "Add Older", :class => 'btn btn-warn main_button', :id => 'add_more_from_history_button', :data => {:toggle => 'modal', :target => '#fromHistory'} %>
+                <% end %>
             </div><br>
             <div id="action_button">
+                <% if current_user.present? %>
                 <%= button_tag "Submit Selected", :class => 'btn_1', :id => 'upload_submit_button' %>
+                <% else %>
+                <a class="btn_1" href="#" data-toggle="modal" data-target="#phoneNumberVerification2" id="continue_with_number">Submit Selected</a>
+                <% end %>
             </div>
         </div>
     </div>
@@ -52,7 +58,12 @@
 </div>
 <br>
 <br><br><br><br><br>
+<% if current_user.present? %>
 <%= render "groups/partial/from_history_main" %>
+<% else %>
+<%= render "groups/partial/phone_number_verification_partial_modal" %>
+<% end %>
+<% if current_user.present? %>
 <script>
 $(document).ready(function() {
     $(document).on('change', '.documentFileField', function(e) {
@@ -233,3 +244,4 @@ $(document).on('click', '.remove_history_document', function() {
     $(this).parent('.history_document_wrapper').remove();
 });
 </script>
+<% end %>

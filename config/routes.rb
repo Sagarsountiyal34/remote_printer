@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
   get 'group/view'
-  devise_for :users
+  # devise_for :users
 	root to: 'home#home'
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
   get '/admin' =>"admins#dashboard"
@@ -10,7 +10,16 @@ Rails.application.routes.draw do
   end
   #------------------ Search ------------------
   get "/search",to: "search#show"
-
+    Rails.application.routes.draw do
+      devise_for :users, controllers: {
+          registrations: 'users/registrations',
+          sessions: 'users/sessions',
+        passwords: 'users/passwords'
+      }
+        # devise_scope :user do
+        #     post 'users/create_customer', to: 'users/registrations#create_customer'
+        # end
+    end
   #------------------- end --------------------
 
   #---------------- Home url's ----------------
@@ -28,9 +37,11 @@ Rails.application.routes.draw do
 
   get 'upload_doc', to: 'groups#new'
   post 'save_group', to: 'groups#create'
+  post 'save_docs', to: 'documents#save_doc_without_user'
   post 'update_group', to: 'groups#update'
   get 'edit_group/:id', to: 'groups#edit', as: 'group_page'
   get 'list_documents', to: 'documents#list_documents'
+  post 'create_account_with_group', to: 'users#create_account_with_group'
   get 'get_documents', to: 'documents#get_documents'
   get 'get_documents_for_history', to: 'groups#get_documents_for_history'
   get 'printed_groups', to: 'groups#list'
@@ -40,6 +51,7 @@ Rails.application.routes.draw do
   post 'remove_document_from_group', to: 'groups#remove_document_from_group'
   post 'remove_documents', to: 'documents#remove_documents'
   post 'start_payment', to: 'groups#start_payment'
+  post 'send_otp_to_phone_number', to: 'users#send_otp_to_phone_number'
 
   post 'proceed_to_payment', to: 'groups#proceed_to_payment'
   post 'approve_disapprove_group_doc', to: 'groups#approve_disapprove_group_doc'

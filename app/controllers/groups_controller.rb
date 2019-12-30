@@ -1,15 +1,21 @@
 require 'twilio-ruby'
+require 'socket'
 class GroupsController < ApplicationController
-	before_action :authenticate_user!
+	before_action :authenticate_user!, except: [:new]
 	protect_from_forgery prepend: true
 
 	def new
-		ready_to_print_group = current_user.check_if_any_group_ready_for_payment
-		if ready_to_print_group.present?
-			redirect_to action: 'edit', :id =>  ready_to_print_group.id
+		if current_user.present?
+			ready_to_print_group = current_user.check_if_any_group_ready_for_payment
+			if ready_to_print_group.present?
+				redirect_to action: 'edit', :id =>  ready_to_print_group.id
+			else
+				@upload_document = UploadDocument.new
+			end
 		else
 			@upload_document = UploadDocument.new
 		end
+
 	end
 
 	def create
@@ -29,6 +35,7 @@ class GroupsController < ApplicationController
 				break
 			end
 			response[count-1] = []
+
 			if @upload_document.save
 				@upload_document.add_pdf_extension_if_not_present
 				@upload_document.generate_deep_copy_in_directory(group.otp)

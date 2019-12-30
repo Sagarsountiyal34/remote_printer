@@ -3,7 +3,7 @@ class Group
   include Mongoid::Document
   include Mongoid::Timestamps
 
-  belongs_to :user
+  belongs_to :user, optional: true
   embeds_many :documents, class_name: "GroupDocument", cascade_callbacks: true
 
   field :status, type: String, default: "ready_for_payment"

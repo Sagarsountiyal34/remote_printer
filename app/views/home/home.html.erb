@@ -10,8 +10,8 @@
                         <% if !current_user.present? %>
                         <div>
                             <span class="login_helper">To use remote printing </span>
-                            <%= link_to(list_documents_path, :class => "btn_1 home_login_button") do %>
-                            Login Here
+                            <%= link_to(upload_doc_path, :class => "btn_1 home_login_button") do %>
+                            Upload Document
                             <% end %>
                         </div>
                         <% end %>
@@ -24,7 +24,7 @@
         </div>
     </div>
 </section>
-<div class="container-fluid" id="digital_india">
+<div class="container-fluid" id="digital_india" style="display: none;">
     <div class="row digital_row">
         <div class="col-12 col-sm-3 text-center">
             <%= image_tag("digital_india.png", :class => "mt-3 digital_india_logo") %>

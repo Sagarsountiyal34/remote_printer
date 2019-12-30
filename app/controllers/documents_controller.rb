@@ -1,5 +1,5 @@
 class DocumentsController < ApplicationController
-	before_action :authenticate_user!
+	before_action :authenticate_user!, except: [:save_doc_without_user]
 	protect_from_forgery prepend: true
 	# def remove_documents
 	# 	document_ids = params[:document_ids]
@@ -29,6 +29,62 @@ class DocumentsController < ApplicationController
 
 
 
+	def save_doc_without_user
+		user = User.find_by(:phone_number => params[:phone_number])
+		if user.phone_otp == params[:otp]
+			redirect_status = true
+			count = 1
+			response = {}
+			group = user.groups.new
+			group.otp = group.generate_otp
+			response['source'] = 'without_user'
+			loop do
+				begin
+					@upload_document = UploadDocument.new(params.require('upload_document').require(count.to_s).permit(:document_name, :document))
+				rescue Exception => e
+					break
+				end
+				response[count-1] = []
+				if @upload_document.save
+					@upload_document.add_pdf_extension_if_not_present
+					@upload_document.generate_deep_copy_in_directory(group.otp)
+					if @upload_document.have_to_create_pdf_from_file?
+						@upload_document.create_pdf_from_file(group.otp)
+					end
+					# @upload_document.insert_otp_into_document(group.otp)
+					@upload_document.generate_preview_file
+					file_type = FileInfo.get_file_media_type(@upload_document.document_url)
+					if file_type == 'office' or file_type == 'PDF'
+						reader = PDF::Reader.new(@upload_document.get_absolute_preview_url)
+						@upload_document.total_pages = reader.page_count
+					end
+					@upload_document.save
+					@upload_document.add_documents(group)
+					response[count-1].push(true)
+					response[count-1].push("Document Uploaded")
+				else
+					redirect_status = false
+					response[count-1].push(false)
+					response[count-1].push(@upload_document.errors.full_messages.first)
+				end
+				count = count + 1
+			end
+			debugger
+			if group.documents.length > 0 and group.save
+				sign_in(user, scope: :user)
+				if redirect_status == true or count == 2
+					render :js => "window.location = '#{group_page_url(:id => group.id.to_s)}'"
+				else
+					render json: {status: true, message: response, group_id: group.id.to_s, redirect_url: group_page_url(:id => group.id)}, status: 200
+				end
+			else
+				group.destroy
+				render json: {status: false, message: response}.to_json, status: 200
+			end
+		else
+			render json: {status: false, message: "Please Enter valid otp"}.to_json, status: 200
+		end
+	end
 	def get_documents
 		total_record = current_user.upload_documents.length
 		if params[:search][:value].present?

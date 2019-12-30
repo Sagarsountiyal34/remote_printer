@@ -5,7 +5,7 @@ class UploadDocument
   include Mongoid::Timestamps
   include DocumentUploader::Attachment.new(:document)
 
-  belongs_to :user
+  belongs_to :user, optional: true
   field :document_name,           type: String, default: ""
   field :document_data,   		  type: Hash, default: {}
   field :total_pages, type: Integer,default: 1

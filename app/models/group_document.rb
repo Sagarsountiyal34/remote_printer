@@ -15,12 +15,13 @@ class GroupDocument
   field :processed_pages, type: Integer,default: 0
   field :active, type: Boolean, default: false
   field :is_approved, type: Boolean, default: false
+  field :print_type, type: String, default: 'black_white'
 
   before_update :active_next_document
 
   validates :status, inclusion: { in: ['pending','sent_for_printing', 'processing', 'failed', 'completed_&_paid','completed_&_unpaid'] }
   after_save :create_note_entry
-
+  validates :print_type, inclusion: { in: ['black_white', 'color'] }
 
   def active_next_document
     if (status_changed? && status_was =="sent_for_printing" && (status =="completed_&_paid"||status =="completed_&_unpaid"||status=="interrupted") )
