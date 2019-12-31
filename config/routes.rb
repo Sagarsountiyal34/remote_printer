@@ -90,6 +90,7 @@ Rails.application.routes.draw do
       post 'change_document_status', to: 'documents#change_document_status'
       get 'change_progress_page_count', to: 'documents#change_progress_page_count'
       get 'get_doc_to_print', to: 'documents#get_doc_to_print'
+      post 'change_paid_status',to: "groups#change_paid_status"
 		end
 	end
 end
