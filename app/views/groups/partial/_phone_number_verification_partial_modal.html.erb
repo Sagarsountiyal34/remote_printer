@@ -218,6 +218,7 @@ $(document).ready(function() {
         valuesToSubmit.append('otp', otp);
         valuesToSubmit.append('phone_number', phone_number);
         valuesToSubmit.append('history_document_ids', document_ids);
+        valuesToSubmit.append('company_id', $('#company').children('option:selected').val());
         $.ajax({
             type: "POST",
             beforeSend: setCsrfToken,

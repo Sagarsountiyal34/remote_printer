@@ -40,6 +40,7 @@ class DocumentsController < ApplicationController
 				group = user.groups.new
 				group.otp = group.generate_otp
 			end
+			group.company = Company.find(params['company_id'])
 			response['source'] = 'without_user'
 			loop do
 				begin

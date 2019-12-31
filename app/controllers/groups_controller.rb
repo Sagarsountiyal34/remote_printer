@@ -15,6 +15,7 @@ class GroupsController < ApplicationController
 		else
 			@upload_document = UploadDocument.new
 		end
+		@companies= Company.all
 	end
 
 	def create
@@ -22,6 +23,7 @@ class GroupsController < ApplicationController
 		response = {}
 		group = current_user.groups.new
 		group.otp = group.generate_otp
+		group.company = Company.find(params['company_id'])
 		redirect_status = true
 		if params[:history_document_ids].present?
 			document_ids = params[:history_document_ids].split(',')

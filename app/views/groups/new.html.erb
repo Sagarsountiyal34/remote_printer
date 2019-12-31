@@ -49,18 +49,23 @@
                 <%= button_tag "Add Older", :class => 'btn btn-warn main_button', :id => 'add_more_from_history_button', :data => {:toggle => 'modal', :target => '#fromHistory'} %>
                 <% end %>
             </div><br>
-            <div id="action_button">
-                <% if current_user.present? %>
-                <%= button_tag "Submit Selected", :class => 'btn_1', :id => 'upload_submit_button' %>
-                <% else %>
-                <a class="btn_1" href="#" data-toggle="modal" data-target="#phoneNumberVerification2" id="continue_with_number">Submit Selected</a>
-                <% end %>
-            </div>
+            <div class="container-fluid">
+                    Service Provider:
+                    <%= select_tag "company", options_from_collection_for_select(@companies, "id", "company_name"), {required: 'true', autofocus: 'true', class: 'form-control', style: 'display:inline-block;width:auto;'}%>
+            </div><br>
+        </div>
+        <div id="action_button">
+            <% if current_user.present? %>
+            <%= button_tag "Submit Selected", :class => 'btn_1', :id => 'upload_submit_button' %>
+            <% else %>
+            <a class="btn_1" href="#" data-toggle="modal" data-target="#phoneNumberVerification2" id="continue_with_number">Submit Selected</a>
+            <% end %>
         </div>
     </div>
-    <div id="loader_wrap_main" class="loader_wrap" style="display: none;">
-        <img src="/images/loader.gif" id="loader_img" width="100" height="100">
-    </div>
+</div>
+<div id="loader_wrap_main" class="loader_wrap" style="display: none;">
+    <img src="/images/loader.gif" id="loader_img" width="100" height="100">
+</div>
 </div>
 <br>
 <br><br><br><br><br>
@@ -178,6 +183,7 @@ $(document).ready(function() {
             return $(this).attr('id');
         }).get().join();
         valuesToSubmit.append('history_document_ids', document_ids);
+        valuesToSubmit.append('company_id', $('#company').children('option:selected').val());
         $.ajax({
             type: "POST",
             beforeSend: setCsrfToken,
