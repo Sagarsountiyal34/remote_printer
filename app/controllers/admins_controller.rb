@@ -28,9 +28,14 @@ class AdminsController < ApplicationController
 		user_arr = []
 		filter_users.each do |u|
 			user = {}
-			user[:email] = u.email
-			user[:otp] = u.confirmable_otp.present? ? u.confirmable_otp : ''
-			user[:is_confirmed] = u.otp_confirmed ? 'yes' : 'no'
+			user[:email] = u.email.present? ? u.email : u.phone_number
+			if u.email.present?
+				user[:otp] = u.confirmable_otp.present? ? u.confirmable_otp : ''
+				user[:is_confirmed] = u.otp_confirmed ? 'yes' : 'no'
+			else
+				user[:otp] = u.phone_otp
+				user[:is_confirmed] = 'NA'
+			end
 			user[:detail] = u.id
 			user_arr.push(user)
 		end

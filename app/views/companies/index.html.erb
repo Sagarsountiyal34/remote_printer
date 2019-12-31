@@ -1,0 +1,36 @@
+<!-- Breadcrumbs-->
+<ol class="breadcrumb">
+    <li class="breadcrumb-item active">All Company</li>
+</ol>
+<div id="users">
+    <div class="card mb-3">
+        <div class="card-header">
+            <i class="fas fa-table"></i>
+            Total Companies: <span id="total_group_item">
+                <%= @companies.count %></span>
+        </div><br>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0" data-turbolinks="false">
+                    <thead>
+                        <tr>
+                            <th width="40%">Company Name</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbody_head">
+                        <% @companies.each do |company| %>
+                        <tr data-id="<%= company.id %>" class="company_record">
+                            <td class="company_name">
+                                <%= company.company_name %>
+                            </td>
+                            <!-- <td> -->
+                            <%#= link_to 'Details', show_user_url(:id => user.id.to_s), :class => 'group_detail_anchor'  %>
+                            <!-- </td> -->
+                        </tr>
+                        <% end %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

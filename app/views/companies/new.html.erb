@@ -1,0 +1,20 @@
+<h3>New Company</h3><br>
+<%= form_for(@company, url: companies_path) do |f| %>
+<div class="form-group">
+    <div class="form-row">
+        <div class="col-md-6">
+            <div class="form-label-group">
+                <%= f.text_field :company_name, autofocus: true, autocomplete: "email", :class => 'form-control', :placeholder => 'Email Address', :required => 'required'%>
+                <%= f.label :company_name %><br />
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-label-group">
+                <%= f.password_field :password, autocomplete: "new-password", :class => 'form-control', :placeholder => 'Password', :required => 'required' %>
+                <%= f.label :password %>
+            </div>
+        </div>
+    </div>
+</div>
+<%= f.submit "Save", :class => "btn_1" %>
+<% end %>

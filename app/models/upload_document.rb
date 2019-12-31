@@ -9,8 +9,10 @@ class UploadDocument
   field :document_name,           type: String, default: ""
   field :document_data,   		  type: Hash, default: {}
   field :total_pages, type: Integer,default: 1
-
+  field :print_type, type: String, default: 'black_white'
   validates :document_data,       presence: true
+
+  validates :print_type, inclusion: { in: ['black_white', 'color'] }
 
   def get_document_by_ids(document_ids)
     return self.where(:_id.in => document_ids)
@@ -76,7 +78,7 @@ class UploadDocument
           cloned_document_data['metadata']['size'] = File.size(self.get_cloned_pdf_file_absolute_path(group.otp))
           cloned_document_data['id'] = File.basename(self.get_cloned_pdf_file_absolute_path(group.otp))
       end
-      group_document = GroupDocument.new(document_name: self.document_name, upload_document_id: self.id, document_data: cloned_document_data, status: 'pending', total_pages: self.total_pages)
+      group_document = GroupDocument.new(document_name: self.document_name, upload_document_id: self.id, document_data: cloned_document_data, status: 'pending', total_pages: self.total_pages, print_type: self.print_type)
       group.documents << group_document
   end
 

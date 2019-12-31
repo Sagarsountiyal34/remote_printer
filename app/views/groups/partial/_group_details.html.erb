@@ -19,6 +19,7 @@
                         <th width="30%">Name</th>
                         <th width="25%">Type</th>
                         <th width="">Pgs</th>
+                        <th width="">Print Color</th>
                         <% if @group.is_group_sent_for_printing? or @group.status == 'ready_for_print' %>
                         <th width="5%">Status</th>
                         <% else %>
@@ -46,6 +47,9 @@
                         </td>
                         <td>
                             <%= a.total_pages %>
+                        </td>
+                        <td>
+                            <%= a.print_type %>
                         </td>
                         <% if @group.is_group_sent_for_printing? or @group.status == 'ready_for_print'%>
                         <td>

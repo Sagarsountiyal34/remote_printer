@@ -48,13 +48,11 @@ $(document).ready(function() {
 
     $(document).on('click', '#create_account_with_doc', function() {
         function onSuccess(response) {
-            debugger
             $('#phoneNumberVerification').modal('hide')
             if (response['message']['source'] == 'without_user') {
                 $('#continue_with_number').show();
                 $('#upload_submit_button').hide();
                 $('#documents_form').find('form').attr('group_id', response['group_id'])
-                debugger
             }
             $('#loader_wrap_main').hide()
             $(self).text('Submit Selected');
@@ -101,8 +99,6 @@ $(document).ready(function() {
             url: "/send_otp_to_phone_number",
             data: { phone_number: phone_number },
             success: function(data) {
-                // alert(data['success']);
-                debugger
                 if (data['status'] == true) {
                     $('#otp_span').show();
                     $('#phone_number_span').hide();
@@ -111,7 +107,6 @@ $(document).ready(function() {
                 }
             },
             error: function(exception) {
-                debugger
                 notification(JSON.parse(exception['responseText'])['message'], "error");
             }
         });
@@ -132,7 +127,6 @@ $(document).ready(function() {
         Object.keys(res['message']).forEach(function(key, value) {
             var doc = $('#documents_form').find('.document').get(parseInt(key));
             var class_name = ''
-            debugger
             if (response['message'][key][0] == true) {
                 class_name = 'success_message';
             } else {
@@ -169,12 +163,15 @@ $(document).ready(function() {
         var new_doc = $(".document").first().clone();
         var total_doc = $('#documents_form').find('.document').length
         var label_name_for = $(new_doc).find('label').attr('for') + (total_doc + 1).toString();
+        var new_select_name = 'upload_document[' + (total_doc + 1).toString() + '][print_type]'
         var document_name = 'upload_document[' + (total_doc + 1).toString() + '][document_name]';
         var document_name_id = $(new_doc).find('#upload_document_document_name').attr('id') + (total_doc + 1).toString();
         var document_file_name = 'upload_document[' + (total_doc + 1).toString() + '][document]';
         $(new_doc).find('input[type=text]').attr('id', document_name_id);
         $(new_doc).find('input[type=text]').attr('name', document_name).val('');
         $(new_doc).find('input[type=file]').attr('name', document_file_name).val('');
+        $(new_doc).find('select').attr('name', new_select_name).val('');
+        $(new_doc).find('select').children().first().attr('selected', 'selected');
         $(new_doc).find('label').attr('for', label_name_for);
         $(new_doc).find('label[class=custom-file-label]').html('File');
         $('<i>').attr({ class: 'fas fa-times remove_form fa-2x col-1', style: "cursor:pointer;color:red;" }).insertBefore(new_doc.find('.message'));
@@ -211,7 +208,6 @@ $(document).ready(function() {
 
 
     function submitForm(form, success_cb, error_cb) {
-        debugger
         var history_data = ""
         var valuesToSubmit = new FormData(form.get(0));
         var document_ids = $('#history_list').find('.history_document').map(function() {

@@ -35,12 +35,15 @@ class DocumentsController < ApplicationController
 			redirect_status = true
 			count = 1
 			response = {}
-			group = user.groups.new
-			group.otp = group.generate_otp
+			group = user.groups.where(:status => 'ready_for_payment').first
+			if !group.present?
+				group = user.groups.new
+				group.otp = group.generate_otp
+			end
 			response['source'] = 'without_user'
 			loop do
 				begin
-					@upload_document = UploadDocument.new(params.require('upload_document').require(count.to_s).permit(:document_name, :document))
+					@upload_document = UploadDocument.new(params.require('upload_document').require(count.to_s).permit(:document_name, :document, :print_type))
 				rescue Exception => e
 					break
 				end
@@ -69,7 +72,6 @@ class DocumentsController < ApplicationController
 				end
 				count = count + 1
 			end
-			debugger
 			if group.documents.length > 0 and group.save
 				sign_in(user, scope: :user)
 				if redirect_status == true or count == 2

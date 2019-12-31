@@ -15,7 +15,6 @@ class GroupsController < ApplicationController
 		else
 			@upload_document = UploadDocument.new
 		end
-
 	end
 
 	def create
@@ -30,7 +29,7 @@ class GroupsController < ApplicationController
 		end
 		loop do
 			begin
-				@upload_document = current_user.upload_documents.new(params.require('upload_document').require(count.to_s).permit(:document_name, :document))
+				@upload_document = current_user.upload_documents.new(params.require('upload_document').require(count.to_s).permit(:document_name, :document, :print_type))
 			rescue Exception => e
 				break
 			end

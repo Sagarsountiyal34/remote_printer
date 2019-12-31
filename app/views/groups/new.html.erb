@@ -12,21 +12,27 @@
                     <input name="utf8" type="hidden" value="✓"><input type="hidden" name="authenticity_token" value="/lBy4wW+drsehD1P5YX+g9/EQJAkOSWWhh+jyLtzD6W3JdkjX7hB1jHh7MJBzV7nmEPqIA4Ltc6XOsnkh5oZjg==">
                     <div id="documents_wrap">
                         <div class="document row form-group" style="margin-left: 0px;">
-                            <div class="input-group col-5 col-sm-5">
+                            <div class="input-group col-4 col-sm-4">
                                 <div class="custom-file">
                                     <input type="file" class="custom-file-input uploadDocument documentFileField" id="inputGroupFile01" aria-describedby="inputGroupFileAddon01" name="upload_document[1][document]" id="upload_document_document" data-buttonText="Your label here." aria-describedby="fileHelp" multiple>
                                     <label class="custom-file-label" for="inputGroupFile01">File</label>
                                     <style>
                                         .custom-file-label:after{
-                                            content: "Browse...";
+                                            content: "Browse";
                                         }
                                     </style>
                                 </div>
                             </div>
-                            <div class="col-5 col-sm-5 document_name_field">
+                            <div class="col-4 col-sm-4 document_name_field">
                                 <div>
                                     <input autofocus="autofocus" class="form-control document_name" placeholder="Document Name" required="required" type="text" value="" name="upload_document[1][document_name]" id="upload_document_document_name">
                                 </div>
+                            </div>
+                            <div class="col-3 col-sm-3 document_name_field">
+                                <select class="form-control" id="type" style="background-color:#28a745;" name=upload_document[1][print_type]>
+                                    <option value="black_white">B/W</option>
+                                    <option value="color">Color</option>
+                                </select>
                             </div>
                             <!-- <i class="fas fa-times remove_form fa-2x col-1" style="cursor:pointer;color:red;"></i> -->
                             <div class="message col-12 col-sm-12"></div>
@@ -87,7 +93,7 @@ $(document).ready(function() {
                 fill_file_entry(files[i + 1]);
             }
         }
-    })
+    });
 
     function fill_file_entry(file) {
         var first_empty_input = get_index_of_first_empty_doc() + 1;
@@ -115,6 +121,7 @@ $(document).ready(function() {
         var new_doc = $(".document").first().clone();
         var total_doc = $('#documents_form').find('.document').length
         var label_name_for = $(new_doc).find('label').attr('for') + (total_doc + 1).toString();
+        var new_select_name = 'upload_document[' + (total_doc + 1).toString() + '][print_type]'
         var document_name = 'upload_document[' + (total_doc + 1).toString() + '][document_name]';
         var document_name_id = $(new_doc).find('#upload_document_document_name').attr('id') + (total_doc + 1).toString();
         var document_file_name = 'upload_document[' + (total_doc + 1).toString() + '][document]';
@@ -122,6 +129,8 @@ $(document).ready(function() {
         $(new_doc).find('input[type=text]').attr('name', document_name).val('');
         $(new_doc).find('input[type=file]').attr('name', document_file_name).val('');
         $(new_doc).find('label').attr('for', label_name_for);
+        $(new_doc).find('select').attr('name', new_select_name).val('');
+        $(new_doc).find('select').children().first().attr('selected', 'selected');
         $(new_doc).find('label[class=custom-file-label]').html('File');
         $('<i>').attr({ class: 'fas fa-times remove_form fa-2x col-1', style: "cursor:pointer;color:red;" }).insertBefore(new_doc.find('.message'));
         $('#documents_wrap').append(new_doc);

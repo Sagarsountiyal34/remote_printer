@@ -8,6 +8,10 @@ Rails.application.routes.draw do
     get '/users' =>"admins#users"
     get "/user_list", to: "admins#user_list"
   end
+
+
+  resources :companies
+
   #------------------ Search ------------------
   get "/search",to: "search#show"
     Rails.application.routes.draw do

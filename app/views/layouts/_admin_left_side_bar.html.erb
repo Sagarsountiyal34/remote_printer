@@ -15,7 +15,13 @@
     </div>
     <div class="w3-bar-block" data-turbolinks="false">
         <%= link_to(all_users_path, :class => "w3-bar-item w3-button w3-padding") do %>
-        <i class="fas fa-users"></i>&nbsp;All Users
+        <i class="fas fa-users"></i>&nbsp;Users
+        <% end %>
+        <%= link_to(companies_path, :class => "w3-bar-item w3-button w3-padding") do %>
+        <i class="fas fa-building"></i>&nbsp;Companies
+        <% end %>
+        <%= link_to(new_company_path, :class => "w3-bar-item w3-button w3-padding") do %>
+        <i class="fas fa-building"></i>&nbsp;Create Company
         <% end %>
         <br><br>
     </div>

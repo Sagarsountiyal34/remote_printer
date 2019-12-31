@@ -60,7 +60,6 @@ class User
   end
 
   def self.find_first_by_auth_conditions(warden_conditions)
-    debugger
     conditions = warden_conditions.dup
     if login = conditions.delete(:login)
       self.any_of({ :phone_number =>  /^#{::Regexp.escape(login)}$/i }, { :email =>  /^#{::Regexp.escape(login)}$/i }).first
@@ -70,7 +69,6 @@ class User
   end
     # function to handle user's login via email or username
   def self.find_for_database_authentication(warden_conditions)
-    debugger
     conditions = warden_conditions.dup
     if login = conditions.delete(:login).downcase
       where(conditions).where('$or' => [ {:phone_number => /^#{::Regexp.escape(login)}$/i}, {:email => /^#{::Regexp.escape(login)}$/i} ]).first
