@@ -25,6 +25,7 @@ class User
   has_many :upload_documents, dependent: :destroy
   has_many :groups, dependent: :destroy
   has_one :note, dependent: :destroy
+  has_one :printer_setting, dependent: :destroy
 
   ## Trackable
   field :sign_in_count,      type: Integer, default: 0
@@ -75,7 +76,7 @@ class User
     else
       where(conditions).first
     end
-  end 
+  end
 
   def get_total_group
     total_group = ''

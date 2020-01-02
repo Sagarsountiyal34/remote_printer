@@ -91,6 +91,8 @@ Rails.application.routes.draw do
       get 'change_progress_page_count', to: 'documents#change_progress_page_count'
       get 'get_doc_to_print', to: 'documents#get_doc_to_print'
       post 'change_paid_status',to: "groups#change_paid_status"
+      post 'update_printer_setting',to: "printer_settings#update_printer_setting"
+      get 'get_current_printer_name',to: "printer_settings#get_current_printer_name"
 		end
 	end
 end
