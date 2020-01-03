@@ -43,25 +43,25 @@ module Api
 			def mark_all_as_printed
 				begin
 					group = Group.find(params["groupID"])
-					old_check_for_pending_payments = group.user.note.try(:pending_payments).present?
+					# old_check_for_pending_payments = group.user.note.try(:pending_payments).present?
 
 					if group.present?
-						group.documents.find_all { |m| m.update_attributes(status: params[:completedPU]) }
-						if params[:completedPU]=="completed_&_unpaid"
-								new_check_for_pending_payments = true
-						else
-								new_check_for_pending_payments = group.user.note.try(:pending_payments).present?
-						end
+						group.documents.find_all { |m| m.update_attributes(status: "completed") }
+						# if params[:completedPU]=="completed_&_unpaid"
+						# 		new_check_for_pending_payments = true
+						# else
+						# 		new_check_for_pending_payments = group.user.note.try(:pending_payments).present?
+						# end
 
-						if old_check_for_pending_payments == new_check_for_pending_payments
-								pending_payment_status = "DontSet"
-						else
-								pending_payment_status = new_check_for_pending_payments
-						end
+						# if old_check_for_pending_payments == new_check_for_pending_payments
+						# 		pending_payment_status = "DontSet"
+						# else
+						# 		pending_payment_status = new_check_for_pending_payments
+						# end
 
 						render status: "200", json: {
 							group: group,
-							any_payment_pending: pending_payment_status,
+							# any_payment_pending: pending_payment_status,
 							message: "Success"
 						}
 					else

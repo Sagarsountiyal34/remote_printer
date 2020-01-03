@@ -383,36 +383,36 @@ module Api
 
 
 			def change_progress_page_count
-			    begin
-			      group = Group.find(params["groupID"])
-			      document = group.documents.find(params["documentID"])
-			      if document.present?
-			        document.processed_pages = params[:pcount]
-			          if (params[:pcount].to_i== document.total_pages )
-			            document.active = false
-			            document.status = "completed_&_paid"
-			          end
-			          if document.save
-			            render status: "200", json: {
-			              document: document,
-			              page_number_updated: true,
-			              message: "page number updated"
-			            }
-			          else
-			            render status: "500", json: {
-			                    message: "Something Went Wrong!"
-			                  }
-			          end
-			      else
-			        render status: "422", json: {
-			                message: "Group not found with given ID"
-			              }
-			      end
+				begin
+					 group = Group.find(params["groupID"])
+					 document = group.documents.find(params["documentID"])
+					 if document.present?
+						 document.processed_pages = params[:pcount]
+							 if (params[:pcount].to_i== document.total_pages )
+								 document.active = false
+								 document.status = "completed"
+							 end
+							 if document.save
+								 render status: "200", json: {
+									 document: document,
+									 page_number_updated: true,
+									 message: "page number updated"
+								 }
+							 else
+								 render status: "500", json: {
+												 message: "Something Went Wrong!"
+											 }
+							 end
+					 else
+						 render status: "422", json: {
+										 message: "Group not found with given ID"
+									 }
+					 end
 
-			    rescue Exception => e
-			      generate_error_response("500",e.message)
+				 rescue Exception => e
+					 generate_error_response("500",e.message)
 
-			    end
+				 end
 
 			end
 

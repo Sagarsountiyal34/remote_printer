@@ -9,6 +9,7 @@ class Group
 
   field :status, type: String, default: "ready_for_payment"
   field :payment_type, type: String, default: "pending"
+  field :paid, type: Boolean, default: false
   field :otp, type: String, default: ""
   field :submitted_time, type: DateTime, default: ""
   validates :status, inclusion: { in: ['ready_for_payment', 'ready_for_print','sent_for_printing', 'processing', 'failed', 'completed'] }
