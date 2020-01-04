@@ -16,6 +16,7 @@ class GroupDocument
   field :active, type: Boolean, default: false
   field :is_approved, type: Boolean, default: false
   field :print_type, type: String, default: 'black_white'
+  field :cost, type: Integer
 
   before_update :active_next_document
 

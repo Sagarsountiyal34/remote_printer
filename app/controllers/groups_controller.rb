@@ -1,8 +1,9 @@
 require 'twilio-ruby'
 require 'socket'
 class GroupsController < ApplicationController
+	include PaytmHelper::EncryptionNewPG
 	before_action :authenticate_user!, except: [:new]
-	protect_from_forgery prepend: true
+	protect_from_forgery prepend: true, except: [:payment_response]
 
 	def new
 		if current_user.present?
@@ -156,13 +157,38 @@ class GroupsController < ApplicationController
 
 	def proceed_to_payment
 		group = current_user.groups.find(params[:group_id])
-		if params[:type] == 'cash' or params[:type] == 'online'
-			if group.update_attributes(:status => 'ready_for_print', :payment_type => params[:type], :submitted_time => Time.now)
-				redirect_to action: 'edit', :id =>  group.id
-			else
-				render json: {  error: 'Please try again later.'}, status: :unprocessable_entity
-			end
+		payment_detail = group.payment_details.new
+		new_params = params.merge(payment_detail_id: payment_detail.id.to_s, amount: group.get_amount_after_discount)
+		new_params_arr = prepare_payment_params(new_params)
+		payment_detail.amount = new_params_arr[0]['TXN_AMOUNT'] * 100 /90
+		payment_detail.final_amount  = new_params_arr[0]['TXN_AMOUNT']
+		payment_detail.discount = 10
+		payment_detail.save
+		@param_list = new_params_arr[0]
+		@checksum_hash =  new_params_arr[1]
+		@payment_url = new_params_arr[2]
+	end
+
+	def payment_response
+		payment_detail = PaymentDetail.find(params['ORDERID'])
+		payment_detail.transaction_id = params['TXNID']
+		payment_detail.payment_mode = params['PAYMENTMODE']
+		payment_detail.currency = params['CURRENCY']
+		payment_detail.status = params['STATUS']
+		payment_detail.response_code = params['RESPCODE']
+		payment_detail.response_message = params['RESPMSG']
+		payment_detail.gateway_name = ''
+		payment_detail.bank_tx_id = params['BANKTXNID'].to_s
+		payment_detail.bank_name = params['BANKNAME']
+		payment_detail.save
+		if params['RESPCODE'] == "01"
+			group = payment_detail.group
+			group.update_attributes(:status => 'ready_for_print', :payment_type => params[:type], :submitted_time => Time.now, :paid => true)
+			flash[:message] = "Transaction Successfull"
+		else
+			flash[:errors] = params['RESPMSG']
 		end
+		redirect_to action: 'edit', :id =>  payment_detail.group.id
 	end
 
 	def selected_page_print

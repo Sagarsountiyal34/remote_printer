@@ -55,6 +55,7 @@ Rails.application.routes.draw do
   post 'remove_document_from_group', to: 'groups#remove_document_from_group'
   post 'remove_documents', to: 'documents#remove_documents'
   post 'start_payment', to: 'groups#start_payment'
+  post 'payment_response', to: 'groups#payment_response'
   post 'send_otp_to_phone_number', to: 'users#send_otp_to_phone_number'
 
   post 'proceed_to_payment', to: 'groups#proceed_to_payment'

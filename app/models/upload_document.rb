@@ -78,7 +78,7 @@ class UploadDocument
           cloned_document_data['metadata']['size'] = File.size(self.get_cloned_pdf_file_absolute_path(group.otp))
           cloned_document_data['id'] = File.basename(self.get_cloned_pdf_file_absolute_path(group.otp))
       end
-      group_document = GroupDocument.new(document_name: self.document_name, upload_document_id: self.id, document_data: cloned_document_data, status: 'pending', total_pages: self.total_pages, print_type: self.print_type)
+      group_document = GroupDocument.new(document_name: self.document_name, upload_document_id: self.id, document_data: cloned_document_data, status: 'pending', total_pages: self.total_pages, print_type: self.print_type, cost: self.get_doc_cost)
       group.documents << group_document
   end
 
@@ -171,5 +171,21 @@ class UploadDocument
 
   def is_document_deleted?
     !File.exist?(self.get_absolute_preview_url)
+  end
+
+  def get_doc_cost
+    if FileInfo.get_file_media_type(self.document_url) == 'PDF'
+      if self.print_type == 'black_white'
+        return 1 * total_pages
+      else
+        return 10 * total_pages
+      end
+    else
+      if self.print_type == 'black_white'
+        return 5
+      else
+        return 10
+      end
+    end
   end
 end

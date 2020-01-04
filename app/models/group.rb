@@ -1,5 +1,4 @@
 class Group
-
   include Mongoid::Document
   include Mongoid::Timestamps
 
@@ -7,20 +6,29 @@ class Group
   belongs_to :company
   embeds_many :documents, class_name: "GroupDocument", cascade_callbacks: true
 
+  has_many :payment_details, class_name: "PaymentDetail"
   field :status, type: String, default: "ready_for_payment"
   field :payment_type, type: String, default: "pending"
   field :paid, type: Boolean, default: false
   field :otp, type: String, default: ""
   field :submitted_time, type: DateTime, default: ""
+  field :amount,   type: Float, default: ""
+  field :final_amount, type: Float
   validates :status, inclusion: { in: ['ready_for_payment', 'ready_for_print','sent_for_printing', 'processing', 'failed', 'completed'] }
   validates :payment_type, inclusion: { in: ['pending', 'online', 'cash'] }
 
   after_save :remove_group_if_needed
+  before_save :calculate_cost
 
   def remove_group_if_needed
     self.destroy if !self.documents.present?
   end
 
+
+  def calculate_cost
+    self.amount = self.documents.map(&:cost).inject(0){|sum,x| sum + x }
+  end
+  
   def get_total_group_item
     total_item = ''
     if self.documents.present?
@@ -89,6 +97,11 @@ class Group
 
   def self.any_online_payment_group_sent_for_printing?
     Group.where(payment_type: 'online').where(:status.in => ['sent_for_printing', 'processing','failed']).present?
+  end
+
+
+  def get_amount_after_discount
+    self.amount - (self.amount * 10)/ 100
   end
 
 end

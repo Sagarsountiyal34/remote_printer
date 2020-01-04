@@ -93,7 +93,15 @@
         <span style="float:right;">
         <a class="btn btn-primary main_button" href="#" data-toggle="modal" data-target="#fromDesktop">Add new</a>
         <a class="btn btn-warn main_button" href="#" data-toggle="modal" data-target="#fromHistory" style="background-color: #ca8f64;">Add older</a></span><br><br><p></p>
-        <span class="btn_1" id="cash_payment" style="cursor: pointer;">Submit for printing</span>
+        <%= form_tag('/proceed_to_payment') do %>
+            <% if @group.paid %>
+                <input type="button" value="Paid: <%= @group.get_amount_after_discount %> Rs." class="btn_1">
+            <% else %>
+                <input type="hidden" name="group_id" value="<%= @group.id.to_s%>">
+                <input type="submit" value="Pay: <%= @group.get_amount_after_discount %> Rs." class="btn_1">
+            <% end %>
+            <span style="font-size: 1.0rem;">SubTotal <%= @group.amount%> Rs, Discount 10%</span>
+        <% end %>
         <%#= button_tag "Add New", :class => 'btn btn-primary main_button', :id => 'add_more_button' %>
         <%#= button_tag "Add Older", :class => 'btn btn-warn main_button', :id => 'add_more_from_history_button', :data => {:toggle => 'modal', :target => '#fromHistory'} %>
         <% end%>
@@ -144,22 +152,22 @@ $('#tbody_head').lightGallery({
     thumbnail: false,
 });
 
-$("#online_payment").click(function() {
-    $.ajax({
-        type: "POST",
-        beforeSend: setCsrfToken, // implemented in application.html.erb
-        url: "/proceed_to_payment",
-        data: { group_id: '<%= @group.id %>', type: 'online' },
-        success: function(data) {
-            // alert(data['success']);
-        },
-        error: function(exception) {
-            alert(JSON.parse(exception.responseText)['error']);
-        }
-    });
-});
+// $("#cash_payment").click(function() {
+//     $.ajax({
+//         type: "POST",
+//         beforeSend: setCsrfToken, // implemented in application.html.erb
+//         url: "/proceed_to_payment",
+//         data: { group_id: '<%= @group.id %>', type: 'online' },
+//         success: function(data) {
+//             // alert(data['success']);
+//         },
+//         error: function(exception) {
+//             alert(JSON.parse(exception.responseText)['error']);
+//         }
+//     });
+// });
 
-$("#cash_payment").click(function() {
+$("#online_payment").click(function() {
     // submit for printing. in proceed to print .please contsct on this number to pay and complete
     //  your printing.
     var retVal = confirm("Please contact on 017245644 number to pay and complete your printing.?");
