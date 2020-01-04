@@ -11,7 +11,7 @@ class GroupDocument
   field :document_data,   		  type: Hash, default: {}
   field :status, 				  type: String, default: "pending"
   field :total_pages, type: Integer,default: 0
-  field :upload_document_id, type: String 
+  field :upload_document_id, type: String
   field :processed_pages, type: Integer,default: 0
   field :active, type: Boolean, default: false
   field :is_approved, type: Boolean, default: false
@@ -20,7 +20,7 @@ class GroupDocument
 
   before_update :active_next_document
 
-  validates :status, inclusion: { in: ['pending','sent_for_printing', 'processing', 'failed', 'completed_&_paid','completed_&_unpaid'] }
+  validates :status, inclusion: { in: ['pending','sent_for_printing', 'processing', 'failed', 'completed'] }
   after_save :create_note_entry
   validates :print_type, inclusion: { in: ['black_white', 'color'] }
 

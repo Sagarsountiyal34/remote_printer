@@ -98,6 +98,36 @@ module Api
 				end
 			end
 
+			def change_paid_status
+				begin
+					group = Group.find(params["groupID"])
+					if group.present?
+						group.paid =  true
+						if group.save
+							render status: "200", json: {
+								group: group,
+								message: "Success"
+							}
+						else
+							render status: "200", json: {
+								group: group,
+								message: group.errors.full_messages
+							}
+						end
+
+					else
+						render status: "422", json: {
+								message: "Group not found with given ID"
+							}
+
+					end
+
+				rescue Exception => e
+					forbidden_error(e)
+				end
+			end
+
+
       def get_groups(groups_status)
         return  Group.where(status: "ready_for_print").all_of({:'documents.status' => groups_status }).map{|grp| grp.attributes.merge(documents: grp.documents.where(status: groups_status),user_email: grp.user.email,note_text_present: grp.user.note.try(:note_text).present?)}
       end
