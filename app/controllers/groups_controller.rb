@@ -160,9 +160,14 @@ class GroupsController < ApplicationController
 		payment_detail = group.payment_details.new
 		new_params = params.merge(payment_detail_id: payment_detail.id.to_s, amount: group.get_amount_after_discount)
 		new_params_arr = prepare_payment_params(new_params)
-		payment_detail.amount = new_params_arr[0]['TXN_AMOUNT'] * 100 /90
+		discount = Discount.where(:status => true).first
+		if discount.present?
+			payment_detail.amount = new_params_arr[0]['TXN_AMOUNT'] * 100 / (100 - discount.discount_value.to_f)
+			payment_detail.discount = discount.discount_value
+		else
+			payment_detail.amount = new_params_arr[0]['TXN_AMOUNT']
+		end
 		payment_detail.final_amount  = new_params_arr[0]['TXN_AMOUNT']
-		payment_detail.discount = 10
 		payment_detail.save
 		@param_list = new_params_arr[0]
 		@checksum_hash =  new_params_arr[1]
@@ -183,7 +188,7 @@ class GroupsController < ApplicationController
 		payment_detail.save
 		if params['RESPCODE'] == "01"
 			group = payment_detail.group
-			group.update_attributes(:status => 'ready_for_print', :payment_type => params[:type], :submitted_time => Time.now, :paid => true)
+			group.update_attributes(:status => 'ready_for_print', :payment_type => 'online', :submitted_time => Time.now, :paid => true)
 			flash[:message] = "Transaction Successfull"
 		else
 			flash[:errors] = params['RESPMSG']
@@ -301,6 +306,8 @@ class GroupsController < ApplicationController
 		if @group.present?
 			@documents = @group.documents.order_by(created_at: :desc)
 			@upload_document = UploadDocument.new
+			discount = Discount.where(:status => true).first
+			@discount_value = discount.present? ? discount.discount_value : ''
 
 			# uploaded_doc_ids = @group.documents.map{|d| d.upload_document_id.to_s}
 			# @all_documents = current_user.upload_documents.not_in(:_id => uploaded_doc_ids).order_by(created_at: :desc)

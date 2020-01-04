@@ -101,7 +101,12 @@ class Group
 
 
   def get_amount_after_discount
-    self.amount - (self.amount * 10)/ 100
+    discount = Discount.where(:status => true).first
+    if discount.present?
+      self.amount - (self.amount * discount.discount_value.to_f) / 100
+    else
+      self.amount
+    end
   end
 
 end

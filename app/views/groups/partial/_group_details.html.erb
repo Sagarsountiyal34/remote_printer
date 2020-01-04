@@ -100,7 +100,9 @@
                 <input type="hidden" name="group_id" value="<%= @group.id.to_s%>">
                 <input type="submit" value="Pay: <%= @group.get_amount_after_discount %> Rs." class="btn_1">
             <% end %>
-            <span style="font-size: 1.0rem;">SubTotal <%= @group.amount%> Rs, Discount 10%</span>
+            <% if @discount_value.present? %>
+            <span style="font-size: 1.0rem;">SubTotal <%= @group.amount %> Rs, Discount <%= @discount_value %>%</span>
+            <% end %>
         <% end %>
         <%#= button_tag "Add New", :class => 'btn btn-primary main_button', :id => 'add_more_button' %>
         <%#= button_tag "Add Older", :class => 'btn btn-warn main_button', :id => 'add_more_from_history_button', :data => {:toggle => 'modal', :target => '#fromHistory'} %>

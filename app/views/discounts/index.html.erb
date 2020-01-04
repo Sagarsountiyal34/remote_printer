@@ -1,0 +1,16 @@
+<!-- Breadcrumbs-->
+<ol class="breadcrumb">
+    <li class="breadcrumb-item active">Discount List</li>
+</ol>
+<div id="users">
+    <div class="card mb-3">
+        <div class="card-header">
+            <i class="fas fa-table"></i>
+            Total Discount: <span id="total_group_item">
+                <%= @discounts.count %></span>
+        </div><br>
+        <div class="card-body" id="discount_wrap">
+        	<%= render "discount_list" %>
+        </div>
+    </div>
+</div>

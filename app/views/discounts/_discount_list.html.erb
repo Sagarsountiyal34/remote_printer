@@ -1,0 +1,70 @@
+<div class="table-responsive">
+    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0" data-turbolinks="false">
+        <thead>
+            <tr>
+                <th width="40%">Discount Name</th>
+                <th width="40%">Discount Percentage</th>
+                <th width="20%">Action</th>
+            </tr>
+        </thead>
+        <tbody id="tbody_head">
+            <% @discounts.each do |discount| %>
+            <tr data-id="<%= discount.id %>" class="discount_record">
+                <td class="discount_desc">
+                    <%= discount.desc %>
+                </td>
+                <td class="discount_desc">
+                    <%= discount.discount_value %>
+                </td>
+                <td>
+                    <% if discount.status == true %>
+                    <button name="button" type="submit" class="btn btn-primary apply_disapply_discount" data-is-active=true data-id="<%= discount.id %>">
+                        Disapply
+                    </button>
+                    <% else %>
+                    <button name="button" type="submit" class="btn btn-primary apply_disapply_discount red_background" data-is-active=false data-id="<%= discount.id %>">
+                        Apply
+                    </button>
+                    <% end%>
+                </td>
+                <!-- <td> -->
+                <%#= link_to 'Details', show_user_url(:id => user.id.to_s), :class => 'group_detail_anchor'  %>
+                <!-- </td> -->
+            </tr>
+            <% end %>
+        </tbody>
+    </table>
+</div>
+<script>
+$(".apply_disapply_discount").click(function() {
+    var discount_id = $(this).data('id');
+    var is_active = $(this).data('isActive');
+    var self = $(this);
+    $(this).text("Please wait");
+    function onSuccess(response) {
+        $('#discount_wrap').html(response);
+    }
+
+    function onError(reponse) {
+    	notification("error", JSON.parse(exception.responseText)['error']);
+        $(self).text("Please wait");
+    }
+    apply_disapply_discount(discount_id, is_active, onSuccess, onError)
+
+});
+
+function apply_disapply_discount(discount_id, is_active, successcb, errorcb) {
+    $.ajax({
+        type: "POST",
+        beforeSend: setCsrfToken, // implemented in application.html.erb
+        url: "/apply_disapply_discount",
+        data: { discount_id: discount_id, is_active: is_active },
+        success: function(data) {
+            if (successcb) successcb(data);
+        },
+        error: function(exception) {
+            if (errorcb) errorcb(exception);
+        }
+    });
+}
+</script>
