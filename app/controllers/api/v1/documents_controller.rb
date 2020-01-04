@@ -363,9 +363,17 @@ module Api
 												} and  return
 											end
 										end
+										admin = User.where(role: "admin").first
+										printer_name=""
+										if doc_to_print.print_type ==="color"
+											printer_name = admin.printer_setting.color_printer if admin.printer_setting.present?
+										elsif  doc_to_print.print_type ==="black_white"
+											printer_name = admin.printer_setting.bw_printer if admin.printer_setting.present?
+										end
 										render status: "200", json: {
 											document: doc_to_print,
 											groupID: group_id,
+											printer_name: printer_name,
 											continue_printing: true
 										}
 								else
@@ -415,6 +423,35 @@ module Api
 				 end
 
 			end
+
+			def update_doc_print_type
+        begin
+					group = Group.find(params["groupID"])
+					document = group.documents.find(params["documentID"])
+           if document.present?
+            document.print_type=params[:type]
+						if document.save
+							render status: "200", json: {
+								document: document,
+								message: "updated"
+							}
+						else
+							render status: "422", json: {
+											message: document.errors.full_messages
+										}
+						end
+          else
+						render status: "422", json: {
+							message: "Document not found with given ID"
+						}
+          end
+				rescue Exception => e
+					forbidden_error(e)
+				end
+        # admin = User.find_by(email: params[:email])
+
+
+      end
 
 			private
 			def generate_error_response(code,message)

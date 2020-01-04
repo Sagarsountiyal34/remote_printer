@@ -94,7 +94,8 @@ Rails.application.routes.draw do
       post 'check_company_credential', to: 'users#check_company_credential'
       post 'change_paid_status',to: "groups#change_paid_status"
       post 'update_printer_setting',to: "printer_settings#update_printer_setting"
-      get 'get_current_printer_name',to: "printer_settings#get_current_printer_name"
+      post 'get_current_printer_name',to: "printer_settings#get_current_printer_name"
+      post 'update_doc_print_type',to: "documents#update_doc_print_type"
 		end
 	end
 end
