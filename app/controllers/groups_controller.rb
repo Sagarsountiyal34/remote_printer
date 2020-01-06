@@ -156,22 +156,31 @@ class GroupsController < ApplicationController
 	end
 
 	def proceed_to_payment
-		group = current_user.groups.find(params[:group_id])
-		payment_detail = group.payment_details.new
-		new_params = params.merge(payment_detail_id: payment_detail.id.to_s, amount: group.get_amount_after_discount)
-		new_params_arr = prepare_payment_params(new_params)
-		discount = Discount.where(:status => true).first
-		if discount.present?
-			payment_detail.amount = new_params_arr[0]['TXN_AMOUNT'] * 100 / (100 - discount.discount_value.to_f)
-			payment_detail.discount = discount.discount_value
+		group = current_user.groups.find(params[:id])
+		if params[:type] == 'cash'
+			if group.update_attributes(:status => 'ready_for_print', :payment_type => 'cash', :submitted_time => Time.now, :final_amount => group.get_amount_after_discount)
+				get_details_for_group_page
+				render partial: 'groups/partial/group_details'
+			else
+				render json: 'Please try again later'.to_json, status: 500
+			end
 		else
-			payment_detail.amount = new_params_arr[0]['TXN_AMOUNT']
+			payment_detail = group.payment_details.new
+			new_params = params.merge(payment_detail_id: payment_detail.id.to_s, amount: group.get_amount_after_discount)
+			new_params_arr = prepare_payment_params(new_params)
+			discount = Discount.where(:status => true).first
+			if discount.present?
+				payment_detail.amount = new_params_arr[0]['TXN_AMOUNT'] * 100 / (100 - discount.discount_value.to_f)
+				payment_detail.discount = discount.discount_value
+			else
+				payment_detail.amount = new_params_arr[0]['TXN_AMOUNT']
+			end
+			payment_detail.final_amount  = new_params_arr[0]['TXN_AMOUNT']
+			payment_detail.save
+			@param_list = new_params_arr[0]
+			@checksum_hash =  new_params_arr[1]
+			@payment_url = new_params_arr[2]
 		end
-		payment_detail.final_amount  = new_params_arr[0]['TXN_AMOUNT']
-		payment_detail.save
-		@param_list = new_params_arr[0]
-		@checksum_hash =  new_params_arr[1]
-		@payment_url = new_params_arr[2]
 	end
 
 	def payment_response

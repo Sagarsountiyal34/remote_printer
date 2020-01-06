@@ -10,7 +10,10 @@
             <%= button_tag "Show", id: 'toggle_otp', class: 'btn_1' %>
         </span>
     </div><br>
-      <b><div class="col-sm-3">  <span class="breadcrumb-item active">Provider: <%= @group.company.company_name %></span></div></b>
+    <b>
+        <div class="col-sm-3"> <span class="breadcrumb-item active">Provider:
+                <%= @group.company.company_name %></span></div>
+    </b>
     <div class="card-body">
         <div class="table-responsive">
             <table class="table table-bordered document_table" id="dataTableGroupDoc" width="100%" cellspacing="0">
@@ -40,7 +43,7 @@
                             </div>
                             <% end %>
                         </td>
-                        <td class="table_entry_name" title="<%= a.document_name %>">   
+                        <td class="table_entry_name" title="<%= a.document_name %>">
                             <%= a.document_name %>
                         </td>
                         <td>
@@ -81,28 +84,32 @@
                 <a class="dropdown-item " href="#" data-target="#online_payment" id="online_payment"><i class="fas fa-cloud" style="margin-right: 10px;"></i>Online</a>
             </div> -->
         <!-- </div> -->
-        
-<!--         <div class="dropdown" style="margin-left:10px;">
+        <!--         <div class="dropdown" style="margin-left:10px;">
             <%#= button_tag "Add More", data: {:toggle => 'dropdown', :display => 'static' }, class: 'dropdown-toggle btn btn-primary' %>
             <div class="dropdown-menu btn" style="margin-top: 0px;">
                 <a class="dropdown-item " href="#" data-toggle="modal" data-target="#fromDesktop"><i class="fas fa-desktop" style="margin-right: 10px;"></i>From Desktop</a>
                 <a class="dropdown-item " href="#" data-toggle="modal" data-target="#fromHistory"><i class="fas fa-history" style="margin-right: 10px;"></i>From History</a>
             </div>
         </div> -->
-
         <span style="float:right;">
-        <a class="btn btn-primary main_button" href="#" data-toggle="modal" data-target="#fromDesktop">Add new</a>
-        <a class="btn btn-warn main_button" href="#" data-toggle="modal" data-target="#fromHistory" style="background-color: #ca8f64;">Add older</a></span><br><br><p></p>
+            <a class="btn btn-primary main_button" href="#" data-toggle="modal" data-target="#fromDesktop">Add new</a>
+            <a class="btn btn-warn main_button" href="#" data-toggle="modal" data-target="#fromHistory" style="background-color: #ca8f64;">Add older</a></span><br><br>
+        <p></p>
         <%= form_tag('/proceed_to_payment') do %>
-            <% if @group.paid %>
-                <input type="button" value="Paid: <%= @group.get_amount_after_discount %> Rs." class="btn_1">
-            <% else %>
-                <input type="hidden" name="group_id" value="<%= @group.id.to_s%>">
-                <input type="submit" value="Pay: <%= @group.get_amount_after_discount %> Rs." class="btn_1">
-            <% end %>
-            <% if @discount_value.present? %>
-            <span style="font-size: 1.0rem;">SubTotal <%= @group.amount %> Rs, Discount <%= @discount_value %>%</span>
-            <% end %>
+        <% if @group.paid %>
+        <input type="button" value="Paid: <%= @group.get_amount_after_discount %> Rs." class="btn_1">
+        <% else %>
+        <input type="hidden" name="id" value="<%= @group.id.to_s%>">
+        <input type="submit" value="Pay Online" class="btn_1">
+        <% end %>
+        <input type="button" value="Pay by Cash" class="btn_1" id="cash_payment">
+        <% if @discount_value.present? %>
+        <span style="font-size: 1.0rem;">
+            Total: <%= @group.get_amount_after_discount %> Rs.
+            SubTotal
+            <%= @group.amount %> Rs, Discount
+            <%= @discount_value %>%</span>
+        <% end %>
         <% end %>
         <%#= button_tag "Add New", :class => 'btn btn-primary main_button', :id => 'add_more_button' %>
         <%#= button_tag "Add Older", :class => 'btn btn-warn main_button', :id => 'add_more_from_history_button', :data => {:toggle => 'modal', :target => '#fromHistory'} %>
@@ -154,20 +161,30 @@ $('#tbody_head').lightGallery({
     thumbnail: false,
 });
 
-// $("#cash_payment").click(function() {
-//     $.ajax({
-//         type: "POST",
-//         beforeSend: setCsrfToken, // implemented in application.html.erb
-//         url: "/proceed_to_payment",
-//         data: { group_id: '<%= @group.id %>', type: 'online' },
-//         success: function(data) {
-//             // alert(data['success']);
-//         },
-//         error: function(exception) {
-//             alert(JSON.parse(exception.responseText)['error']);
-//         }
-//     });
-// });
+$("#cash_payment").click(function() {
+    $(this).text('Please Wait');
+    var self = $(this);
+    $.ajax({
+        type: "POST",
+        beforeSend: setCsrfToken, // implemented in application.html.erb
+        url: "/proceed_to_payment",
+        data: { id: '<%= @group.id %>', type: 'cash' },
+        success: function(data) {
+            if(data != ''){
+                $('#group_content').html(data);
+            }
+            else
+            {
+                $(self).text('Pay By Cash');
+                notification("Please try again.", "error")
+            }
+        },
+        error: function(exception) {
+            $(self).text('Pay By Cash');
+            alert(JSON.parse(exception.responseText)['error']);
+        }
+    });
+});
 
 $("#online_payment").click(function() {
     // submit for printing. in proceed to print .please contsct on this number to pay and complete
@@ -215,7 +232,7 @@ $(".remove_group_document").click(function() {
     }
     removeFromGroup(group_id, document_id, onSuccess, onError);
 });
-$(".table_entry_name").tooltip({container: 'body'});
+$(".table_entry_name").tooltip({ container: 'body' });
 </script>
 <script src="https://cdn.jsdelivr.net/picturefill/2.3.1/picturefill.min.js"></script>
 <style type="text/css">
