@@ -20,7 +20,7 @@ class GroupDocument
 
   before_update :active_next_document
 
-  validates :status, inclusion: { in: ['pending','sent_for_printing', 'processing', 'failed', 'completed'] }
+  validates :status, inclusion: { in: ['pending','interrupted','sent_for_printing', 'processing', 'failed', 'completed'] }
   after_save :create_note_entry
   validates :print_type, inclusion: { in: ['black_white', 'color'] }
 

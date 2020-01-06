@@ -391,10 +391,12 @@ module Api
 
 
 			def change_progress_page_count
+
 				begin
 					 group = Group.find(params["groupID"])
 					 document = group.documents.find(params["documentID"])
 					 if document.present?
+
 						 document.processed_pages = params[:pcount]
 							 if (params[:pcount].to_i== document.total_pages )
 								 document.active = false
@@ -424,34 +426,34 @@ module Api
 
 			end
 
-			def update_doc_print_type
-        begin
-					group = Group.find(params["groupID"])
-					document = group.documents.find(params["documentID"])
-           if document.present?
-            document.print_type=params[:type]
-						if document.save
-							render status: "200", json: {
-								document: document,
-								message: "updated"
-							}
-						else
-							render status: "422", json: {
-											message: document.errors.full_messages
-										}
-						end
-          else
-						render status: "422", json: {
-							message: "Document not found with given ID"
-						}
-          end
-				rescue Exception => e
-					forbidden_error(e)
+			def interrupt_cancel_document
+					begin
+							group = Group.find(params["groupID"])
+							document = group.documents.find(params["documentID"])
+							if document.active && document.processed_pages >0
+								document.status = "interrupted"
+								document.active = false
+							else
+								document.status = "pending"
+							end
+
+							if document.save
+								render status: "200", json: {
+									document: document,
+									message: "document set to pending"
+								}
+							else
+								render status: "500", json: {
+												message: document.errors.full_messages
+											}
+							end
+					rescue Exception => e
+							render status: "500", json: {
+										message: e.message
+									}
+					end
+
 				end
-        # admin = User.find_by(email: params[:email])
-
-
-      end
 
 			private
 			def generate_error_response(code,message)

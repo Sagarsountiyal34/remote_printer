@@ -102,6 +102,7 @@ Rails.application.routes.draw do
       post 'update_printer_setting',to: "printer_settings#update_printer_setting"
       post 'get_current_printer_name',to: "printer_settings#get_current_printer_name"
       post 'update_doc_print_type',to: "documents#update_doc_print_type"
+      post 'interrupt_document',to: 'documents#interrupt_cancel_document'
 		end
 	end
 end
