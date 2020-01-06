@@ -16,6 +16,10 @@ Rails.application.routes.draw do
   #------------------ Search ------------------
   get "/search",to: "search#show"
     Rails.application.routes.draw do
+  mount_devise_token_auth_for 'Member', at: 'auth',
+      controllers: {
+          sessions: 'api/v1/devise_token_auth/sessions',
+      }
       devise_for :users, controllers: {
           registrations: 'users/registrations',
           sessions: 'users/sessions',

@@ -1,9 +1,9 @@
 class ApplicationController < ActionController::Base
+        include DeviseTokenAuth::Concerns::SetUserByToken
 	protect_from_forgery with: :null_session
 	layout :is_devise
 	before_action :is_confirmed?
 	before_action :configure_permitted_parameters, if: :devise_controller?
-
 	def is_devise
 		if devise_controller?
 			"devise_layout"
@@ -42,6 +42,7 @@ class ApplicationController < ActionController::Base
 	    added_attrs = [:phone_number, :email, :password, :password_confirmation, :remember_me]
 	    devise_parameter_sanitizer.permit :sign_up, keys: added_attrs
 	    devise_parameter_sanitizer.permit :account_update, keys: added_attrs
+	    # devise_parameter_sanitizer.permit keys: added_attrs
 	end
 	def forbidden_error(e=nil)
 		render status: "500", json: {
