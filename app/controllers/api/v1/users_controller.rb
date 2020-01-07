@@ -1,6 +1,6 @@
 module Api
 	module V1
-		class UsersController < ApplicationController
+		class UsersController < ApplicationApiController
 			include ActionController::ImplicitRender
 			protect_from_forgery with: :null_session
 

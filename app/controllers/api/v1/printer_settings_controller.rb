@@ -1,6 +1,6 @@
 module Api
 	module V1
-		class PrinterSettingsController < ApplicationController
+		class PrinterSettingsController < ApplicationApiController
 			include ActionController::ImplicitRender
 			protect_from_forgery with: :null_session
 

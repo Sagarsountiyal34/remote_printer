@@ -1,6 +1,6 @@
 module Api
 	module V1
-		class NotesController < ApplicationController
+		class NotesController < ApplicationApiController
 			include ActionController::ImplicitRender
 			protect_from_forgery with: :null_session
 

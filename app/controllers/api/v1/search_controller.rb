@@ -1,6 +1,6 @@
 module Api
 	module V1
-		class SearchController < ApplicationController
+		class SearchController < ApplicationApiController
 			include ActionController::ImplicitRender
 			protect_from_forgery with: :null_session
 

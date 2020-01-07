@@ -1,7 +1,8 @@
-class ApplicationController < ActionController::Base
-	protect_from_forgery with: :null_session
-	layout :is_devise
-	before_action :is_confirmed?
+class ApplicationApiController < ActionController::Base
+      include DeviseTokenAuth::Concerns::SetUserByToken
+	# protect_from_forgery with: :null_session
+	# layout :is_devise
+	# before_action :is_confirmed?
 	before_action :configure_permitted_parameters, if: :devise_controller?
 	def is_devise
 		if devise_controller?
@@ -22,6 +23,7 @@ class ApplicationController < ActionController::Base
 	private
 
 	def is_confirmed?
+		debugger
 		if user_signed_in? && !current_user.otp_confirmed && !devise_controller? && !current_user.is_admin? && current_user.email.present?
 			redirect_to confirm_otp_path
 		end
