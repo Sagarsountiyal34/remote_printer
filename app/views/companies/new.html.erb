@@ -4,8 +4,8 @@
     <div class="form-row">
         <div class="col-md-6">
             <div class="form-label-group">
-                <%= f.text_field :company_name, autofocus: true, autocomplete: "email", :class => 'form-control', :placeholder => 'Email Address', :required => 'required'%>
-                <%= f.label :company_name %><br />
+                <%= f.email_field :email, autofocus: true, autocomplete: "email", :class => 'form-control', :placeholder => 'Email Address', :required => 'required'%>
+                <%= f.label :email %><br />
             </div>
         </div>
         <div class="col-md-6">

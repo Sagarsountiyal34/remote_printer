@@ -51,7 +51,7 @@
             </div><br>
             <div class="container-fluid">
                     Service Provider:
-                    <%= select_tag "company", options_from_collection_for_select(@companies, "id", "company_name"), {required: 'true', autofocus: 'true', class: 'form-control', style: 'display:inline-block;width:auto;'}%>
+                    <%= select_tag "company", options_from_collection_for_select(@companies, "id", "email"), {required: 'true', autofocus: 'true', class: 'form-control', style: 'display:inline-block;width:auto;'}%>
             </div><br>
         </div>
         <div id="action_button">

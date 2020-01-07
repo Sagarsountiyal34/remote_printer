@@ -7,7 +7,7 @@ class CompaniesController < ApplicationController
 	end
 	
 	def create
-		company = Company.new(params.require(:company).permit(:company_name, :password))
+		company = Company.new(params.require(:company).permit(:email, :password))
 		if company.save
 			redirect_to action: 'index'
 		else

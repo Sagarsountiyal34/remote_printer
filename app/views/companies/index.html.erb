@@ -21,7 +21,7 @@
                         <% @companies.each do |company| %>
                         <tr data-id="<%= company.id %>" class="company_record">
                             <td class="company_name">
-                                <%= company.company_name %>
+                                <%= company.email %>
                             </td>
                             <!-- <td> -->
                             <%#= link_to 'Details', show_user_url(:id => user.id.to_s), :class => 'group_detail_anchor'  %>
