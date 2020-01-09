@@ -16,15 +16,12 @@ Rails.application.routes.draw do
   #------------------ Search ------------------
   get "/search",to: "search#show"
     Rails.application.routes.draw do
-  mount_devise_token_auth_for 'Member', at: 'auth',
-      controllers: {
-          sessions: 'api/v1/devise_token_auth/sessions',
-      }
-      devise_for :users, controllers: {
-          registrations: 'users/registrations',
-          sessions: 'users/sessions',
-        passwords: 'users/passwords'
-      }
+
+        devise_for :users, controllers: {
+            registrations: 'users/registrations',
+            sessions: 'users/sessions',
+          passwords: 'users/passwords'
+        }
         # devise_scope :user do
         #     post 'users/create_customer', to: 'users/registrations#create_customer'
         # end
@@ -70,6 +67,8 @@ Rails.application.routes.draw do
 
   namespace 'api' do
 		namespace 'v1' do
+      mount_devise_token_auth_for 'Company', at: 'auth'
+      
       post 'get_all_documents', to: 'documents#get_all_documents'
 			post 'update_document_status', to: 'documents#update_document_status', as: 'update_document_status'
       post 'update_group_status', to: 'documents#update_group_status', as: 'update_group_status'
