@@ -481,6 +481,33 @@ module Api
 
 			end
 
+			def update_doc_print_type
+        begin
+					group = Group.find(params["groupID"])
+					document = group.documents.find(params["documentID"])
+           if document.present?
+            document.print_type=params[:type]
+						if document.save
+							render status: "200", json: {
+								document: document,
+								message: "updated"
+							}
+						else
+							render status: "422", json: {
+											message: document.errors.full_messages
+										}
+						end
+          else
+						render status: "422", json: {
+							message: "Document not found with given ID"
+						}
+          end
+				rescue Exception => e
+					forbidden_error(e)
+				end
+        # admin = User.find_by(email: params[:email])
+      end
+
 			def interrupt_cancel_document
 					begin
 							group = Group.find(params["groupID"])
