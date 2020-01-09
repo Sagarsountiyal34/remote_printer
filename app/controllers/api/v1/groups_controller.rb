@@ -81,7 +81,7 @@ module Api
 				begin
 					group = Group.find(params["groupID"])
 					if group.present?
-						group.documents.update_all(status: "sent_for_printing")
+						group.documents.update_all(status: "sent_for_printing",processed_pages:0)
 						render status: "200", json: {
 							group: group,
 							message: "Success"

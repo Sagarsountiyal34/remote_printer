@@ -317,7 +317,7 @@ module Api
 						document = ""
 						document = group.documents.find(params["documentID"]) if group.present?
 						if document.present?
-								if document.update_attribute('status', 'sent_for_printing')
+								if document.update_attribute(status: 'sent_for_printing')
 									render status: "200", json: {
 										document: document,
 										message: "Status updated successfully"
@@ -325,6 +325,61 @@ module Api
 								else
 									generate_error_response("304","")
 								end
+						else
+							generate_error_response("404","Docment not found with given ID")
+
+						end
+
+					rescue Exception => e
+						generate_error_response("500",e.message)
+					end
+
+			end
+
+			def change_status_and_active
+
+					begin
+						group = Group.find(params["groupID"])
+						document = ""
+						document = group.documents.find(params["documentID"]) if group.present?
+						if document.present?
+								if document.update_attributes(status: 'sent_for_printing',active:true)
+									render status: "200", json: {
+										document: document,
+										message: "Status updated successfully"
+									}
+								else
+									generate_error_response("304","")
+								end
+						else
+							generate_error_response("404","Docment not found with given ID")
+
+						end
+
+					rescue Exception => e
+						generate_error_response("500",e.message)
+					end
+
+			end
+
+			def get_document_details
+
+					begin
+						group = Group.find(params["groupID"])
+						document = group.documents.find(params["documentID"]) if group.present?
+						if document.present?
+							admin = User.where(role: "admin").first
+							printer_name=""
+							if document.print_type ==="color"
+								printer_name = admin.printer_setting.color_printer if admin.printer_setting.present?
+							elsif  document.print_type ==="black_white"
+								printer_name = admin.printer_setting.bw_printer if admin.printer_setting.present?
+							end
+							render status: "200", json: {
+								document: document,
+								printer_name: printer_name,
+								message: "Status updated successfully"
+							}
 						else
 							generate_error_response("404","Docment not found with given ID")
 

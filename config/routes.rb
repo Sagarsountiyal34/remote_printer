@@ -95,8 +95,10 @@ Rails.application.routes.draw do
       get 'pending_payments',to: 'users#pending_payments'
       get 'check_user_confirmed',to: 'users#check_user_confirmed'
       post 'change_document_status', to: 'documents#change_document_status'
+      post 'change_status_and_active', to: 'documents#change_status_and_active'
       get 'change_progress_page_count', to: 'documents#change_progress_page_count'
       get 'get_doc_to_print', to: 'documents#get_doc_to_print'
+      get 'get_document_details', to: 'documents#get_document_details'
       post 'check_company_credential', to: 'users#check_company_credential'
       post 'change_paid_status',to: "groups#change_paid_status"
       post 'update_printer_setting',to: "printer_settings#update_printer_setting"
