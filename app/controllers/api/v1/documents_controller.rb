@@ -226,37 +226,50 @@ module Api
 				begin
 					group = Group.find(params["groupID"])
 					document = group.documents.find(params["documentID"])
-					old_check_for_pending_payments = document.group.user.note.try(:pending_payments).present?
-
-					# document.status = "completed"
-					document.status = params[:completedPU]
-
-					document.processed_pages = document.total_pages
-
+					# debugger
+					document.status = "completed"
 					if document.save
-						if params[:completedPU]=="completed_&_unpaid"
-								any_payment_pending = true
-						else
-								any_payment_pending = document.group.user.note.try(:pending_payments).present?
-						end
-
-						if old_check_for_pending_payments == any_payment_pending
-								pending_payment_status = "DontSet"
-						else
-							  pending_payment_status = any_payment_pending
-						end
-						# groups = document.group.user.groups.where(status: "ready_for_print").map{|g| g.attributes.merge(user_email: g.user.email,note_text_present: g.user.note.try(:note_text).present?)}
 						render status: "200", json: {
-							any_payment_pending: pending_payment_status,
-							# groups: groups,
 							document: document,
-							message: "document set to pending"
+							# page_number_updated: true,
+							message: "Document Completed"
 						}
 					else
 						render status: "500", json: {
 										message: document.errors.full_messages
 									}
 					end
+					# old_check_for_pending_payments = document.group.user.note.try(:pending_payments).present?
+					#
+					# # document.status = "completed"
+					# document.status = params[:completedPU]
+					#
+					# document.processed_pages = document.total_pages
+					#
+					# if document.save
+					# 	if params[:completedPU]=="completed_&_unpai"
+					# 			any_payment_pending = true
+					# 	else
+					# 			any_payment_pending = document.group.user.note.try(:pending_payments).present?
+					# 	end
+					#
+					# 	if old_check_for_pending_payments == any_payment_pending
+					# 			pending_payment_status = "DontSet"
+					# 	else
+					# 		  pending_payment_status = any_payment_pending
+					# 	end
+					# 	# groups = document.group.user.groups.where(status: "ready_for_print").map{|g| g.attributes.merge(user_email: g.user.email,note_text_present: g.user.note.try(:note_text).present?)}
+						# render status: "200", json: {
+						# 	# any_payment_pending: pending_payment_status,
+						# 	# groups: groups,
+						# 	document: document,
+						# 	message: "document set to pending"
+						# }
+					# else
+					# 	render status: "500", json: {
+					# 					message: document.errors.full_messages
+					# 				}
+					# end
 
 				rescue Exception => e
 					render status: "500", json: {
@@ -507,6 +520,33 @@ module Api
 				end
         # admin = User.find_by(email: params[:email])
       end
+
+			def re_print_doc
+					begin
+						group = Group.find(params["groupID"])
+						document = group.documents.find(params["documentID"])
+
+						document.processed_pages = 0
+
+						if document.save
+							render status: "200", json: {
+								document: document,
+								message: "document set to pending"
+							}
+						else
+							render status: "500", json: {
+											message: document.errors.full_messages
+										}
+						end
+
+					rescue Exception => e
+							render status: "500", json: {
+										message: e.message
+									}
+					end
+
+
+				end
 
 			def interrupt_cancel_document
 					begin

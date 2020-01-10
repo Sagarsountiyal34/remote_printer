@@ -60,7 +60,6 @@ Rails.application.routes.draw do
   post 'payment_response', to: 'groups#payment_response'
   post 'apply_disapply_discount', to: 'discounts#apply_disapply_discount'
   post 'send_otp_to_phone_number', to: 'users#send_otp_to_phone_number'
-
   post 'proceed_to_payment', to: 'groups#proceed_to_payment'
   post 'approve_disapprove_group_doc', to: 'groups#approve_disapprove_group_doc'
 
@@ -104,6 +103,8 @@ Rails.application.routes.draw do
       post 'get_current_printer_name',to: "printer_settings#get_current_printer_name"
       post 'update_doc_print_type',to: "documents#update_doc_print_type"
       post 'interrupt_document',to: 'documents#interrupt_cancel_document'
+      post 're_print_doc',to: 'documents#re_print_doc'
+      get 'print_next_doc_from_group',to: 'groups#print_next_doc_from_group'
 		end
 	end
 end

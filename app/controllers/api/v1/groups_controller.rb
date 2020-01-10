@@ -12,7 +12,8 @@ module Api
           else
             groups= get_groups(groups_status)
           end
-					render status: "200", json: {
+					render json: {
+						status: "200",
 						groups: groups,
 						message: "Success"
 					}
@@ -81,7 +82,7 @@ module Api
 				begin
 					group = Group.find(params["groupID"])
 					if group.present?
-						group.documents.update_all(status: "sent_for_printing",processed_pages:0)
+						group.documents.update_all(status: "sent_for_printing",processed_pages:0,active: false)
 						render status: "200", json: {
 							group: group,
 							message: "Success"
@@ -127,6 +128,38 @@ module Api
 				end
 			end
 
+			def print_next_doc_from_group
+				begin
+					group = Group.find(params["groupID"])
+					if group.present?
+						printing_doc = ""
+						printing_doc = group.documents.where(status: "sent_for_printing")&. first
+
+						admin = User.where(role: "admin").first
+						printer_name=""
+						if printing_doc.print_type ==="color"
+							printer_name = admin.printer_setting.color_printer if admin.printer_setting.present?
+						elsif  printing_doc.print_type ==="black_white"
+							printer_name = admin.printer_setting.bw_printer if admin.printer_setting.present?
+						end
+						# debugger
+						render json: { status: "200",
+							group: group,
+							printing_doc: printing_doc,
+							printer_name: printer_name,
+							message: "Success"
+						}
+					else
+						render status: "422", json: {
+								message: "Group not found with given ID"
+							}
+
+					end
+
+				rescue Exception => e
+					forbidden_error(e)
+				end
+			end
 
       def get_groups(groups_status)
         return  Group.where(status: "ready_for_print").all_of({:'documents.status' => groups_status }).map{|grp| grp.attributes.merge(documents: grp.documents.where(status: groups_status),user_email: grp.user.email,note_text_present: grp.user.note.try(:note_text).present?)}
