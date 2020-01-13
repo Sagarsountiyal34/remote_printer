@@ -357,12 +357,22 @@ module Api
 						document = group.documents.find(params["documentID"]) if group.present?
 						if document.present?
 								if document.update_attributes(status: 'sent_for_printing',active:true)
+									admin = User.where(role: "admin").first
+									printer_name=""
+									if document.print_type ==="color"
+										printer_name = admin.printer_setting.color_printer if admin.printer_setting.present?
+									elsif  document.print_type ==="black_white"
+										printer_name = admin.printer_setting.bw_printer if admin.printer_setting.present?
+									end
+									document.attributes.merge(printer_name:printer_name)
 									render status: "200", json: {
 										document: document,
 										message: "Status updated successfully"
 									}
 								else
-									generate_error_response("304","")
+									render status: "422", json: {
+													message: document.errors.full_messages
+												}
 								end
 						else
 							generate_error_response("404","Docment not found with given ID")
@@ -402,6 +412,37 @@ module Api
 						generate_error_response("500",e.message)
 					end
 
+			end
+
+			def fetch_document_to_print
+				begin
+					doc_to_print=""
+					printer_name=""
+					group = Group.find(params["groupID"])
+					admin = User.where(role: "admin").first
+					if group.present?
+						doc_to_print = group.documents.where(:status=>"sent_for_printing").first
+						if doc_to_print.present?
+							doc_to_print.update_attributes(active: true)
+							if 	doc_to_print.print_type ==="color"
+								printer_name = admin.printer_setting.color_printer if admin.printer_setting.present?
+							elsif doc_to_print.print_type ==="black_white"
+								printer_name = admin.printer_setting.bw_printer if admin.printer_setting.present?
+							end
+						end
+					  doc_to_print = doc_to_print.attributes.merge(printer_name:printer_name)
+						render status: "200", json: {
+							document: doc_to_print,
+							message: "Status updated successfully"
+						}
+					else
+						render status: "422", json: {
+								message: "Group not found with given ID"
+							}
+					end
+				rescue Exception => e
+					generate_error_response("500",e.message)
+				end
 			end
 
 

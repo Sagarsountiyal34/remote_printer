@@ -67,7 +67,7 @@ Rails.application.routes.draw do
   namespace 'api' do
 		namespace 'v1' do
       mount_devise_token_auth_for 'Company', at: 'auth'
-      
+
       post 'get_all_documents', to: 'documents#get_all_documents'
 			post 'update_document_status', to: 'documents#update_document_status', as: 'update_document_status'
       post 'update_group_status', to: 'documents#update_group_status', as: 'update_group_status'
@@ -96,6 +96,7 @@ Rails.application.routes.draw do
       post 'change_status_and_active', to: 'documents#change_status_and_active'
       get 'change_progress_page_count', to: 'documents#change_progress_page_count'
       get 'get_doc_to_print', to: 'documents#get_doc_to_print'
+      get 'fetch_document_to_print', to: 'documents#fetch_document_to_print'
       get 'get_document_details', to: 'documents#get_document_details'
       post 'check_company_credential', to: 'users#check_company_credential'
       post 'change_paid_status',to: "groups#change_paid_status"
