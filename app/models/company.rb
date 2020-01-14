@@ -61,8 +61,19 @@ class Company
   index({ reset_password_token: 1 }, { name: 'reset_password_token_index', unique: true, sparse: true, background: true })
   index({ confirmation_token: 1 }, { name: 'confirmation_token_index', unique: true, sparse: true, background: true })
   index({ uid: 1, provider: 1}, { name: 'uid_provider_index', unique: true, background: true })
-  # index({ unlock_token: 1 }, { name: 'unlock_token_index', unique: true, sparse: true, background: true })
+  # index({ unlock_token: 1 }, { name: 'unlock_token_pindex', unique: true, sparse: true, background: true })
    before_validation do
     self.uid = email if uid.blank?
+  end
+
+  def create_new_auth_token(client = nil)
+    now = Time.zone.now.utc
+    token = create_token(
+      client: client,
+      last_token: tokens.fetch(client, {})['token'],
+      updated_at: now
+    )
+
+    update_auth_header(token.token, token.client)
   end
 end
