@@ -1,6 +1,7 @@
 module Api
 	module V1
 		class DocumentsController < ApplicationApiController
+			# DeviseTokenAuth::Concerns::User 
 			include ActionController::ImplicitRender
 			protect_from_forgery with: :null_session
 
@@ -357,12 +358,11 @@ module Api
 						document = group.documents.find(params["documentID"]) if group.present?
 						if document.present?
 								if document.update_attributes(status: 'sent_for_printing',active:true)
-									admin = User.where(role: "admin").first
 									printer_name=""
 									if document.print_type ==="color"
-										printer_name = admin.printer_setting.color_printer if admin.printer_setting.present?
+										printer_name = @current_company.printer_setting.color_printer if @current_company.printer_setting.present?
 									elsif  document.print_type ==="black_white"
-										printer_name = admin.printer_setting.bw_printer if admin.printer_setting.present?
+										printer_name =  @current_company.printer_setting.bw_printer if@current_company.printer_setting.present?
 									end
 									document.attributes.merge(printer_name:printer_name)
 									render status: "200", json: {
@@ -391,12 +391,11 @@ module Api
 						group = Group.find(params["groupID"])
 						document = group.documents.find(params["documentID"]) if group.present?
 						if document.present?
-							admin = User.where(role: "admin").first
 							printer_name=""
 							if document.print_type ==="color"
-								printer_name = admin.printer_setting.color_printer if admin.printer_setting.present?
+								printer_name = @current_company.printer_setting.color_printer if @current_company.printer_setting.present?
 							elsif  document.print_type ==="black_white"
-								printer_name = admin.printer_setting.bw_printer if admin.printer_setting.present?
+								printer_name =  @current_company.printer_setting.bw_printer if@current_company.printer_setting.present?
 							end
 							render status: "200", json: {
 								document: document,
@@ -419,15 +418,13 @@ module Api
 					doc_to_print=""
 					printer_name=""
 					group = Group.find(params["groupID"])
-					admin = User.where(role: "admin").first
 					if group.present?
 						doc_to_print = group.documents.where(:status=>"sent_for_printing").first
 						if doc_to_print.present?
-							doc_to_print.update_attributes(active: true)
-							if 	doc_to_print.print_type ==="color"
-								printer_name = admin.printer_setting.color_printer if admin.printer_setting.present?
-							elsif doc_to_print.print_type ==="black_white"
-								printer_name = admin.printer_setting.bw_printer if admin.printer_setting.present?
+							if doc_to_print.print_type ==="color"
+								printer_name = @current_company.printer_setting.color_printer if @current_company.printer_setting.present?
+							elsif  doc_to_print.print_type ==="black_white"
+								printer_name =  @current_company.printer_setting.bw_printer if@current_company.printer_setting.present?
 							end
 						end
 					  doc_to_print = doc_to_print.attributes.merge(printer_name:printer_name)
@@ -447,7 +444,7 @@ module Api
 
 
 			def get_doc_to_print
-						begin
+							begin
 								doc_to_print=""; group=""
 								active_group = Group.all_of({:'documents.active' => true }).map{|grp| grp.attributes.merge(documents: grp.documents.where(active: true),user_email: grp.user.email)}
 

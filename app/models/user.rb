@@ -25,7 +25,6 @@ class User
   has_many :upload_documents, dependent: :destroy
   has_many :groups, dependent: :destroy
   has_one :note, dependent: :destroy
-  has_one :printer_setting, dependent: :destroy
 
   ## Trackable
   field :sign_in_count,      type: Integer, default: 0
@@ -51,6 +50,7 @@ class User
 
   before_create :generate_confirmable_otp
   after_create :send_otp_mail
+  
 
   def generate_confirmable_otp
     self.confirmable_otp =  rand(10 ** 5)

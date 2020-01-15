@@ -50,6 +50,8 @@ class Company
 
   ## Tokens
   field :tokens, type: Hash, default: {}
+  has_one :printer_setting, dependent: :destroy
+  
 
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable

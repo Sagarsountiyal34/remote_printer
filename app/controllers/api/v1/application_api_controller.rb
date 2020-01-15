@@ -9,18 +9,25 @@ class ApplicationApiController < ActionController::Base
 	private
 
 	def get_current_company
-		@current_company = Company.find_by(email: params[:uid]).valid_token?(params["access-token"],params[:client])
+		validate_token = false
+		company =  Company.find_by(email: params[:uid])
+		token_valid = company.valid_token?(params["access-token"],params[:client]) if company.present?
+		if token_valid
+			return @current_company = company
+		else
+			return false
+		end 
 	end
 	def company_signed_in?
 	   get_current_company.present?
 	end
 
 	def authenticate_with_token!
-	    unless company_signed_in?
-	    	render status: :unauthorized, json: {
-				 errors: "Not authenticated"
-	        } 
-	    end
+	    # unless company_signed_in?
+	    # 	render status: :unauthorized, json: {
+				 # errors: "Not authenticated"
+	    #     } 
+	    # end
 	end
 
 	

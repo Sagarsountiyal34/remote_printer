@@ -6,15 +6,14 @@ module Api
 
       def update_printer_setting
         begin
-          admin = User.where(role: "admin").first
-          if admin.printer_setting.nil?
-            admin.create_printer_setting(params[:type]=> params[:name])
+          if @current_company.printer_setting.nil?
+            @current_company.create_printer_setting(params[:type]=> params[:name])
             render status: "200", json: {
               # users_emails: users_emails_with_groupCount,
               message: "Success"
             }
           else
-            admin.printer_setting.update_attributes(params[:type]=> params[:name])
+            @current_company.printer_setting.update_attributes(params[:type]=> params[:name])
             render status: "200", json: {
               # users_emails: users_emails_with_groupCount,
               message: "Success"
@@ -31,12 +30,11 @@ module Api
       def get_current_printer_name
         begin
 
-          admin = User.where(role: "admin").first
           colored = ""
           bw = ""
-          if admin.printer_setting.present?
-            colored = admin.printer_setting.color_printer
-            bw = admin.printer_setting.bw_printer
+          if @current_company.printer_setting.present?
+            colored = @current_company.printer_setting.color_printer
+            bw = @current_company.printer_setting.bw_printer
           end
           render status: "200", json: {
             # users_emails: users_emails_with_groupCount,
