@@ -89,7 +89,7 @@ Rails.application.routes.draw do
       post 'groups/get_groups_with_document_status', to: 'groups#get_groups_with_document_status'
       post 'notes/save_note', to: 'notes#save_note'
       get 'notes/get_note', to: 'notes#get_note'
-      post 'users_list',to:'users#users_list'
+      get 'users_list',to:'users#users_list'
       get 'pending_payments',to: 'users#pending_payments'
       get 'check_user_confirmed',to: 'users#check_user_confirmed'
       post 'change_document_status', to: 'documents#change_document_status'

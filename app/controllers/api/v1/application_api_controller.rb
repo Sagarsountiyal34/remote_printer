@@ -23,13 +23,20 @@ class ApplicationApiController < ActionController::Base
 	end
 
 	def authenticate_with_token!
-	    # unless company_signed_in?
-	    # 	render status: :unauthorized, json: {
-				 # errors: "Not authenticated"
-	    #     } 
-	    # end
+		# debugger
+	    unless company_signed_in?
+	    	render status: :unauthorized, json: {
+				 errors: "Not authenticated"
+	        } 
+	    end
 	end
 
+	protected
+	def forbidden_error(e=nil)
+		render status: "500", json: {
+			message: "Internal Server Error." + e.to_s
+        }
+	end
 	
 end
 
