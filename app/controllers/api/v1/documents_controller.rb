@@ -364,7 +364,7 @@ module Api
 									elsif  document.print_type ==="black_white"
 										printer_name =  @current_company.printer_setting.bw_printer if@current_company.printer_setting.present?
 									end
-									document.attributes.merge(printer_name:printer_name)
+									document = document.attributes.merge(printer_name:printer_name)
 									render status: "200", json: {
 										document: document,
 										message: "Status updated successfully"
@@ -427,7 +427,8 @@ module Api
 								printer_name =  @current_company.printer_setting.bw_printer if@current_company.printer_setting.present?
 							end
 						end
-					  doc_to_print = doc_to_print.attributes.merge(printer_name:printer_name)
+						doc_to_print.update(active: true)
+					  	doc_to_print = doc_to_print.attributes.merge(printer_name:printer_name)
 						render status: "200", json: {
 							document: doc_to_print,
 							message: "Status updated successfully"
@@ -587,6 +588,7 @@ module Api
 				end
 
 			def interrupt_cancel_document
+				# debugger
 					begin
 							group = Group.find(params["groupID"])
 							document = group.documents.find(params["documentID"])
@@ -596,6 +598,7 @@ module Api
 							else
 								document.status = "pending"
 							end
+
 
 							if document.save
 								render status: "200", json: {

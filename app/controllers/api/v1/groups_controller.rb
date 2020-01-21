@@ -17,9 +17,9 @@ module Api
 						groups: groups,
 						message: "Success"
 					}
-				rescue Exception => e
-					forbidden_error(e)
-				end
+		rescue Exception => e
+			forbidden_error(e)
+		end
       end
 
 		    def get_groups_with_document_status
