@@ -6,5 +6,7 @@ class PrinterSetting
 
   field :color_printer, type: String, default: ""
   field :bw_printer, type: String, default: ""
+  field :bw_price, type: Float, default: 1
+  field :color_price, type: Float, default: 1
 
 end

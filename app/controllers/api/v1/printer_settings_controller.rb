@@ -27,6 +27,27 @@ module Api
 
       end
 
+			def update_printer_cost
+				begin
+					# @current_company = Company.last
+					if @current_company.printer_setting.nil?
+						@current_company.create_printer_setting(params[:cost_type]=> params[:cost])
+						render status: "200", json: {
+							# users_emails: users_emails_with_groupCount,
+							message: "Success"
+						}
+					else
+						@current_company.printer_setting.update_attributes(params[:cost_type]=> params[:cost])
+						render status: "200", json: {
+							# users_emails: users_emails_with_groupCount,
+							message: "Success"
+						}
+					end
+				rescue Exception => e
+					forbidden_error(e)
+				end
+			end
+
       def get_current_printer_name
         begin
 
