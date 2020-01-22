@@ -105,6 +105,7 @@ module Api
 					if group.present?
 						group.paid =  true
 						if group.save
+						group = 	group.attributes.merge(user_email: group.user.email)
 							render status: "200", json: {
 								group: group,
 								message: "Success"
@@ -142,7 +143,7 @@ module Api
 						elsif  printing_doc.print_type ==="black_white"
 							printer_name = admin.printer_setting.bw_printer if admin.printer_setting.present?
 						end
-						# debugger
+						#
 						render json: { status: "200",
 							group: group,
 							printing_doc: printing_doc,

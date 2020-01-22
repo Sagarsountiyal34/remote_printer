@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class Company
+  # require 'mongoid/locker'
   include Mongoid::Document
   include Mongoid::Timestamps
   include Mongoid::Locker
@@ -51,7 +52,8 @@ class Company
   ## Tokens
   field :tokens, type: Hash, default: {}
   has_one :printer_setting, dependent: :destroy
-  
+  has_many :groups
+
 
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable

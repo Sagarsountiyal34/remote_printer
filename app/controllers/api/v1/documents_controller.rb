@@ -1,7 +1,7 @@
 module Api
 	module V1
 		class DocumentsController < ApplicationApiController
-			# DeviseTokenAuth::Concerns::User 
+			# DeviseTokenAuth::Concerns::User
 			include ActionController::ImplicitRender
 			protect_from_forgery with: :null_session
 
@@ -227,7 +227,7 @@ module Api
 				begin
 					group = Group.find(params["groupID"])
 					document = group.documents.find(params["documentID"])
-					# debugger
+					#
 					document.status = "completed"
 					if document.save
 						render status: "200", json: {
@@ -428,7 +428,7 @@ module Api
 							end
 						end
 						doc_to_print.update(active: true)
-					  	doc_to_print = doc_to_print.attributes.merge(printer_name:printer_name)
+					  doc_to_print = doc_to_print.attributes.merge(printer_name:printer_name) if doc_to_print.present?
 						render status: "200", json: {
 							document: doc_to_print,
 							message: "Status updated successfully"
@@ -617,6 +617,27 @@ module Api
 					end
 
 				end
+
+				def set_status_on_start
+					begin
+						 documents = Group.all.map(&:documents).flatten
+						 documents.each do |doc|
+								if doc.status =="sent_for_printing"
+										if doc.processed_pages > 0
+											doc.update(status: "interrupted")
+										else
+											doc.update(status: "pending")
+										end
+								end
+						 end
+						 render json: { status: "200",
+								message: "Documents status reset"
+							}
+				 rescue Exception => e
+					 forbidden_error(e)
+				 end
+			end
+
 
 			private
 			def generate_error_response(code,message)
