@@ -70,6 +70,24 @@ module Api
 
       end
 
+			def get_current_printer_settings
+				begin
+					# @current_company = Company.last
+					printer_setting = ""
+          if @current_company.printer_setting.present?
+            printer_setting= @current_company.printer_setting
+          end
+          render status: "200", json: {
+            # users_emails: users_emails_with_groupCount,
+            message: "Success",
+            printer_setting: printer_setting
+          }
+
+        rescue Exception => e
+          forbidden_error(e)
+        end
+			end
+
 
     end
   end
