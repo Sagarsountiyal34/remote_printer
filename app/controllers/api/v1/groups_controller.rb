@@ -8,7 +8,7 @@ module Api
       def get_groups_wd_status
         begin
           groups_status= params["GStatus"]
-          if true
+          if groups_status=="all"
             groups = Group.where(status: "ready_for_print").map{|g| g.attributes.merge(user_email: g.user.email,total_cost: group_total(g),note_text_present: g.user.note.try(:note_text).present?)}
           else
             groups= get_groups(groups_status)
