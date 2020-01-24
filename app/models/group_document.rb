@@ -16,14 +16,21 @@ class GroupDocument
   field :active, type: Boolean, default: false
   field :is_approved, type: Boolean, default: false
   field :print_type, type: String, default: 'black_white'
-  field :cost, type: Integer
+  field :cost, type: Float
 
   # before_update :active_next_document
 
   validates :status, inclusion: { in: ['pending','interrupted','sent_for_printing', 'processing', 'failed', 'completed'] }
-  # after_save :create_note_entry
+  before_save :calculate_cost
   validates :print_type, inclusion: { in: ['black_white', 'color'] }
 
+  def calculate_cost
+    setting  = group.company.printer_setting
+    if setting.present?
+      count  = total_pages
+      self.cost =(print_type== "black_white"?(count*setting.bw_price):(count*setting.color_price))
+    end
+  end
   def active_next_document
     if (status_changed? && status_was =="sent_for_printing" && (status =="completed_&_paid"||status =="completed_&_unpaid"||status=="interrupted") )
       next_doc_to_print = group.documents.where(status: "sent_for_printing").where(id!= self.id).first

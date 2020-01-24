@@ -72,7 +72,7 @@ Rails.application.routes.draw do
 			post 'update_document_status', to: 'documents#update_document_status', as: 'update_document_status'
       post 'update_group_status', to: 'documents#update_group_status', as: 'update_group_status'
       post 'get_groups_with_status', to: 'documents#get_groups_with_status'
-      post 'get_groups_wd_status', to: 'groups#get_groups_wd_status'
+      get 'get_groups_wd_status', to: 'groups#get_groups_wd_status'
       post 'mark_all_as_printed', to: 'groups#mark_all_as_printed'
       post 'print_group_again', to: 'groups#print_group_again'
       post 'send_error_to_admin', to: 'documents#send_error_to_admin'

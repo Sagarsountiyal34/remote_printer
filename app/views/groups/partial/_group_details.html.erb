@@ -3,17 +3,26 @@
         <i class="fas fa-table"></i>
         Group Item: <span id="total_group_item">
             <%= @group.documents.length %></span>
+
         <span style="float:right;">
             <i class="fas fa-table"></i>
             OTP:
             <input type="text" id="otp" value="<%= @group.otp %>" data-value="<%= @group.otp %>" disabled>
             <%= button_tag "Show", id: 'toggle_otp', class: 'btn_1' %>
+
+
         </span>
+
     </div><br>
     <b>
         <div class="col-sm-3"> <span class="breadcrumb-item active">Provider:
                 <%= @group.company.email %></span></div>
     </b>
+    <b>
+        <div class="col-sm-3"> <span class="breadcrumb-item active">Total Amount:
+                <%= group_total(@group)%></span></div>
+    </b>
+
     <div class="card-body">
         <div class="table-responsive">
             <table class="table table-bordered document_table" id="dataTableGroupDoc" width="100%" cellspacing="0">
@@ -23,6 +32,7 @@
                         <th width="30%">Name</th>
                         <th width="25%">Type</th>
                         <th width="">Pgs</th>
+                        <th width="">Amount</th>
                         <th width="">Print Color</th>
                         <% if @group.is_group_sent_for_printing? or @group.status == 'ready_for_print' %>
                         <th width="5%">Status</th>
@@ -51,6 +61,9 @@
                         </td>
                         <td>
                             <%= a.total_pages %>
+                        </td>
+                        <td>
+                            <%= a.cost%>
                         </td>
                         <td>
                             <%= a.print_type %>
