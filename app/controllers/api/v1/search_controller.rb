@@ -3,6 +3,7 @@ module Api
 		class SearchController < ApplicationApiController
 			include ActionController::ImplicitRender
 			protect_from_forgery with: :null_session
+			include GroupHelper
 
       def suggestions_for_user_email
         begin
@@ -68,13 +69,13 @@ module Api
 					case params[:category]
 							when "search_with_user_email"
 								user = User.find_by(email: params[:searchTerm])
-								groups = user.groups.where(status: "ready_for_print").map{|g| g.attributes.merge(user_email: g.user.email,note_text_present: g.user.note.try(:note_text).present?)} if user.present?
+								groups = user.groups.where(status: "ready_for_print").map{|g| g.attributes.merge(user_email: g.user.email,total_cost: group_total(g),note_text_present: g.user.note.try(:note_text).present?)} if user.present?
 							when "search_with_doc_name"
-								groups = Group.where(status: "ready_for_print").all_of({:'documents.document_name' => params[:searchTerm]}).map{|grp| grp.attributes.merge(documents: grp.documents.where(document_name: params[:searchTerm]),user_email: grp.user.email,note_text_present: grp.user.note.try(:note_text).present?)}
+								groups = Group.where(status: "ready_for_print").all_of({:'documents.document_name' => params[:searchTerm]}).map{|grp| grp.attributes.merge(documents: grp.documents.where(document_name: params[:searchTerm]),total_cost: group_total(g),user_email: grp.user.email,note_text_present: grp.user.note.try(:note_text).present?)}
 
 							when "search_with_OTP"
 							 	groups=Group.where(status: "ready_for_print").where(otp: params[:searchTerm] )
-								groups=groups.map{|g| g.attributes.merge(user_email: g.user.email)}if groups.present?
+								groups=groups.map{|g| g.attributes.merge(user_email: g.user.email,total_cost: group_total(g))}if groups.present?
 							else
 								return groups
 					end
