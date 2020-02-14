@@ -46,7 +46,6 @@ class Company
   # field :locked_at,       type: Time
 
   ## Required
-  field :provider, type: String
   field :uid,      type: String, default: ''
 
   ## Tokens
