@@ -350,6 +350,35 @@ module Api
 
 			end
 
+			def set_doc_status
+
+					begin
+						group = Group.find(params["groupID"])
+						document = ""
+						document = group.documents.find(params["documentID"]) if group.present?
+						if document.present?
+							# debugger
+								if document.update_attributes(status: params[:status],active: false)
+									render status: "200", json: {
+										document: document,
+										message: "Status Updated"
+									}
+								else
+									generate_error_response("304","")
+								end
+						else
+							render status: "422", json: {
+								message: document.errors.full_messages
+							}
+
+						end
+
+					rescue Exception => e
+						generate_error_response("500",e.message)
+					end
+
+			end
+
 			def change_status_and_active
 
 					begin
