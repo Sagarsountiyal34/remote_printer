@@ -13,6 +13,9 @@ class HomeController < ApplicationController
 
 	def confirm_otp
 		 #render :layout => false
+		 if current_user.otp_confirmed
+		 	redirect_to root_path
+		 end
 	end
 
 	def save_confirmable_otp
