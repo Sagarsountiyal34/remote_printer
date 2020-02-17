@@ -109,6 +109,7 @@ Rails.application.routes.draw do
       post 're_print_doc',to: 'documents#re_print_doc'
       get 'print_next_doc_from_group',to: 'groups#print_next_doc_from_group'
       post 'set_status_on_start',to: "documents#set_status_on_start"
+      post 'set_doc_status',to: "documents#set_doc_status"
 		end
 	end
 end
