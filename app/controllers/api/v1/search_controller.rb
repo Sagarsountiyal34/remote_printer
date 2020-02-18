@@ -1,14 +1,12 @@
-module Api
-	module V1
-		class SearchController < ApplicationApiController
-			include ActionController::ImplicitRender
-			protect_from_forgery with: :null_session
-			include GroupHelper
+class Api::V1::SearchController < ApplicationApiController
+	include ActionController::ImplicitRender
+	protect_from_forgery with: :null_session
+	include GroupHelper
 
-      def suggestions_for_user_email
-        begin
-          searchterm = params[:searchTerm]
-          users_emails = []
+  	def suggestions_for_user_email
+	    begin
+	      searchterm = params[:searchTerm]
+	      users_emails = []
 					if params[:condition] == "avoid_blank_grps"
 						all_users_ids = Group.where(status:  "ready_for_print").pluck(:user_id)
 						users =User.in("id": all_users_ids,"email": /.*#{searchterm}.*/i) if all_users_ids.present?
@@ -17,19 +15,18 @@ module Api
 						users =User.in("email": /.*#{searchterm}.*/i)
 
 					end
-          users_emails = users.map(&:email) if users.present?
-          render status: "200", json: {
-            suggestions: users_emails,
-            message: "Success"
-          }
-        rescue Exception => e
-          generate_error_response("500",e)
+	      users_emails = users.map(&:email) if users.present?
+	      render status: "200", json: {
+	        suggestions: users_emails,
+	        message: "Success"
+	      }
+	    rescue Exception => e
+	      generate_error_response("500",e)
 
-        end
+	    end
+	end
 
-      end
-
-			def suggestions_for_Document_names
+	def suggestions_for_Document_names
         begin
           searchterm = params[:searchTerm]
         	document_names= Group.collection.aggregate([{'$unwind': '$documents'},{'$match':{ '$and': [{'status': "ready_for_print"},{'documents.document_name': /.*#{searchterm}.*/i}]} },{'$project': {'documents.document_name': 1,'_id':0 }}]).to_a.map{|a| a["documents"]["document_name"]}
@@ -42,10 +39,9 @@ module Api
           generate_error_response("500",e)
 
         end
+    end
 
-      end
-
-			def suggestions_for_otps
+	def suggestions_for_otps
         begin
           searchterm = params[:searchTerm]
           otps = []
@@ -60,62 +56,57 @@ module Api
           generate_error_response("500",e)
 
         end
-
-      end
-
-			def search_by_category
-				begin
-					groups=""
-					case params[:category]
-							when "search_with_user_email"
-								user = User.find_by(email: params[:searchTerm])
-								groups = user.groups.where(status: "ready_for_print").map{|g| g.attributes.merge(user_email: g.user.email,total_cost: group_total(g),note_text_present: g.user.note.try(:note_text).present?)} if user.present?
-							when "search_with_doc_name"
-								groups = Group.where(status: "ready_for_print").all_of({:'documents.document_name' => params[:searchTerm]}).map{|grp| grp.attributes.merge(documents: grp.documents.where(document_name: params[:searchTerm]),total_cost: group_total(g),user_email: grp.user.email,note_text_present: grp.user.note.try(:note_text).present?)}
-
-							when "search_with_OTP"
-							 	groups=Group.where(status: "ready_for_print").where(otp: params[:searchTerm] )
-								groups=groups.map{|g| g.attributes.merge(user_email: g.user.email,total_cost: group_total(g))}if groups.present?
-							else
-								return groups
-					end
-
-					render status: "200", json: {
-						groups: groups,
-						message: "Success"
-					}
-				rescue Exception => e
-					generate_error_response("500",e)
-				end
-
-			end
-			def search_in_user_list
-				begin
-					groups=""
-					user = User.find_by(email: params[:searchTerm])
-					user_email = params[:searchTerm]
-					note_text = user.note.try(:note_text).present?
-					groups = user.groups.where(status: "ready_for_print").map{|g| g.attributes.merge(user_email: g.user.email,note_text_present: g.user.note.try(:note_text).present?)} if user.present?
-
-					render status: "200", json: {
-						groups: groups,
-						user_email: user_email,
-						note_text: note_text,
-						message: "Success"
-					}
-				rescue Exception => e
-					generate_error_response("500",e)
-				end
-
-			end
-
-      private
-      def generate_error_response(code,message)
-          render status: code, json: {
-              message: message
-          }
-      end
-
     end
-  end
-end
+
+	def search_by_category
+		begin
+			groups=""
+			case params[:category]
+					when "search_with_user_email"
+						user = User.find_by(email: params[:searchTerm])
+						groups = user.groups.where(status: "ready_for_print").map{|g| g.attributes.merge(user_email: g.user.email,total_cost: group_total(g),note_text_present: g.user.note.try(:note_text).present?)} if user.present?
+					when "search_with_doc_name"
+						groups = Group.where(status: "ready_for_print").all_of({:'documents.document_name' => params[:searchTerm]}).map{|grp| grp.attributes.merge(documents: grp.documents.where(document_name: params[:searchTerm]),total_cost: group_total(g),user_email: grp.user.email,note_text_present: grp.user.note.try(:note_text).present?)}
+
+					when "search_with_OTP"
+					 	groups=Group.where(status: "ready_for_print").where(otp: params[:searchTerm] )
+						groups=groups.map{|g| g.attributes.merge(user_email: g.user.email,total_cost: group_total(g))}if groups.present?
+					else
+						return groups
+			end
+
+			render status: "200", json: {
+				groups: groups,
+				message: "Success"
+			}
+		rescue Exception => e
+			generate_error_response("500",e)
+		end
+	end
+
+	def search_in_user_list
+		begin
+			groups=""
+			user = User.find_by(email: params[:searchTerm])
+			user_email = params[:searchTerm]
+			note_text = user.note.try(:note_text).present?
+			groups = user.groups.where(status: "ready_for_print").map{|g| g.attributes.merge(user_email: g.user.email,note_text_present: g.user.note.try(:note_text).present?)} if user.present?
+
+			render status: "200", json: {
+				groups: groups,
+				user_email: user_email,
+				note_text: note_text,
+				message: "Success"
+			}
+		rescue Exception => e
+			generate_error_response("500",e)
+		end
+	end
+
+    private
+      	def generate_error_response(code,message)
+            render status: code, json: {
+            	message: message
+            }
+      	end
+    end
