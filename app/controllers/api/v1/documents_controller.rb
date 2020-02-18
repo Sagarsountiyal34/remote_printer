@@ -616,12 +616,11 @@ class Api::V1::DocumentsController < ApplicationApiController
 		begin
 				group = Group.find(params["groupID"])
 				document = group.documents.find(params["documentID"])
-				if document.active && document.processed_pages >0
+				# if document.active && document.processed_pages >0
+				if document.active
 					document.status = "interrupted"
 					document.active = false
 				end
-
-
 				if document.save
 					render status: "200", json: {
 						document: document,
