@@ -619,8 +619,6 @@ class Api::V1::DocumentsController < ApplicationApiController
 				if document.active && document.processed_pages >0
 					document.status = "interrupted"
 					document.active = false
-				else
-					document.status = "pending"
 				end
 
 
