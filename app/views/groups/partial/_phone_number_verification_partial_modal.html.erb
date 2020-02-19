@@ -15,8 +15,8 @@
                         Phone Number Verification</div>
                     <div class="card-body">
                         <div class="table-responsive">
-                            <span id="phone_number_span">Enter Phone number: <input type="number" name="phone_number" id="phone_number" value="phone_number"><br><br></span>
-                            <span style="display:none;" id="otp_span">Enter OTP: <input type="number" name="otp" id="otp" value="otp"><br><br></span>
+                            <span id="phone_number_span">Enter Phone number: <input type="text" name="phone_number" id="phone_number"  pattern="[9]{1}[1]{1}[7-9]{1}[0-9]{9}" title="Phone number with 91(country code) and 7-9 and remaing 9 digit with 0-9"><br><br></span>
+                            <span style="display:none;" id="otp_span">Enter OTP: <input type="number" name="otp" id="otp" ><br><br></span>
                             <%= button_tag "Get OTP", :class => 'btn_1', :id => 'send_otp' %>
                             <%= button_tag "Create Account and save Doc", :class => 'btn_1', :id => 'create_account_with_doc', :style => 'display:none;' %>
                         </div>
@@ -104,6 +104,7 @@ $(document).ready(function() {
                     $('#phone_number_span').hide();
                     $('#send_otp').hide();
                     $('#create_account_with_doc').show();
+                    notification("Please check OTP and Enter", "info");
                 }
             },
             error: function(exception) {

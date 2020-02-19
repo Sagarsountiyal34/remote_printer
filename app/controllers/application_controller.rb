@@ -22,7 +22,6 @@ class ApplicationController < ActionController::Base
 	private
 
 	def is_confirmed?
-		# debugger
 		if  params[:controller]!="devise_token_auth/token_validations"
 			if user_signed_in? && !current_user.otp_confirmed && !devise_controller? && !current_user.is_admin? && current_user.email.present?
 				redirect_to confirm_otp_path

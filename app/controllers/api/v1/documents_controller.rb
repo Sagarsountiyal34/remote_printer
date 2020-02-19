@@ -355,7 +355,6 @@ class Api::V1::DocumentsController < ApplicationApiController
 				document = ""
 				document = group.documents.find(params["documentID"]) if group.present?
 				if document.present?
-					# debugger
 						if document.update_attributes(status: params[:status],active: false)
 							render status: "200", json: {
 								document: document,
@@ -612,7 +611,6 @@ class Api::V1::DocumentsController < ApplicationApiController
 	end
 
 	def interrupt_cancel_document
-		# debugger
 		begin
 				group = Group.find(params["groupID"])
 				document = group.documents.find(params["documentID"])

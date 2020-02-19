@@ -1,6 +1,8 @@
+
 class User
   include Mongoid::Document
   include Mongoid::Timestamps
+
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   attr_writer :login
@@ -68,6 +70,11 @@ class User
       super
     end
   end
+
+  def send_reset_password_instructions_email_sms(password_url)
+      raw_token = set_reset_password_token
+      self.email.present? ? send_reset_password_instructions_by_email(raw_token) : send_reset_password_instructions_by_sms(raw_token,password_url)
+  end
     # function to handle user's login via email or username
   def self.find_for_database_authentication(warden_conditions)
     conditions = warden_conditions.dup
@@ -110,6 +117,17 @@ class User
   def login
     @login || self.phone_number || self.email
   end
+  private
+  def send_reset_password_instructions_by_email(raw_token)
+    send_reset_password_instructions_notification(raw_token)
+  end
 
+  def send_reset_password_instructions_by_sms(raw_token,password_url)
+    PhoneMessageSender.send_password_instruction(self, password_url,raw_token)
+  end
 
 end
+
+
+
+

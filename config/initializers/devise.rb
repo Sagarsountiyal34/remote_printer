@@ -300,4 +300,8 @@ Devise.setup do |config|
   # config.sign_in_after_change_password = true
   config.authentication_keys = [:login,:email]
   config.scoped_views = true
+
+  config.reset_password_keys = [:login]
+  config.confirmation_keys = [ :login ]
+
 end

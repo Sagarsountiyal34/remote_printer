@@ -23,7 +23,6 @@ class ApplicationApiController < ActionController::Base
 	end
 
 	def authenticate_with_token!
-		# debugger
 	    unless company_signed_in?
 	    	render status: :unauthorized, json: {
 				 errors: "Not authenticated"

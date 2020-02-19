@@ -11,8 +11,8 @@
         <%= render "devise/shared/error_messages", resource: resource %>
         <div class="form-group">
             <div class="form-label-group">
-                <%= f.email_field :email, autofocus: true, autocomplete: "email", :class => 'form-control', :placeholder => 'Enter Email Address', :required => 'required' %>
-                <%= f.label :email %><br />
+                <%= f.text_field :login, autofocus: true, autocomplete: "email", :class => 'form-control', :placeholder => 'Enter Email Address', :required => 'required' %>
+                <%= f.label :email, "Email/Phone Number" %><br />
             </div>
         </div>
         <%= f.submit "Send link" , :class => 'btn_1'%>
