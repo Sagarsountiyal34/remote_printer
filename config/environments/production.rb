@@ -91,7 +91,10 @@ Rails.application.configure do
   end
 
   ENV['EMAIL'] = 'ravikumar@codegaragetech.com'
-  ENV['PASSWORD'] = 'prvkm@95#'
+  ENV['PASSWORD'] = 'rvk@codegaragetech#'
+  ENV['Twillio_account_id'] = "AC6eddef18a18609824a3b477ea8551108"
+  ENV['Twillio_auth_token'] = "7d7d48a6989349b81b6211ba68db1e72"
+
   config.action_mailer.default_url_options = { host: 'www.codegaragetech.com', port: 40 }
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {
