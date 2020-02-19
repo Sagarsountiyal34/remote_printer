@@ -110,6 +110,7 @@ Rails.application.routes.draw do
       get 'print_next_doc_from_group',to: 'groups#print_next_doc_from_group'
       post 'set_status_on_start',to: "documents#set_status_on_start"
       post 'set_doc_status',to: "documents#set_doc_status"
+      get 'get_document_details_only', to: "documents#get_document_details_only"
 		end
 	end
 end
