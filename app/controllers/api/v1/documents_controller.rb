@@ -659,6 +659,25 @@ class Api::V1::DocumentsController < ApplicationApiController
 		end
 	end
 
+	def get_document_details_only
+		begin
+			group = Group.find(params["groupID"])
+			document = group.documents.find(params["documentID"])
+		    if document.present?
+				render status: "200", json: {
+					document: document,
+					message: "Document found."
+				}
+		    else
+				render status: "422", json: {
+					message: "Document not found with given ID"
+				}
+  			end
+		rescue Exception => e
+			forbidden_error(e)
+		end
+	end
+
 
 	private
 	def generate_error_response(code,message)
