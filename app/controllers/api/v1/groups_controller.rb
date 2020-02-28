@@ -104,7 +104,7 @@ class Api::V1::GroupsController < ApplicationApiController
 			if group.present?
 				group.paid =  true
 				if group.save
-				group = 	group.attributes.merge(user_email: group.user.email)
+				group = group.attributes.merge(user_email: group.user.email,total_cost: group_total(group), net_cost: get_net_cost_of_groups(group))
 					render status: "200", json: {
 						group: group,
 						message: "Success"
