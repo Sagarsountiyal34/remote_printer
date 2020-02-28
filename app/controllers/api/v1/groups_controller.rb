@@ -7,7 +7,7 @@ class Api::V1::GroupsController < ApplicationApiController
 	    begin
 	      groups_status= params["GStatus"]
 	      if groups_status=="all"
-	        groups = @current_company.groups.where(status: "ready_for_print").map{|g| g.attributes.merge(user_email: g.user.email,total_cost: group_total(g),note_text_present: g.user.note.try(:note_text).present?)}
+	        groups = @current_company.groups.where(status: "ready_for_print").map{|g| g.attributes.merge(user_email: g.user.email,total_cost: group_total(g),note_text_present: g.user.note.try(:note_text).present?, net_cost: get_net_cost_of_groups(group))}
 	      else
 	        groups= get_groups(groups_status)
 	      end
