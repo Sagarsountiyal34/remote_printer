@@ -4,6 +4,6 @@ module GroupHelper
 	end
 
 	def get_net_cost_of_groups(group)
-		 Group.last.documents.where(:status => 'completed').sum('cost')
+		 group.documents.where(:status => 'completed').sum('cost')
 	end
 end
