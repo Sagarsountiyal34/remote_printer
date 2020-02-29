@@ -29,7 +29,7 @@ class Api::V1::SearchController < ApplicationApiController
 	def suggestions_for_Document_names
         begin
           searchterm = params[:searchTerm]
-        	document_names= Group.collection.aggregate([{'$unwind': '$documents'},{'$match':{ '$and': [{'status': "ready_for_print"},{'documents.document_name': /.*#{searchterm}.*/i}]} },{'$project': {'documents.document_name': 1,'_id':0 }}]).to_a.map{|a| a["documents"]["document_name"]}
+        	document_names= @current_company.groups.collection.aggregate([{'$unwind': '$documents'},{'$match':{ '$and': [{'status': "ready_for_print"},{'documents.document_name': /.*#{searchterm}.*/i}]} },{'$project': {'documents.document_name': 1,'_id':0 }}]).to_a.map{|a| a["documents"]["document_name"]}
 
 					render status: "200", json: {
             suggestions: document_names,
@@ -45,7 +45,7 @@ class Api::V1::SearchController < ApplicationApiController
         begin
           searchterm = params[:searchTerm]
           otps = []
-					groups = Group.where(status: "ready_for_print").any_of({ :otp => /.*#{searchterm}.*/i })
+					groups = @current_company.groups.where(status: "ready_for_print").any_of({ :otp => /.*#{searchterm}.*/i })
           otps = groups.map(&:otp) if groups.present?
 
           render status: "200", json: {
@@ -66,10 +66,10 @@ class Api::V1::SearchController < ApplicationApiController
 						user = User.find_by(email: params[:searchTerm])
 						groups = user.groups.where(status: "ready_for_print").map{|g| g.attributes.merge(user_email: g.user.email,total_cost: group_total(g),note_text_present: g.user.note.try(:note_text).present?)} if user.present?
 					when "search_with_doc_name"
-						groups = Group.where(status: "ready_for_print").all_of({:'documents.document_name' => params[:searchTerm]}).map{|grp| grp.attributes.merge(documents: grp.documents.where(document_name: params[:searchTerm]),total_cost: group_total(g),user_email: grp.user.email,note_text_present: grp.user.note.try(:note_text).present?)}
+						groups = @current_company.groups.where(status: "ready_for_print").all_of({:'documents.document_name' => params[:searchTerm]}).map{|grp| grp.attributes.merge(documents: grp.documents.where(document_name: params[:searchTerm]),total_cost: group_total(g),user_email: grp.user.email,note_text_present: grp.user.note.try(:note_text).present?)}
 
 					when "search_with_OTP"
-					 	groups=Group.where(status: "ready_for_print").where(otp: params[:searchTerm] )
+					 	groups=@current_company.groups.where(status: "ready_for_print").where(otp: params[:searchTerm] )
 						groups=groups.map{|g| g.attributes.merge(user_email: g.user.email,total_cost: group_total(g))}if groups.present?
 					else
 						return groups
@@ -83,14 +83,13 @@ class Api::V1::SearchController < ApplicationApiController
 			generate_error_response("500",e)
 		end
 	end
-
 	def search_in_user_list
 		begin
 			groups=""
 			user = User.find_by(email: params[:searchTerm])
 			user_email = params[:searchTerm]
 			note_text = user.note.try(:note_text).present?
-			groups = user.groups.where(status: "ready_for_print").map{|g| g.attributes.merge(user_email: g.user.email,note_text_present: g.user.note.try(:note_text).present?)} if user.present?
+			groups = @current_company.groups.where(:user_id => user.id, :status => 'ready_for_payment').map{|g| g.attributes.merge(user_email: g.user.email,note_text_present: g.user.note.try(:note_text).present?)} if user.present?
 
 			render status: "200", json: {
 				groups: groups,

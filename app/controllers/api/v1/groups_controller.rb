@@ -25,7 +25,7 @@ class Api::V1::GroupsController < ApplicationApiController
         begin
           	doc_status= params["doc_status"]
           	if !doc_status.present?
-            	groups = Group.all
+            	groups = @current_company.groups
           	else
             	groups= get_groups_with_doc_status(doc_status)
           	end
@@ -42,7 +42,7 @@ class Api::V1::GroupsController < ApplicationApiController
 
 	def mark_all_as_printed
 		begin
-			group = Group.find(params["groupID"])
+			group = @current_company.groups.find(params["groupID"])
 			# old_check_for_pending_payments = group.user.note.try(:pending_payments).present?
 
 			if group.present?
@@ -79,7 +79,7 @@ class Api::V1::GroupsController < ApplicationApiController
 
 	def print_group_again
 		begin
-			group = Group.find(params["groupID"])
+			group = @current_company.groups.find(params["groupID"])
 			if group.present?
 				group.documents.update_all(status: "sent_for_printing",processed_pages:0,active: false)
 				render status: "200", json: {
@@ -100,7 +100,7 @@ class Api::V1::GroupsController < ApplicationApiController
 
 	def change_paid_status
 		begin
-			group = Group.find(params["groupID"])
+			group = @current_company.groups.find(params["groupID"])
 			if group.present?
 				group.paid =  true
 				if group.save
@@ -130,7 +130,7 @@ class Api::V1::GroupsController < ApplicationApiController
 
 	def print_next_doc_from_group
 		begin
-			group = Group.find(params["groupID"])
+			group = @current_company.groups.find(params["groupID"])
 			if group.present?
 				printing_doc = ""
 				printing_doc = group.documents.where(status: "sent_for_printing")&. first
@@ -165,6 +165,6 @@ class Api::V1::GroupsController < ApplicationApiController
         return  @current_company.groups.where(status: "ready_for_print").all_of({:'documents.status' => groups_status }).map{|grp| grp.attributes.merge(documents: grp.documents.where(status: groups_status),user_email: grp.user.email,total_cost: group_total(grp),note_text_present: grp.user.note.try(:note_text).present?, net_cost: get_net_cost_of_groups(grp))}
     end
     def get_groups_with_doc_status(doc_status)
-      	return  Group.all_of({:'documents.status' => doc_status })
+      	return  @current_company.groups.all_of({:'documents.status' => doc_status })
     end
 end

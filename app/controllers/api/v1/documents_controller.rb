@@ -14,7 +14,7 @@ class Api::V1::DocumentsController < ApplicationApiController
       			}
 			else
 				if status.present?
-					group = Group.find(group_id)
+					group = @current_company.groups.find(group_id)
 					document = group.documents.find(document_id)
 					document.status = status
 					if group.documents.map{|g| g.status}.include?('pending')
@@ -48,8 +48,8 @@ class Api::V1::DocumentsController < ApplicationApiController
 			response = {}
 			message = "Try Again"
 			if payment_type == 'online'
-				if Group.any_online_payment_group_sent_for_printing? == false
-					group = Group.not_in(:status => 'completed', :status => 'ready_for_payment').where(payment_type: payment_type).first
+				if @current_company.groups.any_online_payment_group_sent_for_printing? == false
+					group = @current_company.groups.not_in(:status => 'completed', :status => 'ready_for_payment').where(payment_type: payment_type).first
 					if group.present? and group.documents.present?
 						documents_hash = group.get_documents_for_api(request)
 						if group.update_attributes(:status => 'sent_for_printing') and documents_hash.present?
@@ -63,7 +63,7 @@ class Api::V1::DocumentsController < ApplicationApiController
 					message = "A Group with online payment already sent for printing."
 				end
 			else
-				Group.not_in(status: 'completed', :status => 'ready_for_payment').each do |group|
+				@current_company.groups.not_in(status: 'completed', :status => 'ready_for_payment').each do |group|
 					if group.documents.present?
 						documents_hash = group.get_documents_for_api(request)
 						if group.update_attributes(:status => 'sent_for_printing') and documents_hash.present?
@@ -95,7 +95,7 @@ class Api::V1::DocumentsController < ApplicationApiController
        				 message: "Group id or status is empty."
       			}
 			else
-				group = Group.find(group_id)
+				group = @current_company.groups.find(group_id)
 				if group.present?
 					group.status = status
 					if group.save
@@ -120,7 +120,7 @@ class Api::V1::DocumentsController < ApplicationApiController
 
 	def get_groups_with_status
 		begin
-			groups = Group.all
+			groups = @current_company.groups
 			render status: "200", json: {
 				groups: groups,
 				message: "Success"
@@ -157,7 +157,7 @@ class Api::V1::DocumentsController < ApplicationApiController
 
 	def print_document
 		begin
-			group = Group.find(params["groupID"])
+			group = @current_company.groups.find(params["groupID"])
 			document = group.documents.find(params["documentID"])
 			if document.present?
 				document.status = "sent_for_printing"
@@ -187,7 +187,7 @@ class Api::V1::DocumentsController < ApplicationApiController
 
 	def print_document2
 		begin
-			group = Group.find(params["groupID"])
+			group = @current_company.groups.find(params["groupID"])
 			document = group.documents.find(params["documentID"])
 			if document.present?
 				document.processed_pages = params[:pcount]
@@ -223,7 +223,7 @@ class Api::V1::DocumentsController < ApplicationApiController
 
 	def mark_document_as_printed
 		begin
-			group = Group.find(params["groupID"])
+			group = @current_company.groups.find(params["groupID"])
 			document = group.documents.find(params["documentID"])
 			#
 			document.status = "completed"
@@ -280,7 +280,7 @@ class Api::V1::DocumentsController < ApplicationApiController
 	def fetch_in_printing_doc_to_print
 		begin
 			doc_to_print = ""
-			active_group = Group.all_of({:'documents.active' => true }).map{|grp| grp.attributes.merge(documents: grp.documents.where(active: true),user_email: grp.user.email)}
+			active_group = @current_company.groups.all_of({:'documents.active' => true }).map{|grp| grp.attributes.merge(documents: grp.documents.where(active: true),user_email: grp.user.email)}
 			# check if any group with active document is there
 
 			if active_group.present?
@@ -293,7 +293,7 @@ class Api::V1::DocumentsController < ApplicationApiController
 					continue_printing: true
 				}
 			else
-				groups = Group.all_of({:'documents.status' => "sent_for_printing" }).map{|grp| grp.attributes.merge(documents: grp.documents.where(status: "sent_for_printing"),user_email: grp.user.email)}
+				groups = @company.groups.all_of({:'documents.status' => "sent_for_printing" }).map{|grp| grp.attributes.merge(documents: grp.documents.where(status: "sent_for_printing"),user_email: grp.user.email)}
 				if groups.present?
 					doc_to_print = groups.first[:documents].first
 
@@ -351,7 +351,7 @@ class Api::V1::DocumentsController < ApplicationApiController
 	def set_doc_status
 
 			begin
-				group = Group.find(params["groupID"])
+				group = @current_company.groups.find(params["groupID"])
 				document = ""
 				document = group.documents.find(params["documentID"]) if group.present?
 				if document.present?
@@ -379,7 +379,7 @@ class Api::V1::DocumentsController < ApplicationApiController
 	def change_status_and_active
 
 			begin
-				group = Group.find(params["groupID"])
+				group = @current_company.groups.find(params["groupID"])
 				document = ""
 				document = group.documents.find(params["documentID"]) if group.present?
 				if document.present?
@@ -414,7 +414,7 @@ class Api::V1::DocumentsController < ApplicationApiController
 	def get_document_details
 
 			begin
-				group = Group.find(params["groupID"])
+				group = @current_company.groups.find(params["groupID"])
 				document = group.documents.find(params["documentID"]) if group.present?
 				if document.present?
 					printer_name=""
@@ -525,7 +525,7 @@ class Api::V1::DocumentsController < ApplicationApiController
 	def change_progress_page_count
 
 		begin
-			 group = Group.find(params["groupID"])
+			 group = @current_company.groups.find(params["groupID"])
 			 document = group.documents.find(params["documentID"])
 			 if document.present?
 
@@ -560,7 +560,7 @@ class Api::V1::DocumentsController < ApplicationApiController
 
 	def update_doc_print_type
 		begin
-			group = Group.find(params["groupID"])
+			group = @current_company.groups.find(params["groupID"])
 			document = group.documents.find(params["documentID"])
 		    if document.present?
 			    document.print_type=params[:type]
@@ -587,7 +587,7 @@ class Api::V1::DocumentsController < ApplicationApiController
 
 	def re_print_doc
 		begin
-			group = Group.find(params["groupID"])
+			group = @current_company.groups.find(params["groupID"])
 			document = group.documents.find(params["documentID"])
 
 			document.processed_pages = 0
@@ -612,7 +612,7 @@ class Api::V1::DocumentsController < ApplicationApiController
 
 	def interrupt_cancel_document
 		begin
-				group = Group.find(params["groupID"])
+				group = @current_company.groups.find(params["groupID"])
 				document = group.documents.find(params["documentID"])
 				# if document.active && document.processed_pages >0
 				if document.active
@@ -639,7 +639,7 @@ class Api::V1::DocumentsController < ApplicationApiController
 
 	def set_status_on_start
 		begin
-			 documents = Group.all.map(&:documents).flatten
+			 documents = @current_company.groups.all.map(&:documents).flatten
 			 documents.each do |doc|
 					if doc.status =="sent_for_printing"
 							if doc.processed_pages > 0
@@ -659,7 +659,7 @@ class Api::V1::DocumentsController < ApplicationApiController
 
 	def get_document_details_only
 		begin
-			group = Group.find(params["groupID"])
+			group = @current_company.groups.find(params["groupID"])
 			document = group.documents.find(params["documentID"])
 		    if document.present?
 				render status: "200", json: {
