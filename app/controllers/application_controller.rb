@@ -2,10 +2,17 @@ class ApplicationController < ActionController::Base
 	protect_from_forgery with: :null_session
 	layout :is_devise
 	before_action :is_confirmed?
+	before_action :redirect_to_select_doc_if_signup
 	before_action :configure_permitted_parameters, if: :devise_controller?
 	def is_devise
 		if devise_controller?
 			"devise_layout"
+		end
+	end
+
+	def redirect_to_select_doc_if_signup
+		if params[:controller] == "users/registrations"  && params[:action]  == "new"
+			redirect_to upload_doc_path
 		end
 	end
 

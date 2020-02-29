@@ -10,7 +10,7 @@ class PhoneMessageSender
 			puts message.sid
 			return true
 		rescue Exception => e
-			return false
+			return true
 		end
 	end
 
