@@ -29,6 +29,8 @@ class GroupDocument
     if setting.present?
       count  = total_pages
       self.cost =(print_type== "black_white"?(count*setting.bw_price):(count*setting.color_price))
+    else
+      self.cost = get_doc_cost
     end
   end
   def active_next_document
@@ -69,5 +71,21 @@ class GroupDocument
 
   def get_total_pages
     self.total_pages
+  end
+
+  def get_doc_cost
+    if FileInfo.get_file_media_type(self.document_url) == 'PDF'
+      if self.print_type == 'black_white'
+        return 1 * total_pages
+      else
+        return 10 * total_pages
+      end
+    else
+      if self.print_type == 'black_white'
+        return 5
+      else
+        return 10
+      end
+    end
   end
 end
