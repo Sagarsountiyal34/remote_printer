@@ -3,16 +3,12 @@
         <i class="fas fa-table"></i>
         Group Item: <span id="total_group_item">
             <%= @group.documents.length %></span>
-
         <span style="float:right;">
             <i class="fas fa-table"></i>
             OTP:
             <input type="text" id="otp" value="<%= @group.otp %>" data-value="<%= @group.otp %>" disabled>
             <%= button_tag "Show", id: 'toggle_otp', class: 'btn_1' %>
-
-
         </span>
-
     </div><br>
     <b>
         <div class="col-sm-3"> <span class="breadcrumb-item active">Provider:
@@ -22,7 +18,6 @@
         <div class="col-sm-3"> <span class="breadcrumb-item active">Total Amount:
                 <%= group_total(@group)%></span></div>
     </b>
-
     <div class="card-body">
         <div class="table-responsive">
             <table class="table table-bordered document_table" id="dataTableGroupDoc" width="100%" cellspacing="0">
@@ -32,6 +27,9 @@
                         <th width="30%">Name</th>
                         <th width="25%">Type</th>
                         <th width="">Pgs</th>
+                        <% if @group.status == "ready_for_payment" %>
+                        <th width=>Select Pgs</th>
+                        <% end %>
                         <th width="">Amount</th>
                         <th width="">Print Color</th>
                         <% if @group.is_group_sent_for_printing? or @group.status == 'ready_for_print' %>
@@ -59,9 +57,18 @@
                         <td>
                             <%= FileInfo.get_file_media_type(a.document_url).capitalize %>
                         </td>
-                        <td>
+                        <td class="total_pages" data-pages="<%= a.total_pages%>">
                             <%= a.total_pages %>
                         </td>
+                        <% if @group.status == "ready_for_payment" %>
+                        <td>
+                            <% if FileInfo.is_document?(a.document_url) and a.get_total_pages > 1 %>
+                            <a class="select_pages" href="#" data-toggle="modal" data-target="#selectPageWrapper" style="color:green;text-decoration: underline;">Select</a>
+                            <% else %>
+                            NA
+                            <% end %>
+                        </td>
+                        <% end %>
                         <td>
                             <%= a.cost%>
                         </td>
@@ -118,7 +125,8 @@
         <input type="button" value="Pay by Cash" class="btn_1" id="cash_payment">
         <% if @discount_value.present? %>
         <span style="font-size: 1.0rem;">
-            Total: <%= @group.get_amount_after_discount %> Rs.
+            Total:
+            <%= @group.get_amount_after_discount %> Rs.
             SubTotal
             <%= @group.amount %> Rs, Discount
             <%= @discount_value %>%</span>
@@ -136,6 +144,7 @@
     <% end %>
     <%= render "groups/partial/from_desktop" %>
     <%= render "groups/partial/from_history" %>
+    <%= render "groups/partial/select_page_modal" %>
 </div>
 <script type="text/javascript">
 function asterisks_otp() {
@@ -183,11 +192,9 @@ $("#cash_payment").click(function() {
         url: "/proceed_to_payment",
         data: { id: '<%= @group.id %>', type: 'cash' },
         success: function(data) {
-            if(data != ''){
+            if (data != '') {
                 $('#group_content').html(data);
-            }
-            else
-            {
+            } else {
                 $(self).text('Pay By Cash');
                 notification("Please try again.", "error")
             }
@@ -227,6 +234,77 @@ $("#toggle_otp").click(function() {
         $("#otp").val($("#otp").data('value'));
         $(this).text('Hide');
     }
+});
+
+$(".select_pages").click(function() {
+    var group_id = $('#tbody_head').data('group-id');
+    var group_doc_id = $(this).parents('.document_record').data('id');
+    var total_pages = $(this).parents('.document_record').find('.total_pages').data('pages');
+    var pdf_preview_url = $(this).parents('tr').find('.group_item').data('src');
+    $('#selectPageModalContent').attr('group_doc_id', group_doc_id);
+    $('#selectPageModalContent').attr('group_id', group_id);
+    $('#pdf_wrapper').find('embed').attr('src', pdf_preview_url + '#toolbar=0&navpanes=0&scrollbar=0&zoom=scale')
+    make_select_page(total_pages)
+});
+
+
+$(document).on('change', '.select_page_check_box', function() {
+    if ($('.select_page_check_box:checked').length > 0) {
+        $('#create_pdf_with_selected_page').show();
+    } else {
+        $('#create_pdf_with_selected_page').hide();
+    }
+});
+
+$('#create_pdf_with_selected_page').click(function() {
+    var pages_to_select = $('.select_page_check_box:checked').map(function() { return $(this).data('id'); }).get().join(',');
+    var group_id = $('#selectPageModalContent').attr('group_id');
+    var group_doc_id = $('#selectPageModalContent').attr('group_doc_id');
+    var self = $(this);
+
+    function successcb(res) {
+        if (res != null && res != "") {
+            $('.modal-backdrop').remove();
+            $('#group_content').html(res);
+        }
+    }
+
+    function errorcb(res) {
+        notification("Please try again", "error");
+        $(self).attr('value', "Update Document");
+    }
+    $(this).attr('value', "Please wait");
+    create_pdf_with_selected_page(group_id, group_doc_id, pages_to_select, successcb, errorcb);
+
+});
+
+function create_pdf_with_selected_page(group_id, group_doc_id, pages_to_select, successcb, errorcb) {
+    $.ajax({
+        type: "POST",
+        beforeSend: setCsrfToken,
+        url: "/create_pdf_with_selected_page",
+        data: { id: group_id, group_doc_id: group_doc_id, pages_to_select: pages_to_select },
+        success: function(data) {
+            if (successcb) successcb(data);
+        },
+        error: function(exception) {
+            if (errorcb) errorcbcb(exception);
+        }
+    });
+}
+
+
+function make_select_page(total_pages) {
+    var page_wrapper = $('#pdf_pager_selection')
+    page_wrapper.empty();
+    for (i = 1; i <= total_pages; i++) {
+        page_wrapper.append("<input type='checkbox' class='select_page_check_box' data-id=" + i + "> Select Page " + i + "<br>")
+    }
+}
+
+$('#g01-01').on('change', function() {
+    var _val = $(this).is(':checked') ? 'checked' : 'unchecked';
+    alert(_val);
 });
 
 $(".remove_group_document").click(function() {

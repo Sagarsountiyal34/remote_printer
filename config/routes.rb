@@ -62,7 +62,7 @@ Rails.application.routes.draw do
   post 'send_otp_to_phone_number', to: 'users#send_otp_to_phone_number'
   post 'proceed_to_payment', to: 'groups#proceed_to_payment'
   post 'approve_disapprove_group_doc', to: 'groups#approve_disapprove_group_doc'
-
+  post 'create_pdf_with_selected_page', to: 'groups#create_pdf_with_selected_page'
 
   namespace 'api' do
 		namespace 'v1' do
@@ -92,7 +92,10 @@ Rails.application.routes.draw do
       get 'users_list',to:'users#users_list'
       get 'pending_payments',to: 'users#pending_payments'
       get 'check_user_confirmed',to: 'users#check_user_confirmed'
-      post 'change_document_status', to: 'documents#change_document_status'
+      post 'change_document_status', to: 'documents#change_document_status' # not present
+
+
+
       post 'change_status_and_active', to: 'documents#change_status_and_active'
       get 'change_progress_page_count', to: 'documents#change_progress_page_count'
       get 'get_doc_to_print', to: 'documents#get_doc_to_print'

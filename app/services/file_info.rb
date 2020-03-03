@@ -17,8 +17,8 @@ class FileInfo
   end
 
   def self.is_document?(file_path)
-    ext = path_or_extension.gsub(/^.*\./, '').downcase
-    get_type(ext) == "document"
+    ext = file_path.gsub(/^.*\./, '').downcase
+    get_type(ext) == "PDF" or get_type(ext) == "office"
   end
 
   def self.get_file_media_type(path_or_extension)

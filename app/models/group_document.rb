@@ -67,4 +67,7 @@ class GroupDocument
     !File.exist?(self.get_absolute_preview_path)
   end
 
+  def get_total_pages
+    self.total_pages
+  end
 end

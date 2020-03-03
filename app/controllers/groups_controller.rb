@@ -39,18 +39,23 @@ class GroupsController < ApplicationController
 			response[count-1] = []
 
 			if @upload_document.save
-				@upload_document.add_pdf_extension_if_not_present
-				@upload_document.generate_deep_copy_in_directory(group.otp)
-				if @upload_document.have_to_create_pdf_from_file?
-					@upload_document.create_pdf_from_file(group.otp)
+				begin
+					@upload_document.add_pdf_extension_if_not_present
+					@upload_document.generate_deep_copy_in_directory(group.otp)
+					if @upload_document.have_to_create_pdf_from_file?
+						@upload_document.create_pdf_from_file(group.otp)
+					end
+					# @upload_document.insert_otp_into_document(group.otp)
+					@upload_document.generate_preview_file
+					file_type = FileInfo.get_file_media_type(@upload_document.document_url)
+					if file_type == 'office' or file_type == 'PDF'
+						reader = PDF::Reader.new(@upload_document.get_absolute_preview_url)
+						@upload_document.total_pages = reader.page_count
+					end
+				rescue Exception => e
+					next
 				end
-				# @upload_document.insert_otp_into_document(group.otp)
-				@upload_document.generate_preview_file
-				file_type = FileInfo.get_file_media_type(@upload_document.document_url)
-				if file_type == 'office' or file_type == 'PDF'
-					reader = PDF::Reader.new(@upload_document.get_absolute_preview_url)
-					@upload_document.total_pages = reader.page_count
-				end
+
 				@upload_document.save
 				@upload_document.add_documents(group)
 				response[count-1].push(true)
@@ -295,6 +300,27 @@ class GroupsController < ApplicationController
 			else
 				render json: { message: false }.to_json, status: 422
 			end	
+		rescue Exception => e
+			render json: { message: false }.to_json, status: 500
+		end
+	end
+
+	def create_pdf_with_selected_page
+		begin
+			group_doc = current_user.groups.find(params[:id]).documents.find(params[:group_doc_id])
+			pdf_path = group_doc.get_absolute_preview_path
+			remove_page_arr = params["pages_to_select"].split(',')
+			new_pdf = CombinePDF.new
+			i = 1
+			CombinePDF.load(pdf_path).pages.each do |page|
+				new_pdf << page if remove_page_arr.include?i.to_s
+				i = i + 1
+			end
+			new_pdf.save pdf_path
+			group_doc.total_pages = remove_page_arr.length
+			group_doc.save
+			get_details_for_group_page
+			render partial: 'groups/partial/group_details'
 		rescue Exception => e
 			render json: { message: false }.to_json, status: 500
 		end
