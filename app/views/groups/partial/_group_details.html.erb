@@ -236,16 +236,7 @@ $("#toggle_otp").click(function() {
     }
 });
 
-$(".select_pages").click(function() {
-    var group_id = $('#tbody_head').data('group-id');
-    var group_doc_id = $(this).parents('.document_record').data('id');
-    var total_pages = $(this).parents('.document_record').find('.total_pages').data('pages');
-    var pdf_preview_url = $(this).parents('tr').find('.group_item').data('src');
-    $('#selectPageModalContent').attr('group_doc_id', group_doc_id);
-    $('#selectPageModalContent').attr('group_id', group_id);
-    $('#pdf_wrapper').find('embed').attr('src', pdf_preview_url + '#toolbar=0&navpanes=0&scrollbar=0&zoom=scale')
-    make_select_page(total_pages)
-});
+
 
 
 $(document).on('change', '.select_page_check_box', function() {
@@ -257,7 +248,7 @@ $(document).on('change', '.select_page_check_box', function() {
 });
 
 $('#create_pdf_with_selected_page').click(function() {
-    var pages_to_select = $('.select_page_check_box:checked').map(function() { return $(this).data('id'); }).get().join(',');
+    var pages_to_select = $('.select_page_check_box:checked').map(function() { return $(this).attr('id'); }).get().join(',');
     var group_id = $('#selectPageModalContent').attr('group_id');
     var group_doc_id = $('#selectPageModalContent').attr('group_doc_id');
     var self = $(this);
@@ -302,11 +293,6 @@ function make_select_page(total_pages) {
     }
 }
 
-$('#g01-01').on('change', function() {
-    var _val = $(this).is(':checked') ? 'checked' : 'unchecked';
-    alert(_val);
-});
-
 $(".remove_group_document").click(function() {
     var self = this;
     var document_id = [$(this).closest('.document_record').data('id')];
@@ -324,6 +310,57 @@ $(".remove_group_document").click(function() {
     removeFromGroup(group_id, document_id, onSuccess, onError);
 });
 $(".table_entry_name").tooltip({ container: 'body' });
+
+$(".select_pages").click(function() {
+    var group_id = $('#tbody_head').data('group-id');
+    var group_doc_id = $(this).parents('.document_record').data('id');
+    var total_pages = $(this).parents('.document_record').find('.total_pages').data('pages');
+    var pdf_preview_url = $(this).parents('tr').find('.group_item').data('src');
+    $('#selectPageModalContent').attr('group_doc_id', group_doc_id);
+    $('#selectPageModalContent').attr('group_id', group_id);
+    renderPDF(pdf_preview_url);
+
+    make_select_page(total_pages)
+});
+
+
+function renderPDF(url) {
+    pdfjsLib.getDocument(url)
+        .then(function(pdf) {
+            var container = document.getElementById("pdf_content");
+            for (var i = 1; i <= pdf.numPages; i++) {
+                pdf.getPage(i).then(function(page) {
+                    var scale = 1.5;
+                    var width_for_pdf = document.getElementById("selectPageModalContent").offsetWidth - 10
+                    var viewport = page.getViewport(width_for_pdf / page.getViewport(1.0).width);
+                    var div = document.createElement("div");
+                    div.setAttribute("id", "page-" + (page.pageIndex + 1));
+                    div.setAttribute("style", "position: relative");
+                    container.appendChild(div);
+                    var canvas = document.createElement("canvas");
+                    div.appendChild(canvas); 
+                    var new_checkbox = $("<input  type='checkbox' class='select_page_check_box' id='" + (page.pageIndex + 1) + "'>");
+                    var new_checkbox_label = $("<label for='select_page_" + (page.pageIndex + 1) + "'>Select Page "   + (page.pageIndex + 1) + "</label>'");
+                    div.appendChild(new_checkbox.get(0));
+                    div.appendChild(new_checkbox_label.get(0));
+
+                    var context = canvas.getContext('2d');
+                    canvas.height = viewport.height;
+                    canvas.width = viewport.width;
+
+                    var renderContext = {
+                        canvasContext: context,
+                        viewport: viewport
+                    };
+
+                    page.render(renderContext);
+                });
+            }
+        });
+
+}
+
+
 </script>
 <script src="https://cdn.jsdelivr.net/picturefill/2.3.1/picturefill.min.js"></script>
 <style type="text/css">

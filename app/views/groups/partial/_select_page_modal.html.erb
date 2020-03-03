@@ -1,6 +1,6 @@
 <!-- From Desktop Modal -->
 <div class="modal fade" id="selectPageWrapper" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-dialog modal-dialog-centered" role="document" style="max-width: 70rem;">
         <div class="modal-content" id="selectPageModalContent" group_doc_id="" group_id="">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLongTitle">Select Pages</h5>
@@ -10,18 +10,11 @@
             </div>
             <div id="wrapper">
                 <div id="pdf_wrapper">
-                    <embed src="<%= @documents.first.get_preview_url %>#toolbar=0&navpanes=0&scrollbar=0&zoom=scale " type="application/pdf" width="100%" height="100%" style="width:25rem;height: 50rem;" />
-                </div>
-                <div id="pdf_pager_selection_wrapper">
-                    <div id="pdf_pager_selection">
-                        <!-- <input type="checkbox" class="select_page_check_box">1<br>
-<input type="checkbox" class="select_page_check_box">2<br>
-<input type="checkbox" class="select_page_check_box">3<br>
-<input type="checkbox" class="select_page_check_box">4<br> -->
+                    <div id="pdf_content">
                     </div>
-                    <input type="submit" value="Update Document" class="btn btn-primary main_button" id="create_pdf_with_selected_page" style="display: none;">
                 </div>
             </div>
+            <input type="submit" value="Update Document" class="btn btn-primary main_button" id="create_pdf_with_selected_page" style="display: none;"><br>
             <div id="loader_wrap_desktop" class="loader_wrap">
                 <img src="/images/loader.gif" id="loader_img" width="100" height="100">
             </div>
