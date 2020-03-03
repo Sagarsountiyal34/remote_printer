@@ -307,7 +307,8 @@ class GroupsController < ApplicationController
 
 	def create_pdf_with_selected_page
 		begin
-			group_doc = current_user.groups.find(params[:id]).documents.find(params[:group_doc_id])
+			group = current_user.groups.find(params[:id])
+			group_doc = group.documents.find(params[:group_doc_id])
 			pdf_path = group_doc.get_absolute_preview_path
 			remove_page_arr = params["pages_to_select"].split(',')
 			new_pdf = CombinePDF.new
@@ -319,6 +320,8 @@ class GroupsController < ApplicationController
 			new_pdf.save pdf_path
 			group_doc.total_pages = remove_page_arr.length
 			group_doc.save
+			group.reload
+			group.save
 			get_details_for_group_page
 			render partial: 'groups/partial/group_details'
 		rescue Exception => e
