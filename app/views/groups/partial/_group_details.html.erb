@@ -318,6 +318,7 @@ $(".select_pages").click(function() {
     var pdf_preview_url = $(this).parents('tr').find('.group_item').data('src');
     $('#selectPageModalContent').attr('group_doc_id', group_doc_id);
     $('#selectPageModalContent').attr('group_id', group_id);
+    $('#pdf_content').empty();
     renderPDF(pdf_preview_url);
 
     make_select_page(total_pages)
