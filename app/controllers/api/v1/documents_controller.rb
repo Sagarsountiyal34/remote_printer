@@ -355,7 +355,7 @@ class Api::V1::DocumentsController < ApplicationApiController
 				document = ""
 				document = group.documents.find(params["documentID"]) if group.present?
 				if document.present?
-						if param[:status] == 'completed'
+						if params[:status] == 'completed'
 						 	document.processed_pages = 0
 						 	document.save
 						end

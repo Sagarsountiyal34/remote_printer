@@ -162,7 +162,7 @@ class Api::V1::GroupsController < ApplicationApiController
 	end
 
     def get_groups(groups_status)
-        return  @current_company.groups.where(status: "ready_for_print").all_of({:'documents.status' => groups_status }).map{|grp| grp.attributes.merge(documents: grp.documents.where(status: groups_status),user_email: grp.user.email, phone_number: g.user.phone_number, total_cost: group_total(grp),note_text_present: grp.user.note.try(:note_text).present?, net_cost: get_net_cost_of_groups(grp))}
+        return  @current_company.groups.where(status: "ready_for_print").all_of({:'documents.status' => groups_status }).map{|grp| grp.attributes.merge(documents: grp.documents.where(status: groups_status),user_email: grp.user.email, phone_number: grp.user.phone_number, total_cost: group_total(grp),note_text_present: grp.user.note.try(:note_text).present?, net_cost: get_net_cost_of_groups(grp))}
     end
     def get_groups_with_doc_status(doc_status)
       	return  @current_company.groups.all_of({:'documents.status' => doc_status })
