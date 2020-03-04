@@ -80,7 +80,7 @@ Rails.application.routes.draw do
       get 'print_document2', to: 'documents#print_document2'
       get 'fetch_in_printing_doc_to_print', to: 'documents#fetch_in_printing_doc_to_print'
       post 'mark_document_as_printed',to: 'documents#mark_document_as_printed'
-      post 'suggestions_for_user_email', to: 'search#suggestions_for_user_email'
+      post 'suggestions_for_user_email_or_phone_number', to: 'search#suggestions_for_user_email_or_phone_number'
       post 'suggestions_for_Document_names', to: 'search#suggestions_for_Document_names'
       post 'suggestions_for_otps', to: 'search#suggestions_for_otps'
       post 'search_by_category', to: 'search#search_by_category'
