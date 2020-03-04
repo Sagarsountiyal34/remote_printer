@@ -355,7 +355,11 @@ class Api::V1::DocumentsController < ApplicationApiController
 				document = ""
 				document = group.documents.find(params["documentID"]) if group.present?
 				if document.present?
-						if document.update_attributes(status: params[:status],active: false, processed_pages: 0)
+						if param[:status] == 'completed'
+						 	document.processed_pages = 0
+						 	document.save
+						end
+						if document.update_attributes(status: params[:status],active: false)
 							render status: "200", json: {
 								document: document,
 								message: "Status Updated"
