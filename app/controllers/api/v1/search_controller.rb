@@ -71,6 +71,9 @@ class Api::V1::SearchController < ApplicationApiController
 					when "search_with_OTP"
 					 	groups=@current_company.groups.where(status: "ready_for_print").where(otp: params[:searchTerm] )
 						groups=groups.map{|g| g.attributes.merge(user_email: g.user.email,total_cost: group_total(g))}if groups.present?
+					when "search_with_phone_number"
+						user = User.find_by(phone_number: params[:searchTerm])
+						groups = user.groups.where(status: "ready_for_print").map{|g| g.attributes.merge(user_email: g.user.email,total_cost: group_total(g),note_text_present: g.user.note.try(:note_text).present?, phone_number: g.user.phone_number) } if user.present?
 					else
 						return groups
 			end
