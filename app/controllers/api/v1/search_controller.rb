@@ -90,13 +90,20 @@ class Api::V1::SearchController < ApplicationApiController
 		begin
 			groups=""
 			user = User.find_by(email: params[:searchTerm])
-			user_email = params[:searchTerm]
+			email, phone_number = ""
+			if user.present?
+				email = params[:searchTerm]
+			else
+				user = User.find_by(phone_number: ) if !user.present?
+				phone_number = params[:searchTerm]
+			end
 			note_text = user.note.try(:note_text).present?
-			groups = @current_company.groups.where(:user_id => user.id, :status => 'ready_for_payment').map{|g| g.attributes.merge(user_email: g.user.email,note_text_present: g.user.note.try(:note_text).present?)} if user.present?
+			groups = @current_company.groups.where(:user_id => user.id, :status => 'ready_for_payment').map{|g| g.attributes.merge(user_email: g.user.email, phone_number: g.user.phone_number, note_text_present: g.user.note.try(:note_text).present?)} if user.present?
 
 			render status: "200", json: {
 				groups: groups,
-				user_email: user_email,
+				user_email: email,
+				phone_number: phone_number,
 				note_text: note_text,
 				message: "Success"
 			}
