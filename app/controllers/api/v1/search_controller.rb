@@ -3,19 +3,19 @@ class Api::V1::SearchController < ApplicationApiController
 	protect_from_forgery with: :null_session
 	include GroupHelper
 
-  	def suggestions_for_user_email
+  	def suggestions_for_user_email_or_phone_number
 	    begin
 	      searchterm = params[:searchTerm]
 	      users_emails = []
 					if params[:condition] == "avoid_blank_grps"
-						all_users_ids = Group.where(status:  "ready_for_print").pluck(:user_id)
-						users =User.in("id": all_users_ids,"email": /.*#{searchterm}.*/i) if all_users_ids.present?
+						all_users_ids = @current_company.groups.where(status:  "ready_for_print").pluck(:user_id)
+						users =User.in("id": all_users_ids,"email": /.*#{searchterm}.*/i).or("id": all_users_ids,"phone_number": /.*#{searchterm}.*/i) if all_users_ids.present?
 
 					elsif params[:condition] == "all"
-						users =User.in("email": /.*#{searchterm}.*/i)
+						users =User.in("email": /.*#{searchterm}.*/i).or("phone_number": /.*#{searchterm}.*/i)
 
 					end
-	      users_emails = users.map(&:email) if users.present?
+	      users_emails = users.map{|u| u.email.present? ? u.email : u.phone_number} if users.present?
 	      render status: "200", json: {
 	        suggestions: users_emails,
 	        message: "Success"
