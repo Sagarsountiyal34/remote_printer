@@ -94,7 +94,7 @@ class Api::V1::SearchController < ApplicationApiController
 			if user.present?
 				email = params[:searchTerm]
 			else
-				user = User.find_by(phone_number: ) if !user.present?
+				user = User.find_by(phone_number: params[:searchTerm]) if !user.present?
 				phone_number = params[:searchTerm]
 			end
 			note_text = user.note.try(:note_text).present?
