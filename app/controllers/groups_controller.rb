@@ -49,8 +49,9 @@ class GroupsController < ApplicationController
 					@upload_document.generate_preview_file
 					file_type = FileInfo.get_file_media_type(@upload_document.document_url)
 					if file_type == 'office' or file_type == 'PDF'
-						reader = PDF::Reader.new(@upload_document.get_absolute_preview_url)
-						@upload_document.total_pages = reader.page_count
+						page_count = PDF::Reader.new(@upload_document.get_absolute_preview_url).page_count rescue ""
+						page_count = Pdfinfo.new(@upload_document.get_absolute_preview_url).page_count if !page_count.present?
+						@upload_document.total_pages = page_count
 					end
 				rescue Exception => e
 					next

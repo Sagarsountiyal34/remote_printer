@@ -42,30 +42,39 @@ class DocumentsController < ApplicationController
 			end
 			group.company = Company.find(params['company_id'])
 			response['source'] = 'without_user'
+			success_count = 0
 			loop do
-				begin
-					@upload_document = UploadDocument.new(params.require('upload_document').require(count.to_s).permit(:document_name, :document, :print_type))
-				rescue Exception => e
-					break
-				end
+				params_for_document = params.require('upload_document').require(count.to_s).permit(:document_name, :document, :print_type, :page_detail) rescue break
+				@upload_document = UploadDocument.new(params.require('upload_document').require(count.to_s).permit(:document_name, :document, :print_type))	
 				response[count-1] = []
 				if @upload_document.save
-					@upload_document.add_pdf_extension_if_not_present
-					@upload_document.generate_deep_copy_in_directory(group.otp)
-					if @upload_document.have_to_create_pdf_from_file?
-						@upload_document.create_pdf_from_file(group.otp)
+					begin
+						page_arr =  params_for_document[:page_detail].split(',')
+						if page_arr.present? && page_arr[0] != "all"
+							PdfService.replace_pdf_with_selected_page(@upload_document.get_absolute_path, page_arr)
+						end
+						@upload_document.add_pdf_extension_if_not_present
+						@upload_document.generate_deep_copy_in_directory(group.otp)
+						if @upload_document.have_to_create_pdf_from_file?
+							@upload_document.create_pdf_from_file(group.otp)
+						end
+
+						# @upload_document.insert_otp_into_document(group.otp)
+						@upload_document.generate_preview_file
+						file_type = FileInfo.get_file_media_type(@upload_document.document_url)
+						if file_type == 'office' or file_type == 'PDF'
+							page_count = PDF::Reader.new(@upload_document.get_absolute_preview_url).page_count rescue ""
+							page_count = Pdfinfo.new(@upload_document.get_absolute_preview_url).page_count if !page_count.present?
+							@upload_document.total_pages = page_count
+						end
+						@upload_document.save
+						@upload_document.add_documents(group)
+						response[count-1].push(true)
+						response[count-1].push("Document Uploaded")	
+						success_count = success_count + 1
+					rescue Exception => e
+						redirect_status = false
 					end
-					# @upload_document.insert_otp_into_document(group.otp)
-					@upload_document.generate_preview_file
-					file_type = FileInfo.get_file_media_type(@upload_document.document_url)
-					if file_type == 'office' or file_type == 'PDF'
-						reader = PDF::Reader.new(@upload_document.get_absolute_preview_url)
-						@upload_document.total_pages = reader.page_count
-					end
-					@upload_document.save
-					@upload_document.add_documents(group)
-					response[count-1].push(true)
-					response[count-1].push("Document Uploaded")
 				else
 					redirect_status = false
 					response[count-1].push(false)
@@ -75,8 +84,9 @@ class DocumentsController < ApplicationController
 			end
 			if group.documents.length > 0 and group.save
 				sign_in(user, scope: :user)
-				if redirect_status == true or count == 2
+				if redirect_status == true or success_count > 0
 					render :js => "window.location = '#{group_page_url(:id => group.id.to_s)}'"
+					# render :js => "notification('some documents not uploaded due their wrong format','info')"
 				else
 					render json: {status: true, message: response, group_id: group.id.to_s, redirect_url: group_page_url(:id => group.id)}, status: 200
 				end
@@ -85,9 +95,10 @@ class DocumentsController < ApplicationController
 				render json: {status: false, message: response}.to_json, status: 200
 			end
 		else
-			render json: {status: false, message: "Please Enter valid otp"}.to_json, status: 200
+			render json: {status: false, message: "Please Enter valid otp"}.to_json, status: 500
 		end
 	end
+
 	def get_documents
 		total_record = current_user.upload_documents.length
 		if params[:search][:value].present?

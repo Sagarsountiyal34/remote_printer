@@ -4,6 +4,12 @@
         <div class="modal-content" id="selectPageModalContent" group_doc_id="" group_id="">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLongTitle">Select Pages</h5>
+                <div class="page_selection_wrapper">
+                    <select class="form-control select_page_tag" id="type" name="upload_document_select_page">
+                        <option value="all">All</option>
+                        <option value="select" class="open_pdf_viewer" data-toggle="modal" data-target="#selectPageWrapper">Select</option>
+                    </select>
+                </div>
                 <button type="button" class="select_page_close close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -20,4 +26,36 @@
             </div>
         </div>
     </div>
+    <div class="main_button btn_1 save_selected_page_button" style="position:fixed;left: 40%;top: 94%;display: none;"> Save Selected Pages</div>
 </div>
+
+<script>
+$(document).on('change', '.select_page_tag', function() {
+  if(this.value == "select"){
+        $('.checkbox_wrap').show();
+        $('.save_selected_page_button').show();
+  }
+  else
+  {
+        $('.checkbox_wrap').hide();
+        $('.save_selected_page_button').hide();
+  }
+});
+$(document).on('click', '.save_selected_page_button', function() {
+    if ($('.select_page_check_box:checked').length <= 0)
+    {
+        notification("Please Select Pages or select All", "error");
+    }
+    else
+    {
+        // $(this).parents('.document').find()document
+        var file_input_id = $(this).parents('#selectPageWrapper').attr('file_input_id');
+        $('#documents_form').find("[id=" + file_input_id + "]")
+        var page_numbers = $('.select_page_check_box:checked').map(function() {
+            return $(this).attr('id');
+        }).get().join(',');
+        $('#documents_form').find("[id=" + file_input_id + "]").parents('.row').find('.page_details').val(page_numbers)
+        $('#selectPageWrapper').modal('hide');
+    }
+});
+</script>

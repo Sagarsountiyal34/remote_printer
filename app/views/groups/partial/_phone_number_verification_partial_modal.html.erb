@@ -15,8 +15,8 @@
                         Phone Number Verification</div>
                     <div class="card-body">
                         <div class="table-responsive">
-                            <span id="phone_number_span">Enter Phone number: <input type="text" name="phone_number" id="phone_number"  pattern="[9]{1}[1]{1}[7-9]{1}[0-9]{9}" title="Phone number with 91(country code) and 7-9 and remaing 9 digit with 0-9"><br><br></span>
-                            <span style="display:none;" id="otp_span">Enter OTP: <input type="number" name="otp" id="otp" ><br><br></span>
+                            <span id="phone_number_span">Enter Phone number: <input type="text" name="phone_number" id="phone_number" pattern="[9]{1}[1]{1}[7-9]{1}[0-9]{9}" title="Phone number with 91(country code) and 7-9 and remaing 9 digit with 0-9"><br><br></span>
+                            <span style="display:none;" id="otp_span">Enter OTP: <input type="number" name="otp" id="otp"><br><br></span>
                             <%= button_tag "Get OTP", :class => 'btn_1', :id => 'send_otp' %>
                             <%= button_tag "Create Account and save Doc", :class => 'btn_1', :id => 'create_account_with_doc', :style => 'display:none;' %>
                         </div>
@@ -41,12 +41,16 @@ $(document).ready(function() {
         }
     });
     $(document).on('click', '#send_otp', function() {
+        $(this).text('Please wait while we are sending.');
+        $(this).attr('disabled', true);
         var phn_num = $('#phone_number').val();
         send_otp_to_phone_number(phn_num);
-
     });
 
     $(document).on('click', '#create_account_with_doc', function() {
+        $(this).attr('disabled', true);
+        $(this).text('Please Wait');
+        var self = this;
         function onSuccess(response) {
             $('#phoneNumberVerification').modal('hide')
             if (response['message']['source'] == 'without_user') {
@@ -61,15 +65,16 @@ $(document).ready(function() {
         }
 
         function onError(error) {
-            $('#phoneNumberVerification').modal('hide')
-            $('#loader_wrap_main').hide()
-            $(this).text('Submit Selected');
-            $(this).removeAttr('disabled');
+            $('#loader_wrap_main').hide();
+            notification(error["responseJSON"]["message"], "error");
+            $(self).text('Submit Selected');
+            $(self).removeAttr('disabled');
         }
         submitForm($('#new_upload_document'), onSuccess, onError);
     });
 
     $(document).on('change', '.documentFileField', function(e) {
+        $('#pdf_content').empty();
         var fileName = $(this).val().split('fakepath')[1].slice(1);
         //replace the "Choose a file" label
         var doc_name = fileName.split('.')[0];
@@ -90,6 +95,14 @@ $(document).ready(function() {
                 fill_file_entry(files[i + 1]);
             }
         }
+        if ($(this).get(0).files[0].type == "application/pdf") {
+            $('.select_page_tag').val('all');
+            $('.save_selected_page_button').hide();
+            $(this).parents('.row').find('.page_selection_wrapper').show();
+            readURL(this);
+        } else {
+            notification("Please upload a Image/PDF Files.", "error")
+        }
     });
 
     function send_otp_to_phone_number(phone_number) {
@@ -109,6 +122,8 @@ $(document).ready(function() {
             },
             error: function(exception) {
                 notification(JSON.parse(exception['responseText'])['message'], "error");
+                $('#send_otp').text('Please wait while we are sending.');
+                $('#send_otp').removeAttr('disabled');
             }
         });
     }
@@ -175,6 +190,8 @@ $(document).ready(function() {
         $(new_doc).find('select').children().first().attr('selected', 'selected');
         $(new_doc).find('label').attr('for', label_name_for);
         $(new_doc).find('label[class=custom-file-label]').html('File');
+        $(new_doc).find('.page_details').val('all')
+        $(new_doc).find('.page_details').attr('name', 'upload_document[' + (total_doc + 1) + '][page_detail]')
         $('<i>').attr({ class: 'fas fa-times remove_form fa-2x col-1', style: "cursor:pointer;color:red;" }).insertBefore(new_doc.find('.message'));
         $('#documents_wrap').append(new_doc);
     }
@@ -207,7 +224,6 @@ $(document).ready(function() {
 
     });
 
-
     function submitForm(form, success_cb, error_cb) {
         var history_data = ""
         var valuesToSubmit = new FormData(form.get(0));
@@ -236,4 +252,71 @@ $(document).ready(function() {
         });
     }
 });
+
+
+
+$(".documentFileField").change(function() {
+
+});
+
+
+
+
+
+
+
+
+function readURL(input) {
+    if (input.files && input.files[0]) {
+        $('#selectPageWrapper').attr('file_input_id', $(input).attr('id'));
+        var reader = new FileReader();
+        var file = input.files[0];
+        reader.onload = function(e) {
+            var typedarray = new Uint8Array(this.result);
+            renderPDF(typedarray);
+            $('#selectPageWrapper').modal('show');
+            // $('#selectPageWrapper').modal('hide');
+
+        }
+        reader.readAsArrayBuffer(file);
+    }
+}
+
+function renderPDF(url) {
+    pdfjsLib.getDocument(url)
+        .then(function(pdf) {
+            var container = document.getElementById("pdf_content");
+            for (var i = 1; i <= pdf.numPages; i++) {
+                pdf.getPage(i).then(function(page) {
+                    var scale = 1.5;
+                    var width_for_pdf = document.getElementById("selectPageModalContent").offsetWidth - 10
+                    var viewport = page.getViewport(width_for_pdf / page.getViewport(1.0).width);
+                    var div = document.createElement("div");
+                    div.setAttribute("id", "page-" + (page.pageIndex + 1));
+                    div.setAttribute("style", "position: relative");
+                    container.appendChild(div);
+                    var canvas = document.createElement("canvas");
+                    div.appendChild(canvas);
+                    var checkbox_wrap = $("<div class='checkbox_wrap' style='display:none;'></div>");
+                    var new_checkbox = $("<input  type='checkbox' class='select_page_check_box' id='" + (page.pageIndex + 1) + "'>");
+                    var new_checkbox_label = $("<label for='select_page_" + (page.pageIndex + 1) + "'>Select Page " + (page.pageIndex + 1) + "</label>'");
+                    checkbox_wrap.append(new_checkbox)
+                    checkbox_wrap.append(new_checkbox_label)
+                    div.appendChild(checkbox_wrap.get(0));
+                    // div.appendChild(new_checkbox_label.get(0));
+
+                    var context = canvas.getContext('2d');
+                    canvas.height = viewport.height;
+                    canvas.width = viewport.width;
+
+                    var renderContext = {
+                        canvasContext: context,
+                        viewport: viewport
+                    };
+                    page.render(renderContext);
+                });
+            }
+        });
+
+}
 </script>
