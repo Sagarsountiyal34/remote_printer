@@ -27,9 +27,6 @@
                         <th width="30%">Name</th>
                         <th width="25%">Type</th>
                         <th width="">Pgs</th>
-                        <% if @group.status == "ready_for_payment" %>
-                        <th width=>Select Pgs</th>
-                        <% end %>
                         <th width="">Amount</th>
                         <th width="">Print Color</th>
                         <% if @group.is_group_sent_for_printing? or @group.status == 'ready_for_print' %>
@@ -60,15 +57,6 @@
                         <td class="total_pages" data-pages="<%= a.total_pages%>">
                             <%= a.total_pages %>
                         </td>
-                        <% if @group.status == "ready_for_payment" %>
-                        <td>
-                            <% if FileInfo.is_document?(a.document_url) and a.get_total_pages > 1 %>
-                            <a class="select_pages" href="#" data-toggle="modal" data-target="#selectPageWrapper" style="color:green;text-decoration: underline;">Select</a>
-                            <% else %>
-                            NA
-                            <% end %>
-                        </td>
-                        <% end %>
                         <td>
                             <%= a.cost%>
                         </td>

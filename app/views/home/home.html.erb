@@ -10,7 +10,7 @@
                         <% if !current_user.present? %>
                         <div>
                             <span class="login_helper">To use remote printing </span>
-                            <%= link_to(upload_doc_path, :class => "btn_1 home_login_button") do %>
+                            <%= link_to(upload_doc_path, :class => "btn_1 home_login_button", :style=> "display:inline-block;") do %>
                             Upload Document
                             <% end %>
                         </div>
