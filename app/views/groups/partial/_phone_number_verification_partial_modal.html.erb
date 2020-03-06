@@ -296,6 +296,8 @@ function renderPDF(url) {
                     div.setAttribute("style", "position: relative");
                     container.appendChild(div);
                     var canvas = document.createElement("canvas");
+                    var page_number_div = $("<div class='checkbox_wrap' style='text-align: center;background-color: background-color: transparent;background-color: #24292e;font-size: x-large;'>" + (page.pageIndex + 1) + "/" + pdf.numPages +"</div>");
+                    div.appendChild(page_number_div.get(0));
                     div.appendChild(canvas);
                     var checkbox_wrap = $("<div class='checkbox_wrap' style='display:none;'></div>");
                     var new_checkbox = $("<input  type='checkbox' class='select_page_check_box' id='" + (page.pageIndex + 1) + "'>");
@@ -320,3 +322,6 @@ function renderPDF(url) {
 
 }
 </script>
+
+
+
