@@ -20,7 +20,7 @@
                 <div class="form-group">
                     <div class="form-label-group">
                         <%= f.hidden_field :document, value: f.object.cached_document_data %>
-                        <%= f.file_field :document , class: 'uploadDocument' %>
+                        <%= f.file_field :document , class: 'uploadDocument uploadDocumentDesktop' %>
                         <%= f.label :document %>
                         <% if @upload_document.errors[:document] %>
                         <ul class="errors">
@@ -66,19 +66,5 @@ $('#new_upload_document').submit(function(e) {
     });
     return false; // prevents normal behaviour
 });
-    // for desktop doc upload
-    $(document).on('change', '.uploadDocument', function(e) {
-        var fileName = $(this).val().split('fakepath')[1].slice(1);
-        //replace the "Choose a file" label
-        var doc_name = fileName.split('.')[0];
-        $(this).parents('form').find('.doc_name').val(doc_name);
-        if ($(this).get(0).files[0].type == "application/pdf") {
-            $('.select_page_tag').val('all');
-            $('.save_selected_page_button').hide();
-            $(this).parents('.row').find('.page_selection_wrapper').show();
-            readURL(this);
-        } else {
-            notification("Please upload a Image/PDF Files.", "error")
-        }
-    })
+
 </script>

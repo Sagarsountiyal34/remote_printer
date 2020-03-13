@@ -348,5 +348,20 @@ $(document).ready(function() {
         });
     }
 
+    // for desktop doc upload
+    $(document).on('change', '.uploadDocumentDesktop', function(e) {
+        var fileName = $(this).val().split('fakepath')[1].slice(1);
+        //replace the "Choose a file" label
+        var doc_name = fileName.split('.')[0];
+        $(this).parents('form').find('.doc_name').val(doc_name);
+        if ($(this).get(0).files[0].type == "application/pdf") {
+            $('.select_page_tag').val('all');
+            $('.save_selected_page_button').hide();
+            $(this).parents('.row').find('.page_selection_wrapper').show();
+            readURL(this);
+        } else {
+            notification("Please upload a Image/PDF Files.", "error")
+        }
+    })
 
 });
