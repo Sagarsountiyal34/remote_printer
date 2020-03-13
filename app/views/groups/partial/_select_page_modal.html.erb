@@ -55,6 +55,10 @@ $(document).on('click', '.save_selected_page_button', function() {
             return $(this).attr('id');
         }).get().join(',');
         $('#documents_form').find("[id=" + file_input_id + "]").parents('.row').find('.page_details').val(page_numbers)
+        if($('#documents_form').find("[id=" + file_input_id + "]").parents('.row').length == 0)
+        {
+            $('.page_details').val(page_numbers)
+        }
         $('#selectPageWrapper').modal('hide');
     }
 });

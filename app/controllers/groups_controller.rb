@@ -19,7 +19,7 @@ class GroupsController < ApplicationController
 		@companies= Company.all
 	end
 
-	def create
+		def create
 		count = 1
 		response = {}
 		group = current_user.groups.new
@@ -30,9 +30,11 @@ class GroupsController < ApplicationController
 			document_ids = params[:history_document_ids].split(',')
 			group.add_documents(document_ids)
 		end
+		success_count = 0
 		loop do
 			begin
-				@upload_document = current_user.upload_documents.new(params.require('upload_document').require(count.to_s).permit(:document_name, :document, :print_type))
+				params_for_document = params.require('upload_document').require(count.to_s).permit(:document_name, :document, :print_type, :page_detail) rescue break
+				@upload_document = UploadDocument.new(params.require('upload_document').require(count.to_s).permit(:document_name, :document, :print_type))	
 			rescue Exception => e
 				break
 			end
@@ -40,6 +42,10 @@ class GroupsController < ApplicationController
 
 			if @upload_document.save
 				begin
+					page_arr =  params_for_document[:page_detail].split(',')
+					if page_arr.present? && page_arr[0] != "all"
+						PdfService.replace_pdf_with_selected_page(@upload_document.get_absolute_path, page_arr)
+					end
 					@upload_document.add_pdf_extension_if_not_present
 					@upload_document.generate_deep_copy_in_directory(group.otp)
 					if @upload_document.have_to_create_pdf_from_file?
@@ -54,6 +60,7 @@ class GroupsController < ApplicationController
 						@upload_document.total_pages = page_count
 					end
 				rescue Exception => e
+					redirect_status = false
 					next
 				end
 
@@ -61,6 +68,7 @@ class GroupsController < ApplicationController
 				@upload_document.add_documents(group)
 				response[count-1].push(true)
 				response[count-1].push("Document Uploaded")
+				success_count = success_count + 1
 			else
 				response[count-1].push(false)
 				response[count-1].push(@upload_document.errors.full_messages.first)
@@ -69,7 +77,7 @@ class GroupsController < ApplicationController
 			count = count + 1
 		end
 		if group.documents.length > 0 and group.save
-			if redirect_status == true or count == 2
+			if redirect_status == true or success_count > 0
 				render :js => "window.location = '#{group_page_url(:id => group.id.to_s)}'"
 			else
 				render json: {status: true, message: response, group_id: group.id.to_s, redirect_url: group_page_url(:id => group.id)}, status: 200
@@ -85,6 +93,10 @@ class GroupsController < ApplicationController
 			upload_document = current_user.upload_documents.new(document_params)
 			group = current_user.groups.find(params[:id])
 			if upload_document.save and group.present?
+				page_arr =  params.require("upload_document").permit(:page_details)[:page_details].split(',')
+				if page_arr.present? && page_arr[0] != "all"
+					PdfService.replace_pdf_with_selected_page(upload_document.get_absolute_path, page_arr)
+				end
 				upload_document.add_pdf_extension_if_not_present
 				upload_document.generate_deep_copy_in_directory(group.otp)
 				if upload_document.have_to_create_pdf_from_file?
@@ -94,8 +106,9 @@ class GroupsController < ApplicationController
 				upload_document.generate_preview_file
 				file_type = FileInfo.get_file_media_type(upload_document.document_url)
 				if file_type == 'office' or file_type == 'PDF'
-					reader = PDF::Reader.new(upload_document.get_absolute_preview_url)
-					upload_document.total_pages = reader.page_count
+						page_count = PDF::Reader.new(upload_document.get_absolute_preview_url).page_count rescue ""
+						page_count = Pdfinfo.new(upload_document.get_absolute_preview_url).page_count if !page_count.present?
+						upload_document.total_pages = page_count	
 				end
 				upload_document.save
 				upload_document.add_documents(group) # addding into group

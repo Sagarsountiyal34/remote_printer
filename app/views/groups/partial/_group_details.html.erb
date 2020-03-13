@@ -133,6 +133,7 @@
     <%= render "groups/partial/from_desktop" %>
     <%= render "groups/partial/from_history" %>
     <%= render "groups/partial/select_page_modal" %>
+    
 </div>
 <script type="text/javascript">
 function asterisks_otp() {
@@ -225,62 +226,6 @@ $("#toggle_otp").click(function() {
 });
 
 
-
-
-$(document).on('change', '.select_page_check_box', function() {
-    if ($('.select_page_check_box:checked').length > 0) {
-        $('#create_pdf_with_selected_page').show();
-    } else {
-        $('#create_pdf_with_selected_page').hide();
-    }
-});
-
-$('#create_pdf_with_selected_page').click(function() {
-    var pages_to_select = $('.select_page_check_box:checked').map(function() { return $(this).attr('id'); }).get().join(',');
-    var group_id = $('#selectPageModalContent').attr('group_id');
-    var group_doc_id = $('#selectPageModalContent').attr('group_doc_id');
-    var self = $(this);
-
-    function successcb(res) {
-        if (res != null && res != "") {
-            $('.modal-backdrop').remove();
-            $('#group_content').html(res);
-        }
-    }
-
-    function errorcb(res) {
-        notification("Please try again", "error");
-        $(self).attr('value', "Update Document");
-    }
-    $(this).attr('value', "Please wait");
-    create_pdf_with_selected_page(group_id, group_doc_id, pages_to_select, successcb, errorcb);
-
-});
-
-function create_pdf_with_selected_page(group_id, group_doc_id, pages_to_select, successcb, errorcb) {
-    $.ajax({
-        type: "POST",
-        beforeSend: setCsrfToken,
-        url: "/create_pdf_with_selected_page",
-        data: { id: group_id, group_doc_id: group_doc_id, pages_to_select: pages_to_select },
-        success: function(data) {
-            if (successcb) successcb(data);
-        },
-        error: function(exception) {
-            if (errorcb) errorcbcb(exception);
-        }
-    });
-}
-
-
-function make_select_page(total_pages) {
-    var page_wrapper = $('#pdf_pager_selection')
-    page_wrapper.empty();
-    for (i = 1; i <= total_pages; i++) {
-        page_wrapper.append("<input type='checkbox' class='select_page_check_box' data-id=" + i + "> Select Page " + i + "<br>")
-    }
-}
-
 $(".remove_group_document").click(function() {
     var self = this;
     var document_id = [$(this).closest('.document_record').data('id')];
@@ -298,56 +243,6 @@ $(".remove_group_document").click(function() {
     removeFromGroup(group_id, document_id, onSuccess, onError);
 });
 $(".table_entry_name").tooltip({ container: 'body' });
-
-$(".select_pages").click(function() {
-    var group_id = $('#tbody_head').data('group-id');
-    var group_doc_id = $(this).parents('.document_record').data('id');
-    var total_pages = $(this).parents('.document_record').find('.total_pages').data('pages');
-    var pdf_preview_url = $(this).parents('tr').find('.group_item').data('src');
-    $('#selectPageModalContent').attr('group_doc_id', group_doc_id);
-    $('#selectPageModalContent').attr('group_id', group_id);
-    $('#pdf_content').empty();
-    renderPDF(pdf_preview_url);
-
-    make_select_page(total_pages)
-});
-
-
-function renderPDF(url) {
-    pdfjsLib.getDocument(url)
-        .then(function(pdf) {
-            var container = document.getElementById("pdf_content");
-            for (var i = 1; i <= pdf.numPages; i++) {
-                pdf.getPage(i).then(function(page) {
-                    var scale = 1.5;
-                    var width_for_pdf = document.getElementById("selectPageModalContent").offsetWidth - 10
-                    var viewport = page.getViewport(width_for_pdf / page.getViewport(1.0).width);
-                    var div = document.createElement("div");
-                    div.setAttribute("id", "page-" + (page.pageIndex + 1));
-                    div.setAttribute("style", "position: relative");
-                    container.appendChild(div);
-                    var canvas = document.createElement("canvas");
-                    div.appendChild(canvas); 
-                    var new_checkbox = $("<input  type='checkbox' class='select_page_check_box' id='" + (page.pageIndex + 1) + "'>");
-                    var new_checkbox_label = $("<label for='select_page_" + (page.pageIndex + 1) + "'>Select Page "   + (page.pageIndex + 1) + "</label>'");
-                    div.appendChild(new_checkbox.get(0));
-                    div.appendChild(new_checkbox_label.get(0));
-
-                    var context = canvas.getContext('2d');
-                    canvas.height = viewport.height;
-                    canvas.width = viewport.width;
-
-                    var renderContext = {
-                        canvasContext: context,
-                        viewport: viewport
-                    };
-
-                    page.render(renderContext);
-                });
-            }
-        });
-
-}
 
 
 </script>

@@ -72,9 +72,10 @@ class DocumentsController < ApplicationController
 						response[count-1].push(true)
 						response[count-1].push("Document Uploaded")	
 						success_count = success_count + 1
-					rescue Exception => e
-						redirect_status = false
-					end
+						rescue Exception => e
+							redirect_status = false
+							next
+						end
 				else
 					redirect_status = false
 					response[count-1].push(false)

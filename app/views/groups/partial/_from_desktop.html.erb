@@ -28,6 +28,7 @@
                         </ul>
                         <% end %>
                     </div>
+                    <%= f.hidden_field :page_details, value: 'all', class: 'page_details' %>
                     <%= f.submit "Upload", :class => 'btn_1 btn-block', :id => 'from_desktop_upload' %>
                     <% end %>
                 </div>
@@ -53,10 +54,11 @@ $('#new_upload_document').submit(function(e) {
         contentType: false,
         success: function(response) {
             jQuery('#loader_wrap_desktop').hide();
-            jQuery('#fromDesktop').modal('toggle')
+            jQuery('#fromDesktop').modal('toggle');
+            notification("Document uploaded succesfully", "info");
         },
         error: function(response) {
-            notification(JSON.parse(response.responseText)['document_error']);
+            notification(JSON.parse(response.responseText)['document_error'], "error");
             // jQuery('#from_desktop_upload').show();
             jQuery('#loader_wrap_desktop').hide();
             jQuery('#from_desktop_upload').show();
@@ -64,11 +66,19 @@ $('#new_upload_document').submit(function(e) {
     });
     return false; // prevents normal behaviour
 });
-
-$(document).on('change', '.uploadDocument', function(e) {
-    var fileName = $(this).val().split('fakepath')[1].slice(1);
-    //replace the "Choose a file" label
-    var doc_name = fileName.split('.')[0];
-    $(this).parents('form').find('.doc_name').val(doc_name);
-})
+    // for desktop doc upload
+    $(document).on('change', '.uploadDocument', function(e) {
+        var fileName = $(this).val().split('fakepath')[1].slice(1);
+        //replace the "Choose a file" label
+        var doc_name = fileName.split('.')[0];
+        $(this).parents('form').find('.doc_name').val(doc_name);
+        if ($(this).get(0).files[0].type == "application/pdf") {
+            $('.select_page_tag').val('all');
+            $('.save_selected_page_button').hide();
+            $(this).parents('.row').find('.page_selection_wrapper').show();
+            readURL(this);
+        } else {
+            notification("Please upload a Image/PDF Files.", "error")
+        }
+    })
 </script>
