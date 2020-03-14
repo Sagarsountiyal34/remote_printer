@@ -14,8 +14,9 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
+            <div id="current_page_number" style="text-align:center;background-color:#4CAF50;;font-size: x-large;opacity: 0.4;">1/5</div>
             <div id="wrapper">
-                <div id="pdf_wrapper" style="width:100%;">
+                <div id="pdf_wrapper" style="width:100%;height: 50rem;overflow: scroll;overflow-x: hidden;">
                     <div id="pdf_content">
                     </div>
                 </div>
@@ -28,26 +29,20 @@
     </div>
     <div class="main_button btn_1 save_selected_page_button" style="position:fixed;left: 40%;top: 94%;display: none;"> Save Selected Pages</div>
 </div>
-
 <script>
 $(document).on('change', '.select_page_tag', function() {
-  if(this.value == "select"){
+    if (this.value == "select") {
         $('.checkbox_wrap').show();
         $('.save_selected_page_button').show();
-  }
-  else
-  {
+    } else {
         $('.checkbox_wrap').hide();
         $('.save_selected_page_button').hide();
-  }
+    }
 });
 $(document).on('click', '.save_selected_page_button', function() {
-    if ($('.select_page_check_box:checked').length <= 0)
-    {
+    if ($('.select_page_check_box:checked').length <= 0) {
         notification("Please Select Pages or select All", "error");
-    }
-    else
-    {
+    } else {
         // $(this).parents('.document').find()document
         var file_input_id = $(this).parents('#selectPageWrapper').attr('file_input_id');
         $('#documents_form').find("[id=" + file_input_id + "]")
@@ -55,11 +50,102 @@ $(document).on('click', '.save_selected_page_button', function() {
             return $(this).attr('id');
         }).get().join(',');
         $('#documents_form').find("[id=" + file_input_id + "]").parents('.row').find('.page_details').val(page_numbers)
-        if($('#documents_form').find("[id=" + file_input_id + "]").parents('.row').length == 0)
-        {
+        if ($('#documents_form').find("[id=" + file_input_id + "]").parents('.row').length == 0) {
             $('.page_details').val(page_numbers)
         }
         $('#selectPageWrapper').modal('hide');
     }
 });
+// $(window).scroll(function(){
+//     debugger
+//     var top_window_offset = document.getElementById('pdf_content').getBoundingClientRect().top * (-1);
+
+// });
+
+$('#pdf_wrapper').scroll(function() {
+    // debugger
+    var pdf_offset = document.getElementById('pdf_content').getBoundingClientRect().top * (-1) + 80;
+    var current_page_number = 1;
+
+    for (i = 1; i <= Object.keys(window.pdf_dim).length; i++) {
+        if ($('.select_page_tag').val() == "select") {
+            var pdf_offset = document.getElementById('pdf_content').getBoundingClientRect().top * (-1) + 80 - (30 * i);
+        }
+        var current_page_top_value = window.pdf_dim[i];
+        if (pdf_offset < current_page_top_value) {
+            current_page_number = i;
+            break;
+        }
+    }
+    $('#current_page_number').text(current_page_number + '/' + Object.keys(window.pdf_dim).length);
+});
 </script>
+<style>
+/* The container */
+.container {
+  display: block;
+  position: relative;
+  padding-left: 35px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  font-size: 22px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Hide the browser's default checkbox */
+.container input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+/* Create a custom checkbox */
+.checkmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 25px;
+  width: 25px;
+  background-color: #eee;
+}
+
+/* On mouse-over, add a grey background color */
+.container:hover input ~ .checkmark {
+  background-color: #ccc;
+}
+
+/* When the checkbox is checked, add a blue background */
+.container input:checked ~ .checkmark {
+  background-color: #2196F3;
+}
+
+/* Create the checkmark/indicator (hidden when not checked) */
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+/* Show the checkmark when checked */
+.container input:checked ~ .checkmark:after {
+  display: block;
+}
+
+/* Style the checkmark/indicator */
+.container .checkmark:after {
+  left: 9px;
+  top: 5px;
+  width: 5px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 3px 3px 0;
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
+</style>

@@ -250,6 +250,7 @@ $(document).ready(function() {
     }
 
     function renderPDF(url) {
+        window['pdf_dim'] = {}
         pdfjsLib.getDocument(url)
             .then(function(pdf) {
                 var container = document.getElementById("pdf_content");
@@ -263,17 +264,28 @@ $(document).ready(function() {
                         div.setAttribute("style", "position: relative");
                         container.appendChild(div);
                         var canvas = document.createElement("canvas");
-                        var page_number_div = $("<div class='checkbox_wrap' style='text-align: center;background-color: background-color: transparent;background-color: #24292e;font-size: x-large;'>" + (page.pageIndex + 1) + "/" + pdf.numPages + "</div>");
-                        div.appendChild(page_number_div.get(0));
                         div.appendChild(canvas);
-                        var checkbox_wrap = $("<div class='checkbox_wrap' style='display:none;'></div>");
-                        var new_checkbox = $("<input  type='checkbox' class='select_page_check_box' id='" + (page.pageIndex + 1) + "'>");
-                        var new_checkbox_label = $("<label for='select_page_" + (page.pageIndex + 1) + "'>Select Page " + (page.pageIndex + 1) + "</label>'");
-                        checkbox_wrap.append(new_checkbox)
-                        checkbox_wrap.append(new_checkbox_label)
-                        div.appendChild(checkbox_wrap.get(0));
-                        // div.appendChild(new_checkbox_label.get(0));
 
+                        var checkbox_wrap = $("<div class='checkbox_wrap' style='display:none;margin-left:4rem;'></div>");
+                        var new_checkbox = $("<input  type='checkbox' class='select_page_check_box' id='" + (page.pageIndex + 1) + "'>");
+                        var new_checkbox_label = $("<label for='select_page_" + (page.pageIndex + 1) + "' style='margin-left:0.6rem;font-weight:bold;font-size:large;'>Click to Select Page " + (page.pageIndex + 1) + "</label>'");
+
+
+                        var checkbox_label_wrap = $("<label class='checkbox_wrap container' style='display:none;margin-left:3.5rem;'>" + "Click to select Page " + (page.pageIndex + 1) + "</label>");
+                        var checkbox = $("<input type='checkbox' class='select_page_check_box' id='" + (page.pageIndex + 1) + "'>");
+                        var checkbox_label_span = $("<span class='checkmark'></span>");
+                        checkbox_label_wrap.append(checkbox).append(checkbox_label_span)
+                        div.appendChild(checkbox_label_wrap.get(0));
+
+
+
+                        if (window['pdf_dim'][page.pageIndex] == null){
+                            window['pdf_dim'][page.pageIndex + 1] = viewport.height
+                        }
+                        else
+                        {
+                            window['pdf_dim'][page.pageIndex + 1] = window['pdf_dim'][page.pageIndex] + viewport.height
+                        }
                         var context = canvas.getContext('2d');
                         canvas.height = viewport.height;
                         canvas.width = viewport.width;
