@@ -7,7 +7,7 @@ class User
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   attr_writer :login
   devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :validatable, :authentication_keys => {login: true, login: false}
+         :recoverable, :rememberable, :validatable, :authentication_keys => {login: true}
 
   ## Database authenticatable
   field :email,              type: String, default: ""

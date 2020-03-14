@@ -350,6 +350,7 @@ $(document).ready(function() {
 
     // for desktop doc upload
     $(document).on('change', '.uploadDocumentDesktop', function(e) {
+        $('.page_details').val('all');
         var fileName = $(this).val().split('fakepath')[1].slice(1);
         //replace the "Choose a file" label
         var doc_name = fileName.split('.')[0];
